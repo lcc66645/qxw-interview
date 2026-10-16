@@ -21,14 +21,14 @@ plt.rcParams.update({
     "font.family": font_manager.FontProperties(fname=str(FONT)).get_name(),
     "font.size": 12,
     "axes.unicode_minus": False,
-    "axes.facecolor": "#1b2e4e",
-    "figure.facecolor": "#1b2e4e",
+    "axes.facecolor": "#171b1c",
+    "figure.facecolor": "#171b1c",
     "text.color": "#eff5ff",
-    "axes.labelcolor": "#c7d9f0",
-    "xtick.color": "#c1d2e9",
-    "ytick.color": "#c1d2e9",
-    "axes.edgecolor": "#8299b8",
-    "savefig.facecolor": "#1b2e4e",
+    "axes.labelcolor": "#c3cfca",
+    "xtick.color": "#c3cfca",
+    "ytick.color": "#c3cfca",
+    "axes.edgecolor": "#687c72",
+    "savefig.facecolor": "#171b1c",
 })
 
 
@@ -40,13 +40,13 @@ def finish(ax):
 
 
 def mix_comparison():
-    fig, ax = plt.subplots(figsize=(11.2, 4.9), dpi=180)
-    fig.subplots_adjust(left=0.22, right=0.92, top=0.77, bottom=0.17)
-    fig.text(0.04, 0.94, "播放表现与拉新贡献", size=21, weight="medium")
-    fig.text(0.04, 0.86, "中秋国庆项目 · 2026/09/24–10/08", size=12, color="#afc6e6")
+    fig, ax = plt.subplots(figsize=(11.2, 5.4), dpi=180)
+    fig.subplots_adjust(left=0.22, right=0.92, top=0.70, bottom=0.17)
+    fig.text(0.04, 0.90, "播放表现与拉新贡献", size=21, weight="medium")
+    fig.text(0.04, 0.82, "中秋国庆项目 · 2026/09/24–10/08", size=12, color="#b6c5bd")
     groups = DATA["groups"][:2]
     for index, group in enumerate(groups):
-        for offset, field, color, label in [(-0.17, "vvShare", "#d9e5f4", "内容 VV 占比"), (0.17, "acquisitionShare", "#9ac4f0", "拉新占比")]:
+        for offset, field, color, label in [(-0.17, "vvShare", "#c6cecb", "内容 VV 占比"), (0.17, "acquisitionShare", "#8bcba9", "拉新占比")]:
             value = group[field] * 100
             ax.barh(index + offset, value, height=0.27, color=color, label=label if index == 0 else None)
             ax.text(value + 1.1, index + offset, f"{value:.1f}%", va="center", fontsize=13, color=color)
@@ -55,10 +55,10 @@ def mix_comparison():
     ax.set_xlim(0, 75)
     ax.set_xticks([0, 20, 40, 60])
     ax.xaxis.set_major_formatter(FuncFormatter(lambda value, _: f"{value:g}%"))
-    ax.grid(axis="x", color="#c7d9f0", alpha=0.12)
-    ax.legend(loc="lower right", frameon=False, bbox_to_anchor=(1.02, 1.01), ncol=2, labelcolor="#d5e4f8", fontsize=11)
+    ax.grid(axis="x", color="#c3cfca", alpha=0.12)
+    ax.legend(loc="lower right", frameon=False, bbox_to_anchor=(1.02, 1.01), ncol=2, labelcolor="#d9e5de", fontsize=11)
     finish(ax)
-    fig.text(0.04, 0.045, "主力方向：帮选车 + 查优惠、AI 语音讲车；流量型方向：精准估价、交易避坑、约试驾。", size=10, color="#a8bfdd")
+    fig.text(0.04, 0.045, "主力方向：帮选车 + 查优惠、AI 语音讲车；流量型方向：精准估价、交易避坑、约试驾。", size=10, color="#b6c5bd")
     fig.savefig(ROOT / "assets/review-vv-vs-growth.png")
     plt.close(fig)
 

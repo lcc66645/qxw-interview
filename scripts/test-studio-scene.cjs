@@ -11,15 +11,20 @@ async function pixels(page, compare = false) {
     const values = new Uint8Array(canvas.width * canvas.height * 4);
     gl.readPixels(0, 0, canvas.width, canvas.height, gl.RGBA, gl.UNSIGNED_BYTE, values);
     let opaque = 0, transparent = 0, soft = 0, changed = 0, lit = 0;
+    let left = canvas.width, right = 0, bottom = canvas.height, top = 0;
     for (let i = 0; i < values.length; i += 64) {
-      if (values[i + 3] > 128) opaque++;
+      if (values[i + 3] > 128) {
+        opaque++;
+        const x = (i / 4) % canvas.width, y = Math.floor(i / 4 / canvas.width);
+        left = Math.min(left, x); right = Math.max(right, x); bottom = Math.min(bottom, y); top = Math.max(top, y);
+      }
       if (values[i + 3] === 0) transparent++;
       if (values[i + 3] > 0 && values[i + 3] < 128) soft++;
       if (values[i] + values[i + 1] + values[i + 2] > 70 && values[i + 3] > 128) lit++;
       if (compare && window.previousPixels && Math.abs(values[i] - window.previousPixels[i]) + Math.abs(values[i + 1] - window.previousPixels[i + 1]) + Math.abs(values[i + 2] - window.previousPixels[i + 2]) > 8) changed++;
     }
     window.previousPixels = values;
-    return { opaque, transparent, soft, lit, changed };
+    return { opaque, transparent, soft, lit, changed, widthRatio: (right - left) / canvas.width, heightRatio: (top - bottom) / canvas.height };
   }, compare);
 }
 (async () => {
@@ -44,6 +49,13 @@ async function pixels(page, compare = false) {
     for (const [width, height] of [[1920,1080], [1440,900], [768,1024], [390,844], [320,568]]) {
       await page.setViewportSize({ width, height }); await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(250);
       const sample = await pixels(page); assert(sample.lit > 100 && sample.transparent > 100, `${width}: ${JSON.stringify(sample)}`);
+      assert(sample.widthRatio > (width >= 1000 ? .68 : .80), `Character must fill the hero: ${width}: ${JSON.stringify(sample)}`);
+      assert(sample.heightRatio > .85, `Character must fill hero height: ${width}: ${JSON.stringify(sample)}`);
+      assert(Number(await page.locator('.portrait-stage').getAttribute('data-scale')) > 1, 'Do not restore the undersized .94 scene');
+      assert(await page.locator('.portrait-copy').evaluate(copy => {
+        const title = copy.getBoundingClientRect(), hero = copy.closest('section').getBoundingClientRect();
+        return title.left >= hero.left && title.right <= hero.right && title.bottom < hero.bottom;
+      }));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       assert(await page.locator('.portrait-intro').evaluate(el => el.getBoundingClientRect().bottom < innerHeight - 20));
       await page.screenshot({ path: path.join(output, `studio-${width}.png`) });

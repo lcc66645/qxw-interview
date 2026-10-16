@@ -58,7 +58,11 @@
       renderer.setSize(width, height, false);
       camera.aspect = width / height; camera.updateProjectionMatrix();
       const worldHeight = 2 * Math.tan(camera.fov * Math.PI / 360) * camera.position.z;
-      mesh.scale.set(worldHeight * 0.94 * image.naturalWidth / image.naturalHeight, worldHeight * 0.94, 1);
+      const scale = Number.parseFloat(getComputedStyle(section).getPropertyValue('--portrait-scale')) || 1.48;
+      mesh.scale.set(worldHeight * scale * image.naturalWidth / image.naturalHeight, worldHeight * scale, 1);
+      // Anchor the hairline near the top; enlarging must not crop the face.
+      mesh.position.y = worldHeight * ((1 - scale) / 2 - 0.02);
+      stage.dataset.scale = String(scale);
       draw();
     }
     function move(event) {

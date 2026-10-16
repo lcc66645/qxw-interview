@@ -20,7 +20,7 @@ async function checkPage(page, id) {
   assert((await page.title()).startsWith(definition.title));
   for (const [key] of definitions) if (key !== id) assert.equal(await page.locator(`main > #${key}`).count(), 0);
   assert.equal(await page.locator('.role-transfer, .role-mapping, #role-mapping-list').count(), 0);
-  assert.equal(await page.locator('.fit-index, .creator-hero, .work-marquee, .project-grid, .project-card, .filters, #work-template, .okr').count(), 0);
+  assert.equal(await page.locator('.fit-index, .creator-hero, .work-marquee, .project-grid, .project-card, .filters, #work-template').count(), 0);
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   const ids = await page.locator('[id]').evaluateAll(els => els.map(el => el.id));
   assert.equal(ids.length, new Set(ids).size);
@@ -58,6 +58,14 @@ async function checkPage(page, id) {
             assert.deepEqual(await page.locator('.review-table tbody tr').nth(row).locator('th, td').allTextContents(), [point.name, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`]);
           }
           assert.equal(await page.locator('.review-chart').count(), 1);
+          assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
+          assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
+          for (const item of data.source.jobs[0].okr) {
+            for (const result of item.results) assert((await page.locator('.job-okr').innerText()).includes(result.slice(result.indexOf('：') + 1)));
+          }
+          assert.deepEqual(await page.locator('#employer-0 > .practice-point').evaluateAll(elements => elements.map(element => element.id)), data.presentation.practiceOrder.map(index => `competence-0-${index}`));
+          assert.equal(await page.locator('.practice-deliverable').count(), 5);
+          for (const fragment of ['TOP13', 'P0–P3', '830万VV', '691万VV', '团队→小组→个人']) assert((await page.locator('#employer-0').innerText()).includes(fragment), fragment);
           assert.equal(await page.locator('.project-visual:visible').count(), 5);
           assert.equal(await page.locator('.weekly-comparison .comparison-row').count(), 2);
           assert.equal(await page.locator('.practice-point:visible').count(), 7);
@@ -67,6 +75,13 @@ async function checkPage(page, id) {
           const links = new Set(await page.locator('main a[href^="https://"]').evaluateAll(els => els.map(el => el.href)));
           data.source.links.forEach(link => assert(links.has(link.url), link.title));
           assert(await page.locator('main img').evaluateAll(els => els.every(el => el.complete && el.naturalWidth > 0)));
+          assert(await page.locator('.project-visual img').evaluateAll(images => images.every(image => {
+            const canvas = document.createElement('canvas'); canvas.width = 60; canvas.height = 40;
+            const context = canvas.getContext('2d'); context.drawImage(image, 0, 0, 60, 40);
+            const pixels = context.getImageData(0, 0, 60, 40).data; let dark = 0;
+            for (let index = 0; index < pixels.length; index += 4) if ((pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3 < 110) dark++;
+            return dark / (60 * 40) > .65;
+          })), 'Every evidence graphic must use a dark presentation');
           await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = el.id === 'business-review'));
         }
         if ([1440,390].includes(width)) await page.screenshot({ path: path.join(output, `${id}-${width}.png`) });
@@ -136,6 +151,7 @@ async function checkPage(page, id) {
     await page.locator('.practice-point [data-enlarge="growth"]').click();
     assert(await page.locator('#project-dialog').evaluate(el => el.open));
     assert(await page.locator('.expanded-visual').evaluate(el => el.complete && el.naturalWidth > 0));
+    assert.equal(await page.locator('#project-dialog').evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(23, 27, 28)');
     await page.locator('[aria-label="图像缩放"]').fill('200');
     assert.equal(await page.locator('.expanded-visual').evaluate(el => el.style.width), '200%');
     assert(await page.locator('.visual-dialog-scroll').evaluate(el => el.scrollWidth > el.clientWidth));
@@ -179,8 +195,14 @@ async function checkPage(page, id) {
     await clean.locator('nav [data-page-link="experience"]').click();
     await clean.locator('#business-review').waitFor();
     const captureStyle = '.header, .toast, .skip { visibility: hidden !important; }';
+    await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
+    await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
+    await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-desktop.png'), style: captureStyle });
     await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-desktop.png'), style: captureStyle });
     await clean.setViewportSize({ width: 390, height: 844 });
+    await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
+    await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
+    await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-mobile.png'), style: captureStyle });
     await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-mobile.png'), style: captureStyle });
     assert.deepEqual(errors, []); assert.deepEqual(failed, []);
     console.log('PASS portrait-before-About, visible project visuals/data table, image upload/persistence/enlargement, seven work points, six-stage case, same-document routes, original links, edit/contact/print, offline navigation/re-export, and default preview.');

@@ -26,12 +26,15 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4196/';
     await page.waitForFunction(() => getComputedStyle(document.querySelector('.capability-item:last-child')).opacity === '1');
     for (let index = 0; index < 15; index++) {
       await page.locator('nav [data-page-link="experience"]').click();
+      await page.locator('main > #experience').waitFor();
       await page.locator('nav [data-page-link="methods"]').click();
+      await page.locator('main > #methods').waitFor();
     }
     assert.equal(await page.evaluate(() => window.activeObservers.size), 1);
     assert.deepEqual(await page.evaluate(() => Object.fromEntries(Object.entries(window.motionListeners).map(([key, set]) => [key, set.size]))), { scroll: 0, resize: 0 });
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.locator('nav [data-page-link="capabilities"]').click();
+    await page.locator('.portrait-stage').waitFor({ state: 'attached' });
     assert.equal(await page.evaluate(() => window.activeObservers.size), 2);
     assert(await page.locator('.about-copy, .capability-item').evaluateAll(els => els.every(el => getComputedStyle(el).opacity === '1')));
     for (const [width, height] of [[1920,1080], [1440,900], [768,1024], [390,844], [320,568]]) {
