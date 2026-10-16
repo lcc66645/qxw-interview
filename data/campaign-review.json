@@ -1,0 +1,492 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "file": "已粘贴的文本.txt",
+    "sha256": "86f8358b99baabd357ee80483f64c89eadf6355e55364dc2d0d97129a8626a8f",
+    "namedTable": "飞书《AI 小懂 AIGC 卖点 & 内容回收》· 数据回收 sheet（原文转述，未直接读取原表）",
+    "attribution": "原文称为链接点击后回流数据；曝光字段按内容 VV 展示。点击数、UV、成本、去重规则和归因窗口未提供。"
+  },
+  "overview": {
+    "period": "2026/09/24–10/08",
+    "days": 15,
+    "videos": 119,
+    "lines": [
+      {
+        "name": "纯小懂",
+        "videos": 107
+      },
+      {
+        "name": "二手车 & 小懂",
+        "videos": 12
+      }
+    ],
+    "sellingPoints": 9,
+    "vv": 36900000,
+    "acquisitions": 238,
+    "reactivations": 2443,
+    "acquisitionsPerMillion": 6.4498644986449865,
+    "reactivationsPerMillion": 66.2059620596206,
+    "meanVvPerPoint": 4100000
+  },
+  "points": [
+    {
+      "id": "selling-point-1",
+      "name": "AI 帮选车 + 查优惠",
+      "videos": 44,
+      "vv": 6910000,
+      "acquisitions": 89,
+      "reactivations": 210,
+      "sourceRate": 0.000013,
+      "sourceRole": "转化主力（铺量型）",
+      "meanVv": 157045.45454545456,
+      "acquisitionsPerMillion": 12.879884225759769,
+      "reactivationsPerMillion": 30.390738060781477,
+      "acquisitionMultiple": 1.9969232265988885,
+      "reactivationMultiple": 0.4590332519209318
+    },
+    {
+      "id": "selling-point-2",
+      "name": "AI 语音讲车",
+      "videos": 7,
+      "vv": 4990000,
+      "acquisitions": 64,
+      "reactivations": 594,
+      "sourceRate": 0.000013,
+      "sourceRole": "爆款 + 转化双优",
+      "meanVv": 712857.1428571428,
+      "acquisitionsPerMillion": 12.825651302605209,
+      "reactivationsPerMillion": 119.0380761523046,
+      "acquisitionMultiple": 1.9885148448156815,
+      "reactivationMultiple": 1.7979963201064426
+    },
+    {
+      "id": "selling-point-3",
+      "name": "小懂精准估价",
+      "videos": 15,
+      "vv": 8300000,
+      "acquisitions": 32,
+      "reactivations": 458,
+      "sourceRate": 0.000004,
+      "sourceRole": "叫好不叫座",
+      "meanVv": 553333.3333333334,
+      "acquisitionsPerMillion": 3.855421686746988,
+      "reactivationsPerMillion": 55.18072289156626,
+      "acquisitionMultiple": 0.5977523539536297,
+      "reactivationMultiple": 0.8334705995492406
+    },
+    {
+      "id": "selling-point-4",
+      "name": "二手车知识问答",
+      "videos": 16,
+      "vv": 3600000,
+      "acquisitions": 21,
+      "reactivations": 377,
+      "sourceRate": 0.000005999999999999999,
+      "sourceRole": "拉活型",
+      "meanVv": 225000,
+      "acquisitionsPerMillion": 5.833333333333333,
+      "reactivationsPerMillion": 104.72222222222223,
+      "acquisitionMultiple": 0.9044117647058824,
+      "reactivationMultiple": 1.5817642243143675
+    },
+    {
+      "id": "selling-point-5",
+      "name": "智能找二手车",
+      "videos": 7,
+      "vv": 3290000,
+      "acquisitions": 9,
+      "reactivations": 803,
+      "sourceRate": 0.0000029999999999999997,
+      "sourceRole": "拉活王",
+      "meanVv": 470000,
+      "acquisitionsPerMillion": 2.7355623100303954,
+      "reactivationsPerMillion": 244.07294832826747,
+      "acquisitionMultiple": 0.42412709764756973,
+      "reactivationMultiple": 3.6865705253021157
+    },
+    {
+      "id": "selling-point-6",
+      "name": "二手车交易避坑",
+      "videos": 4,
+      "vv": 4990000,
+      "acquisitions": 4,
+      "reactivations": 0,
+      "sourceRate": 8.000000000000001e-7,
+      "sourceRole": "纯曝光",
+      "meanVv": 1247500,
+      "acquisitionsPerMillion": 0.8016032064128256,
+      "reactivationsPerMillion": 0,
+      "acquisitionMultiple": 0.1242821778009801,
+      "reactivationMultiple": 0
+    },
+    {
+      "id": "selling-point-7",
+      "name": "AI 约试驾",
+      "videos": 4,
+      "vv": 3860000,
+      "acquisitions": 10,
+      "reactivations": 0,
+      "sourceRate": 0.0000029999999999999997,
+      "sourceRole": "叫好不叫座",
+      "meanVv": 965000,
+      "acquisitionsPerMillion": 2.5906735751295336,
+      "reactivationsPerMillion": 0,
+      "acquisitionMultiple": 0.40166325597596547,
+      "reactivationMultiple": 0
+    },
+    {
+      "id": "selling-point-8",
+      "name": "拍照识故障",
+      "videos": 21,
+      "vv": 900000,
+      "acquisitions": 8,
+      "reactivations": 1,
+      "sourceRate": 0.000009,
+      "sourceRole": "长尾走量",
+      "meanVv": 42857.142857142855,
+      "acquisitionsPerMillion": 8.888888888888888,
+      "reactivationsPerMillion": 1.111111111111111,
+      "acquisitionMultiple": 1.3781512605042014,
+      "reactivationMultiple": 0.016782644289807608
+    },
+    {
+      "id": "selling-point-9",
+      "name": "拍报价单帮砍价",
+      "videos": 1,
+      "vv": 50000,
+      "acquisitions": 0,
+      "reactivations": 0,
+      "sourceRate": null,
+      "sourceRole": "样本不足",
+      "meanVv": 50000,
+      "acquisitionsPerMillion": 0,
+      "reactivationsPerMillion": 0,
+      "acquisitionMultiple": 0,
+      "reactivationMultiple": 0
+    }
+  ],
+  "creators": [
+    {
+      "name": "汽车隐藏说明书",
+      "videos": 7,
+      "vv": 9610000,
+      "acquisitions": 62,
+      "reactivations": 382,
+      "role": "全能头部，爆款制造机，必投"
+    },
+    {
+      "name": "轮上诗集",
+      "videos": 7,
+      "vv": 7530000,
+      "acquisitions": 36,
+      "reactivations": 206,
+      "role": "爆款稳定输出，AI 语音讲车首选"
+    },
+    {
+      "name": "一条视频 car",
+      "videos": 2,
+      "vv": 2540000,
+      "acquisitions": 68,
+      "reactivations": 0,
+      "role": "拉新王，单条拉新率 0.0027%，适合做转化"
+    },
+    {
+      "name": "车藏半生",
+      "videos": 7,
+      "vv": 2660000,
+      "acquisitions": 19,
+      "reactivations": 803,
+      "role": "拉活王，二手车心智强，做召回"
+    },
+    {
+      "name": "汽车那点事儿",
+      "videos": 6,
+      "vv": 6410000,
+      "acquisitions": 10,
+      "reactivations": 458,
+      "role": "高曝光 + 拉活型，品牌广告位"
+    },
+    {
+      "name": "懂车它是谁",
+      "videos": 9,
+      "vv": 2230000,
+      "acquisitions": 20,
+      "reactivations": 330,
+      "role": "稳，性价比高，适合铺量"
+    },
+    {
+      "name": "汽车零件有话说",
+      "videos": 7,
+      "vv": 810000,
+      "acquisitions": 0,
+      "reactivations": 15,
+      "role": "曝光一般 + 零拉新，下轮可砍或换脚本"
+    },
+    {
+      "name": "汽车超硬核科普",
+      "videos": 15,
+      "vv": 740000,
+      "acquisitions": 3,
+      "reactivations": 0,
+      "role": "铺量但低效，15 条才 3 拉新"
+    }
+  ],
+  "samples": [
+    {
+      "rank": 1,
+      "creator": "一条视频 car",
+      "acquisitions": 67,
+      "vv": 2520000,
+      "sellingPoint": "AI 帮选车 + 查优惠",
+      "conflict": "4S 店贷款说 4 厘实际 9 厘 5，现场算账维权",
+      "url": "https://v.douyin.com/MRfNLNFXP3E/",
+      "acquisitionsPerMillion": 26.58730158730159
+    },
+    {
+      "rank": 2,
+      "creator": "汽车隐藏说明书",
+      "acquisitions": 35,
+      "vv": 2660000,
+      "sellingPoint": "AI 语音讲车",
+      "conflict": "亲戚借二手野马见岳父，手动挡不会开",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7691535611106168090",
+      "acquisitionsPerMillion": 13.157894736842106
+    },
+    {
+      "rank": 3,
+      "creator": "轮上诗集",
+      "acquisitions": 29,
+      "vv": 2220000,
+      "sellingPoint": "AI 语音讲车",
+      "conflict": "搬家二女婿开猛禽干活，妈只夸开奔驰的大女婿",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7691148707231698211",
+      "acquisitionsPerMillion": 13.063063063063062
+    },
+    {
+      "rank": 4,
+      "creator": "汽车隐藏说明书",
+      "acquisitions": 17,
+      "vv": 590000,
+      "sellingPoint": "二手车估价",
+      "conflict": "父亲开霸道欠工人 8 万工资，过年卖车发钱",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7689334067799559475",
+      "acquisitionsPerMillion": 28.8135593220339
+    },
+    {
+      "rank": 5,
+      "creator": "懂车它是谁",
+      "acquisitions": 10,
+      "vv": 180000,
+      "sellingPoint": "二手车知识",
+      "conflict": "老板开辉腾回厂，保安当帕萨特让停外面",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAA3w2IRsyKw9gBS13o7L5H1WqT6nU_grzI9llG9Fm55YI?from_tab_name=main&modal_id=7689654757463493934",
+      "acquisitionsPerMillion": 55.55555555555556
+    },
+    {
+      "rank": 6,
+      "creator": "车藏半生",
+      "acquisitions": 6,
+      "vv": 370000,
+      "sellingPoint": "智能找二手车",
+      "conflict": "领导早上嫌员工开揽胜招摇，下午借去接客",
+      "url": "https://v.douyin.com/CAJMdzhNJhQ/",
+      "acquisitionsPerMillion": 16.216216216216214
+    },
+    {
+      "rank": 7,
+      "creator": "车藏半生",
+      "acquisitions": 5,
+      "vv": 770000,
+      "sellingPoint": "AI 约试驾",
+      "conflict": "领导借员工奔驰撑场，吃饭让员工坐司机桌",
+      "url": "https://v.douyin.com/woHl0w1I6FM/",
+      "acquisitionsPerMillion": 6.4935064935064934
+    },
+    {
+      "rank": 8,
+      "creator": "小 Y 懂车",
+      "acquisitions": 5,
+      "vv": 130000,
+      "sellingPoint": "二手车知识",
+      "conflict": "拟人化：中石化 / 中石油 / 中海油 / 民营加油站对话",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7690026232263494955",
+      "acquisitionsPerMillion": 38.46153846153846
+    },
+    {
+      "rank": 9,
+      "creator": "汽车隐藏说明书",
+      "acquisitions": 4,
+      "vv": 4390000,
+      "sellingPoint": "二手车避坑",
+      "conflict": "婚礼前对象家人偷偷把 6 代 GTI 卖了给弟弟凑首付",
+      "url": "https://v.douyin.com/NgPkZ_1YFAk/",
+      "acquisitionsPerMillion": 0.9111617312072894
+    },
+    {
+      "rank": 10,
+      "creator": "车藏半生",
+      "acquisitions": 4,
+      "vv": 590000,
+      "sellingPoint": "AI 帮选车",
+      "conflict": "给亲妈提的车，婆婆直接坐进去当给自己的",
+      "url": "https://v.douyin.com/qKaQ-s4ZV7c/",
+      "acquisitionsPerMillion": 6.779661016949152
+    },
+    {
+      "rank": 11,
+      "creator": "汽车那点事儿",
+      "acquisitions": 4,
+      "vv": 800000,
+      "sellingPoint": "估价 + 对比",
+      "conflict": "婆婆要卖儿媳两门宝马换 \"全家能坐的\"",
+      "url": "https://v.douyin.com/jj1lyssI-9I/",
+      "acquisitionsPerMillion": 5
+    },
+    {
+      "rank": 12,
+      "creator": "懂车的小姬",
+      "acquisitions": 4,
+      "vv": 70000,
+      "sellingPoint": "AI 帮选车",
+      "conflict": "情侣吵架：途观 L/RAV4 / 星越 L 不同条件下选谁",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7690846071223880998",
+      "acquisitionsPerMillion": 57.14285714285714
+    },
+    {
+      "rank": 13,
+      "creator": "汽车那点事儿",
+      "acquisitions": 3,
+      "vv": 2890000,
+      "sellingPoint": "AI 约试驾",
+      "conflict": "给妈买车被嫂子安排成接孩子的车",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7693374181655776521",
+      "acquisitionsPerMillion": 1.0380622837370244
+    }
+  ],
+  "reactivationScopes": [
+    {
+      "name": "智能找二手车",
+      "reactivations": 803,
+      "rate": 0.00024400000000000002,
+      "sourceMultiple": "3.7 倍",
+      "scope": "卖点聚合",
+      "perMillion": 244.07294832826747,
+      "multiple": 3.6865705253021157,
+      "calculation": "按卖点 VV 与人数重算"
+    },
+    {
+      "name": "二手车知识问答",
+      "reactivations": 377,
+      "rate": 0.000105,
+      "sourceMultiple": "1.6 倍",
+      "scope": "卖点聚合",
+      "perMillion": 104.72222222222223,
+      "multiple": 1.5817642243143675,
+      "calculation": "按卖点 VV 与人数重算"
+    },
+    {
+      "name": "AI 语音讲车",
+      "reactivations": 594,
+      "rate": 0.000119,
+      "sourceMultiple": "1.8 倍",
+      "scope": "卖点聚合",
+      "perMillion": 119.0380761523046,
+      "multiple": 1.7979963201064426,
+      "calculation": "按卖点 VV 与人数重算"
+    },
+    {
+      "name": "小懂精准估价（二手车线）",
+      "reactivations": 458,
+      "rate": 0.000312,
+      "sourceMultiple": "4.7 倍",
+      "scope": "二手车线子集",
+      "perMillion": 312,
+      "multiple": 4.7125665165779775,
+      "calculation": "按原文子集率估算，未提供子集 VV"
+    },
+    {
+      "name": "二手车线知识问答",
+      "reactivations": 343,
+      "rate": 0.000453,
+      "sourceMultiple": "6.9 倍",
+      "scope": "二手车线子集",
+      "perMillion": 453,
+      "multiple": 6.842284076954563,
+      "calculation": "按原文子集率估算，未提供子集 VV"
+    }
+  ],
+  "groups": [
+    {
+      "name": "两个主力卖点",
+      "vv": 11900000,
+      "acquisitions": 153,
+      "reactivations": 804,
+      "vvShare": 0.3224932249322493,
+      "acquisitionShare": 0.6428571428571429,
+      "reactivationShare": 0.32910356119525175
+    },
+    {
+      "name": "三个流量型卖点",
+      "vv": 17150000,
+      "acquisitions": 46,
+      "reactivations": 458,
+      "vvShare": 0.46476964769647694,
+      "acquisitionShare": 0.19327731092436976,
+      "reactivationShare": 0.18747441670077772
+    },
+    {
+      "name": "其他及明细差异",
+      "vv": 7850000,
+      "acquisitions": 39,
+      "vvShare": 0.2127371273712737,
+      "acquisitionShare": 0.1638655462184874
+    }
+  ],
+  "coreCreators": {
+    "name": "指定四个头部账号",
+    "vv": 22340000,
+    "acquisitions": 185,
+    "reactivations": 1391,
+    "vvShare": 0.605420054200542,
+    "acquisitionShare": 0.7773109243697479,
+    "reactivationShare": 0.56938190749079
+  },
+  "storyComparison": [
+    {
+      "name": "父亲卖霸道发工资",
+      "vv": 590000,
+      "acquisitions": 17,
+      "interpretation": "角色当下需要估价，工具承担剧情内的解题任务",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7689334067799559475",
+      "perMillion": 28.8135593220339
+    },
+    {
+      "name": "C63 估价旁白",
+      "vv": 3750000,
+      "acquisitions": 2,
+      "interpretation": "剧情已识别车辆，工具以重复信息的旁白出现",
+      "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7690468448844959017",
+      "perMillion": 0.5333333333333333
+    }
+  ],
+  "storyEfficiencyRatio": 54.025423728813564,
+  "reconciliation": {
+    "detailVideos": 119,
+    "detailVv": 36890000,
+    "detailAcquisitions": 237,
+    "detailReactivations": 2443,
+    "vvGap": 10000,
+    "acquisitionGap": 1
+  },
+  "corrections": [
+    "总览为3,690万 VV、238人拉新；9卖点明细合计3,689万 VV、237人拉新，分别差1万 VV与1人。保留差异，不向任一卖点补数。",
+    "两个主力卖点合计153人，占总览238人的64.3%；原文“65%”作为近似说法，不再展示为精确比例。",
+    "三个流量型卖点的拉新效率约为大盘0.12–0.60倍，并非都只有1/5–1/10。均 VV 分别约55.3万、124.8万、96.5万/条。",
+    "“二手车内容拉活3–7倍”仅适用于部分卖点或二手车线子集。卖点聚合下，知识问答约1.58倍、智能找二手车约3.69倍；不同粒度不可相加。",
+    "四个指定头部账号合计拉活1,391人，占总览56.9%，不支持原文73%的说法；曝光约60.5%、拉新约77.7%。",
+    "父亲卖车样本17人/59万 VV，对比 C63 样本2人/375万 VV，按舍入 VV 估算效率约54.0倍，并非原文14倍；两条观察样本不能证明单因素因果。",
+    "TOP13中“懂车的小姬”4人/7万 VV约57.14人/百万 VV，高于贷款维权样本67人/252万 VV的26.59人/百万 VV。贷款维权是此表拉新人数最高，不是率最高；没有成本数据，不给单条 ROI 排名。",
+    "同一 GTI 样本在 TOP13表列439万 VV、4人拉新，模板段落又列59万 VV；暂按 TOP13表展示439万，原始单条数据待回源核验。",
+    "模板不是卖点分组：不能把两卖点64.3%的贡献归因于“家庭伦理模板”。话术具体度、场景需求、功能匹配与工具位置应联合判断。"
+  ]
+}

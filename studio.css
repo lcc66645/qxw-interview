@@ -1,0 +1,56 @@
+:root { --bg: #151a1c; --text: #f0f3f5; --muted: #c2cdd2; --line: #e0e8eb30; }
+html { background: #151a1c; }
+body { background: transparent; isolation: isolate; }
+#studio-backdrop { position: fixed; inset: -35px; z-index: -2; pointer-events: none; overflow: hidden; background: #151a1c; }
+#studio-backdrop img { width: 100%; height: 100%; display: block; object-fit: cover; filter: blur(23px) saturate(.75) brightness(.85); transform: scale(1.06); }
+#studio-backdrop::after { content: ""; position: absolute; inset: 0; background: #0b11196b; }
+.announcement { background: #1118203d; color: #c6cdd2; }
+.header { background: #10171ec2; border-color: #dce8ed26; backdrop-filter: blur(28px); -webkit-backdrop-filter: blur(28px); }
+footer { background: #10171e70; color: #b5c1c7; }
+.published-downloads { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 24px; padding: 12px max(22px, calc((100% - 1120px) / 2)); background: #10171e70; border-top: 1px solid var(--line); }
+.published-downloads .text-button { min-height: 44px; color: #d9e5eb; }
+body:not([data-page="capabilities"]) #main { background: #0b111960; }
+.portrait-intro { height: min(680px, calc(100svh - 240px)); min-height: 340px; overflow: hidden; isolation: isolate; background: transparent; }
+.portrait-room { position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; opacity: .45; filter: blur(3px) saturate(.75); transform: translate(var(--scene-x, 0px), var(--scene-y, 0px)); mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 98%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 98%); }
+.portrait-image { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: contain; object-position: center; mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 73%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 4%, #000 73%, transparent); }
+.portrait-stage { position: absolute; inset: 0; z-index: 1; pointer-events: none; }
+.portrait-stage canvas { display: block; width: 100%; height: 100%; }
+.scene-ready .portrait-image { visibility: hidden; }
+.portrait-copy { inset: 46px auto auto max(32px, calc((100% - 1216px) / 2)); max-width: 320px; text-align: left; z-index: 2; }
+.portrait-copy h1 { font-size: 52px; text-shadow: 0 2px 24px #111b24; }
+.portrait-copy .section-kicker { color: #d8e5ea; text-shadow: 0 1px 12px #111b24; }
+.portrait-kind { z-index: 2; left: max(32px, calc((100% - 1216px) / 2)); bottom: 25px; color: #c0cdd3; }
+.portrait-next { z-index: 2; right: max(88px, calc((100% - 1104px) / 2)); bottom: 21px; color: #eef5f8; }
+.portrait-pause { position: absolute; z-index: 2; right: max(32px, calc((100% - 1216px) / 2)); bottom: 15px; color: #e6f1f5; background: #17222aa8; border: 1px solid #e5f0f32e; }
+.portrait-pause:disabled { cursor: default; opacity: .45; }
+.portrait-intro:not(.scene-ready)[data-motion="playing"] .portrait-image { animation: portrait-breath 6s ease-in-out infinite; }
+@keyframes portrait-breath { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-3px) scale(1.004); } }
+.creator-about { background: transparent; }
+.paper-band { background: #101a2375; color: #edf2f5; --line: #dce8ed2b; }
+.paper-band h2, .capability-item h3, .capability-number { color: #eef4f6; }
+.paper-band .section-kicker, .paper-band .section-note, .capability-item p { color: #c5d0d6; }
+.capability-item { border-color: #dce8ed2b; }
+.profile-description, .profile-facts, .job-intro, .practice-action, .practice-support, .case-stage > p, .project-visual figcaption { color: #c6d2d8; }
+.method-item, .tech-group { background: #101a234d; border-color: #dce8ed2b; }
+.review-table caption, .review-table thead th { background: #17243096; }
+.review-table td, .review-table tbody th { background: #111c2466; }
+.hero-heading, .section-top h1 { background-image: linear-gradient(180deg, #bdced8, #f0f5f8); }
+@media (max-width: 900px) { .portrait-copy { top: 30px; max-width: 220px; } .portrait-copy h1 { font-size: 42px; } }
+@media (max-width: 640px) {
+  .portrait-intro { height: min(470px, calc(100svh - 235px)); min-height: 300px; }
+  .portrait-copy { left: 22px; top: 24px; max-width: 130px; }
+  .portrait-copy h1 { font-size: 30px; }
+  .portrait-copy .section-kicker { font-size: 7px; line-height: 1.6; max-width: 115px; }
+  .portrait-copy.is-long-name h1 { font-size: 20px; }
+  .portrait-kind { left: 22px; bottom: 22px; font-size: 8px; }
+  .portrait-next { right: 74px; bottom: 19px; }
+  .portrait-pause { right: 22px; bottom: 10px; }
+  .portrait-room { opacity: .36; object-position: 58% center; }
+  #studio-backdrop img { filter: blur(20px) saturate(.7) brightness(.76); object-position: 45% center; }
+}
+@media (prefers-reduced-motion: reduce) { .portrait-image { animation: none !important; } }
+@media print {
+  #studio-backdrop, .portrait-intro, .published-downloads { display: none !important; }
+  html, body, body:not([data-page="capabilities"]) #main, .paper-band, .method-item, .tech-group, footer { background: #fff; }
+  .paper-band, .paper-band h2, .capability-number, .capability-item h3, .capability-item p, .practice-support, .practice-action, .case-stage > p, .job-intro, .project-visual figcaption { color: #444; }
+}

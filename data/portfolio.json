@@ -1,0 +1,1254 @@
+{
+  "version": 2,
+  "presentation": {
+    "practices": [
+      { "goal": "把依赖个人经验的创作，变成团队可复用的生产能力。", "steps": ["创意组先试新模板，二创组再复制放量，覆盖抖音、视频号与小红书。", "统一脚本、Prompt和人物车型资产，将六维质检与P0–P3风险审核前置。"], "visual": "production", "caption": "9步生产链路 · 从选题到复盘形成闭环" },
+      { "goal": "不只追高播放，而是找到真正带来新用户的内容。", "steps": ["搭建日报、周报和作品级拉新拉活追踪，按卖点、账号、平台拆解表现。", "对比高曝光低拉新与高拉新内容，调整选题、脚本和账号任务。"], "visual": "growth", "caption": "中秋国庆星图项目 · VV占比与拉新贡献对比" },
+      { "goal": "让高效脚本不再只靠个人灵感。", "steps": ["逐句拆解拉新TOP13，对照3条高曝光低转化反例，定位冲突、工具植入与话术差异。", "提炼家庭伦理救场、即时决策、情怀反差3套模板，先验证再交给矩阵复用。"] },
+      { "goal": "让10人真人IP团队顺利转向20人AIGC矩阵。", "steps": ["按创意验证与批量复制双轨分工，将月度目标拆到小组和个人。", "将播放量单维考核改为内容与拉新双维，配套带教、激励和模板维护责任人。"], "visual": "team", "caption": "团队转型 · 人员、组长与目标达成情况" },
+      { "goal": "保持一线创作手感，用自己的账号验证方法。", "steps": ["运营4个不同定位的AIGC账号，独立完成选题、脚本、生成和剪辑。", "将验证有效的创意拆成模板，再推动团队复用，而不只停留在管理层面。"] }
+    ],
+    "earlierPractices": [
+      { "goal": "从0打造有辨识度的IP，兼顾内容吸引力与商业植入。", "steps": ["主导选题、脚本、拍摄统筹与后期，持续调整人设、人物关系和冲突节奏。", "建立创意、测试、反馈、迭代的周度机制，单月涨粉1万+。"] },
+      { "goal": "让投放素材更贴近用户痛点，降低获客成本。", "steps": ["按目标人群、痛点、卖点、信任证明与行动设计素材。", "结合投放反馈调整开头钩子、卖点顺序、产品露出和时长，3秒完播35%+。"] }
+    ],
+    "methodResults": ["3套脚本模板 · 200万+爆款1→4条", "周拉新71→212 · +198.6%", "9步生产链路 · 六维质检", "62个活跃账号复用 · 20人团队"]
+  },
+  "profile": {
+    "name": "仇熙雯",
+    "role": "AIGC 用户增长运营 TL",
+    "location": "杭州",
+    "headline": "把内容做成增长，把 AI 做成生产力。",
+    "intro": "3年汽车内容经验，专注 AIGC 创作、内容矩阵与用户增长。",
+    "about": "交流 AIGC 创作、内容策略与用户增长。",
+    "email": "a11010406@163.com"
+  },
+  "projects": [
+    {
+      "id": "holiday",
+      "category": "growth",
+      "label": "增长复盘 / 09.24–10.08",
+      "title": "AI 小懂 · 节日增长",
+      "description": "拆解9个业务卖点与高拉新脚本，沉淀3套内容模板，推动内容获客。",
+      "metrics": [
+        {
+          "value": "3,690万",
+          "label": "总曝光"
+        },
+        {
+          "value": "238",
+          "label": "总拉新"
+        },
+        {
+          "value": "2,443",
+          "label": "总拉活"
+        }
+      ],
+      "imageAlt": "中秋国庆 AI 小懂复盘：119条视频、3,690万总曝光、238总拉新"
+    },
+    {
+      "id": "production",
+      "category": "aigc",
+      "label": "AIGC / 生产体系",
+      "title": "AIGC 内容生产体系",
+      "description": "搭建生产流程、Prompt与资产库，让验证后的创意被矩阵稳定复用。",
+      "metrics": [
+        {
+          "value": "62个",
+          "label": "活跃账号复用"
+        },
+        {
+          "value": "近100%",
+          "label": "AIGC覆盖率"
+        },
+        {
+          "value": "4条",
+          "label": "人均日更"
+        }
+      ],
+      "imageAlt": "AIGC 内容生产体系的选题、脚本、分镜、资产、生成、剪辑、审核、发布与复盘九步流程"
+    },
+    {
+      "id": "organization",
+      "category": "team",
+      "label": "TEAM / 组织转型",
+      "title": "20人 AIGC 团队搭建",
+      "description": "设计双轨分工、目标考核与带教机制，推动真人IP团队转向AIGC生产。",
+      "metrics": [
+        {
+          "value": "10→20人",
+          "label": "团队规模"
+        },
+        {
+          "value": "3→5人",
+          "label": "组长培养"
+        },
+        {
+          "value": "70%+",
+          "label": "目标达成率"
+        }
+      ],
+      "imageAlt": "组织转型成果：团队由10人扩至20人，组长由3人增至5人，目标达成率稳定70%以上"
+    }
+  ],
+  "images": [
+    "assets/qxw-growth.png",
+    "assets/qxw-production.png",
+    "assets/qxw-team.png"
+  ],
+  "icons": {
+    "asterisk": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-asterisk\" aria-hidden=\"true\"><path d=\"M12 6v12\"></path><path d=\"M17.196 9 6.804 15\"></path><path d=\"m6.804 9 10.392 6\"></path></svg>",
+    "settings-2": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-settings-2\" aria-hidden=\"true\"><path d=\"M20 7h-9\"></path><path d=\"M14 17H5\"></path><circle cx=\"17\" cy=\"17\" r=\"3\"></circle><circle cx=\"7\" cy=\"7\" r=\"3\"></circle></svg>",
+    "arrow-up-right": "\n<svg aria-hidden=\"true\"\n  class=\"lucide lucide-arrow-up-right\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M7 7h10v10\" />\n  <path d=\"M7 17 17 7\" />\n</svg>\n",
+    "arrow-down": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-arrow-down\" aria-hidden=\"true\"><path d=\"M12 5v14\"></path><path d=\"m19 12-7 7-7-7\"></path></svg>",
+    "arrow-up": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-arrow-up\" aria-hidden=\"true\"><path d=\"m5 12 7-7 7 7\"></path><path d=\"M12 19V5\"></path></svg>",
+    "map-pin": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-map-pin\" aria-hidden=\"true\"><path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"></path><circle cx=\"12\" cy=\"10\" r=\"3\"></circle></svg>",
+    "graduation-cap": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-graduation-cap\" aria-hidden=\"true\"><path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"></path><path d=\"M22 10v6\"></path><path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"></path></svg>",
+    "briefcase-business": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-briefcase-business\" aria-hidden=\"true\"><path d=\"M12 12h.01\"></path><path d=\"M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2\"></path><path d=\"M22 13a18.15 18.15 0 0 1-20 0\"></path><rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"></rect></svg>",
+    "printer": "\n<svg aria-hidden=\"true\"\n  class=\"lucide lucide-printer\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\" />\n  <path d=\"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6\" />\n  <rect x=\"6\" y=\"14\" width=\"12\" height=\"8\" rx=\"1\" />\n</svg>\n",
+    "workflow": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-workflow\" aria-hidden=\"true\"><rect width=\"8\" height=\"8\" x=\"3\" y=\"3\" rx=\"2\"></rect><path d=\"M7 11v4a2 2 0 0 0 2 2h4\"></path><rect width=\"8\" height=\"8\" x=\"13\" y=\"13\" rx=\"2\"></rect></svg>",
+    "chart-no-axes-combined": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-chart-no-axes-combined\" aria-hidden=\"true\"><path d=\"M12 16v5\"></path><path d=\"M16 14v7\"></path><path d=\"M20 10v11\"></path><path d=\"m22 3-8.646 8.646a.5.5 0 0 1-.708 0L9.354 8.354a.5.5 0 0 0-.707 0L2 15\"></path><path d=\"M4 18v3\"></path><path d=\"M8 14v7\"></path></svg>",
+    "layers": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-layers\" aria-hidden=\"true\"><path d=\"M12.83 2.18a2 2 0 0 0-1.66 0L2.6 6.08a1 1 0 0 0 0 1.83l8.58 3.91a2 2 0 0 0 1.66 0l8.58-3.9a1 1 0 0 0 0-1.83z\"></path><path d=\"M2 12a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 12\"></path><path d=\"M2 17a1 1 0 0 0 .58.91l8.6 3.91a2 2 0 0 0 1.65 0l8.58-3.9A1 1 0 0 0 22 17\"></path></svg>",
+    "users": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-users\" aria-hidden=\"true\"><path d=\"M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2\"></path><circle cx=\"9\" cy=\"7\" r=\"4\"></circle><path d=\"M22 21v-2a4 4 0 0 0-3-3.87\"></path><path d=\"M16 3.13a4 4 0 0 1 0 7.75\"></path></svg>",
+    "clapperboard": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-clapperboard\" aria-hidden=\"true\"><path d=\"M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z\"></path><path d=\"m6.2 5.3 3.1 3.9\"></path><path d=\"m12.4 3.4 3.1 4\"></path><path d=\"M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z\"></path></svg>",
+    "play": "\n<svg aria-hidden=\"true\"\n  class=\"lucide lucide-play\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <polygon points=\"6 3 20 12 6 21 6 3\" />\n</svg>\n",
+    "copy": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-copy\" aria-hidden=\"true\"><rect width=\"14\" height=\"14\" x=\"8\" y=\"8\" rx=\"2\" ry=\"2\"></rect><path d=\"M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2\"></path></svg>",
+    "mail": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-mail\" aria-hidden=\"true\"><rect width=\"20\" height=\"16\" x=\"2\" y=\"4\" rx=\"2\"></rect><path d=\"m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7\"></path></svg>",
+    "x": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-x\" aria-hidden=\"true\"><path d=\"M18 6 6 18\"></path><path d=\"m6 6 12 12\"></path></svg>",
+    "download": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-download\" aria-hidden=\"true\"><path d=\"M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4\"></path><polyline points=\"7 10 12 15 17 10\"></polyline><line x1=\"12\" x2=\"12\" y1=\"15\" y2=\"3\"></line></svg>",
+    "check": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-check\" aria-hidden=\"true\"><path d=\"M20 6 9 17l-5-5\"></path></svg>",
+    "pause": "\n<svg aria-hidden=\"true\"\n  class=\"lucide lucide-pause\"\n  xmlns=\"http://www.w3.org/2000/svg\"\n  width=\"24\"\n  height=\"24\"\n  viewBox=\"0 0 24 24\"\n  fill=\"none\"\n  stroke=\"currentColor\"\n  stroke-width=\"2\"\n  stroke-linecap=\"round\"\n  stroke-linejoin=\"round\"\n>\n  <rect x=\"14\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\" />\n  <rect x=\"6\" y=\"4\" width=\"4\" height=\"16\" rx=\"1\" />\n</svg>\n"
+  },
+  "source": {
+    "capabilities": [
+      {
+        "title": "AIGC 内容生产",
+        "description": "从脚本到成片，搭建可复用的生产流程。",
+        "metric": "AIGC覆盖率~100% · 62个活跃号复用"
+      },
+      {
+        "title": "用户增长",
+        "description": "以拉新和拉活表现，反推选题与卖点。",
+        "metric": "周拉新环比+198.6%"
+      },
+      {
+        "title": "创意策划",
+        "description": "拆解高效脚本，把好创意变成可复制的模板。",
+        "metric": "人均3条出1条爆款 · 最高爆款率70%"
+      },
+      {
+        "title": "团队搭建",
+        "description": "设计分工、考核与带教，推动团队转型。",
+        "metric": "团队规模翻倍 · 目标达成率稳定70%+"
+      },
+      {
+        "title": "一线创作",
+        "description": "坚持日更，先自己跑通，再交给团队复用。",
+        "metric": "日均4条 · 单条1000万+ · 单条涨粉3000+"
+      }
+    ],
+    "jobs": [
+      {
+        "company": "北京懂车帝科技有限公司",
+        "role": "AIGC 用户增长运营 TL",
+        "period": "2024.04 – 至今",
+        "okr": [
+          {
+            "objective": "O1：提升自养号矩阵拉新效率，跑通AIGC内容增长模型",
+            "results": [
+              "KR1：周曝光达 4,533万（抖音2,949万）",
+              "KR2：周拉新从71提升至 212（环比+198.6%）",
+              "KR3：爆款率（VV≥50万/条）达 33%–70%"
+            ]
+          },
+          {
+            "objective": "O2：完成团队从真人IP到AIGC生产的组织转型",
+            "results": [
+              "KR1：团队规模从10人扩至 20人+，组长3→5人",
+              "KR2：AIGC内容覆盖率从试点到 ~100%",
+              "KR3：考核从单人播放量改为 内容×拉新双维度绩效"
+            ]
+          },
+          {
+            "objective": "O3：沉淀可复用内容方法论与资产库，驱动规模化复制",
+            "results": [
+              "KR1：沉淀 3套可复用内容模板，62个活跃账号复用",
+              "KR2：产出Prompt库+资产库+Bad Case库，支持快速新人上手"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "title": "AIGC 内容生产",
+            "rows": [
+              {
+                "label": "解决什么问题",
+                "html": "\n          \n          <div class=\"detail-content\">接手时团队靠人工创意试做，产能不稳定、爆款不可复制、成本不可控。需要把AI出片从\"个人玩票\"变成\"20人标准化流水线\"。</div>\n        "
+              },
+              {
+                "label": "为什么做这个决策",
+                "html": "\n          \n          <div class=\"detail-content\">2024年中AI视频工具刚起来，团队还在纯真人拍摄，产能瓶颈明显：10人月产有限、爆款靠灵感不可复制、模型一换就要重新调。判断AIGC会把内容生产成本打下来，不转就会被竞品甩开。但直接全转风险大——先拿实验田（创意组）跑通打法，验证后再交给复制田（二创组）批量放量，这就是\"双轨分工\"的由来。</div>\n        "
+              },
+              {
+                "label": "9步生产链路",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <figure class=\"source-figure\"><svg viewBox=\"0 0 900 130\" role=\"img\" aria-label=\"原文件中的流程示意\">\n              <g font-size=\"11\" text-anchor=\"middle\">\n                <rect x=\"10\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"50\" y=\"42\" font-weight=\"600\">①选题</text>\n                <text x=\"50\" y=\"58\" font-size=\"9\" fill=\"#888\">人工/热点</text>\n                <rect x=\"110\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"150\" y=\"42\" font-weight=\"600\">②脚本</text>\n                <text x=\"150\" y=\"58\" font-size=\"9\" fill=\"#888\">Claude/Codex</text>\n                <rect x=\"210\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"250\" y=\"42\" font-weight=\"600\">③分镜</text>\n                <text x=\"250\" y=\"58\" font-size=\"9\" fill=\"#888\">AI拆解</text>\n                <rect x=\"310\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"350\" y=\"42\" font-weight=\"600\">④资产</text>\n                <text x=\"350\" y=\"58\" font-size=\"9\" fill=\"#888\">人物/车型库</text>\n                <rect x=\"410\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#1a1a1a\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"450\" y=\"42\" fill=\"#fff\" font-weight=\"600\">⑤生成</text>\n                <text x=\"450\" y=\"58\" fill=\"#aaa\" font-size=\"9\">Seedance/即梦</text>\n                <rect x=\"510\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"550\" y=\"42\" font-weight=\"600\">⑥剪辑</text>\n                <text x=\"550\" y=\"58\" font-size=\"9\" fill=\"#888\">剪映/AE</text>\n                <rect x=\"610\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#e67e22\" stroke-width=\"1.5\"></rect>\n                <text x=\"650\" y=\"42\" font-weight=\"600\">⑦审核</text>\n                <text x=\"650\" y=\"58\" font-size=\"9\" fill=\"#888\">六维质检</text>\n                <rect x=\"710\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n                <text x=\"750\" y=\"42\" font-weight=\"600\">⑧发布</text>\n                <text x=\"750\" y=\"58\" font-size=\"9\" fill=\"#888\">三平台分发</text>\n                <rect x=\"810\" y=\"20\" width=\"80\" height=\"50\" rx=\"6\" fill=\"#e8f5e9\" stroke=\"#2e7d32\" stroke-width=\"1.5\"></rect>\n                <text x=\"850\" y=\"42\" font-weight=\"600\" fill=\"#2e7d32\">⑨复盘</text>\n                <text x=\"850\" y=\"58\" font-size=\"9\" fill=\"#2e7d32\">数据反哺</text>\n              </g>\n              <g stroke=\"#999\" stroke-width=\"1.5\" fill=\"none\">\n                <line x1=\"90\" y1=\"45\" x2=\"108\" y2=\"45\"></line>\n                <line x1=\"190\" y1=\"45\" x2=\"208\" y2=\"45\"></line>\n                <line x1=\"290\" y1=\"45\" x2=\"308\" y2=\"45\"></line>\n                <line x1=\"390\" y1=\"45\" x2=\"408\" y2=\"45\"></line>\n                <line x1=\"490\" y1=\"45\" x2=\"508\" y2=\"45\"></line>\n                <line x1=\"590\" y1=\"45\" x2=\"608\" y2=\"45\"></line>\n                <line x1=\"690\" y1=\"45\" x2=\"708\" y2=\"45\"></line>\n                <line x1=\"790\" y1=\"45\" x2=\"808\" y2=\"45\"></line>\n              </g>\n              <path d=\"M 850 70 Q 850 115 450 115 Q 50 115 50 72\" stroke=\"#2e7d32\" stroke-width=\"1.5\" fill=\"none\" stroke-dasharray=\"4,3\"></path>\n              <text x=\"450\" y=\"112\" font-size=\"10\" fill=\"#2e7d32\" text-anchor=\"middle\">数据反哺选题 → 闭环</text>\n            </svg></figure>\n          </div>\n        "
+              },
+              {
+                "label": "具体做了什么",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <ul>\n              <li><b>矩阵策略：</b>管70个自养号/62个活跃，按二手车、新车、流量精品三类定位，实验田验证打法、复制田批量放量；覆盖抖音/视频号/小红书，拉新走付费+自然流+达人（星图）三渠道</li>\n              <li><b>搭流程：</b>设计\"选题→脚本→分镜→资产→生成→剪辑→审核→发布→复盘\"9步生产链路，主环境为飞连驱动的火山引擎Agent画布+懂车TV</li>\n              <li><b>多模型路由：</b>提示词用Claude/Codex/WorkBuddy，视频用Seedance 2.5/2.0，图片用即梦5.0/Nano Banana/ChatGPT/Gemini/画境AI/oiioii AI；按人物一致性、车型还原度、运镜差异分配不同模型任务，配套分级成本管控</li>\n              <li><b>内容方向验证：</b>统筹AI标杆内容与热点素材生产，验证精品情感AI、垂类剧情、复刻号、动画×汽车四类方向；个人日更4个AIGC账号保持一线手感，团队58个号承接硬植入推广</li>\n              <li><b>资产沉淀：</b>建标准化Prompt模板库 + 人物/车型/场景资产库 + 负面词库 + Bad Case失败案例库，走模板申报与分层上架机制；图文组另有2-3人用AIGC出图</li>\n              <li><b>质量管控：</b>设计六维质检标准（人物一致性/车型还原/动作运镜等）；全量实测各模型在不同车型/人物/运镜下的表现，输出模型能力边界文档</li>\n            </ul>\n          </div>\n        "
+              },
+              {
+                "label": "结果",
+                "html": "\n          \n          <div class=\"result-tag\">AIGC覆盖率~100% · 62个活跃号复用模板 · 人均产能稳定日更4条 · 爆款率最高70%</div>\n        "
+              },
+              {
+                "label": "资产库结构",
+                "html": "\n          \n          <div class=\"detail-content source-grid source-grid-three\">\n            <div class=\"source-tile\">\n              <div>📋</div>\n              <div>选题库</div>\n            </div>\n            <div class=\"source-tile\">\n              <div>💡</div>\n              <div>观点库</div>\n            </div>\n            <div class=\"source-tile\">\n              <div>📝</div>\n              <div>脚本库</div>\n            </div>\n            <div class=\"source-tile\">\n              <div>⚙️</div>\n              <div>工作流</div>\n            </div>\n            <div class=\"source-tile\">\n              <div>🤖</div>\n              <div>提示词库</div>\n            </div>\n            <div class=\"source-tile\">\n              <div>🔥</div>\n              <div>爆款模板库</div>\n              <div>aigc创意+混剪</div>\n            </div>\n          </div>\n        "
+              },
+              {
+                "label": "六维质检 + P0-P3四级风险管控",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <div class=\"source-grid source-grid-three\">\n              <div class=\"source-tile\">👤 人物一致性</div>\n              <div class=\"source-tile\">🚗 车型还原度</div>\n              <div class=\"source-tile\">🎬 动作运镜</div>\n              <div class=\"source-tile\">🏠 场景合理性</div>\n              <div class=\"source-tile\">📦 植入自然度</div>\n              <div class=\"source-tile\">💬 话术具体度</div>\n            </div>\n            <div class=\"source-grid source-grid-two\">\n              <div class=\"source-tile\">\n                <div>P0 一票否决</div>\n                <div>竞品恶意拉踩、品牌重大舆情、严重贬损词、AI生成老板恶搞形象</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>P1 必须返工</div>\n                <div>画面崩坏人物重叠、植入过重（\"在\"\"去\"禁用引导词）、撞脸明星、价格信息错误</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>P2 需修复</div>\n                <div>前后车型不一致、人物重复出现、驾驶座人物消失、穿模、车辆突然消失、空间关系错位</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>P3 微调</div>\n                <div>字幕台词对不上、口型不对、配音风格前后不一致、字幕轻微错漏</div>\n              </div>\n            </div>\n          </div>\n        "
+              }
+            ],
+            "summary": {
+              "action": "设计9步生产流程，搭建Prompt、人物车型资产与质检标准。",
+              "outcome": "AIGC覆盖率近100% · 62个活跃账号复用 · 人均日更4条"
+            }
+          },
+          {
+            "title": "内容增长",
+            "rows": [
+              {
+                "label": "解决什么问题",
+                "html": "\n          \n          <div class=\"detail-content\">原团队只看播放量，导致\"叫好不叫座\"——爆款有曝光但不拉新，资源错配。需要建立曝光×拉新双指标体系，用数据反推内容策略。</div>\n        "
+              },
+              {
+                "label": "为什么做这个决策",
+                "html": "<div class=\"detail-content\">中秋国庆活动中，精准估价830万 VV带来32人拉新，帮选车+查优惠691万 VV带来89人拉新。我需要找出用户为什么愿意用产品，而不只是继续复制高播放内容，所以把复盘下钻到卖点、账号和单条脚本。</div>"
+              },
+              {
+                "label": "具体做了什么",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <ul>\n              <li><b>搭数据底座：</b>建了团队统一数据基建——AIGC数据日报（日）、自养号周报（周）、拉新拉活明细（日）、DNU（日）、星图投稿拉新（日）、账号管理唯一表、AI内容资产沉淀库；本周5天全组产出389条/总曝光1.43亿，按小组/卖点/平台三维交叉分析</li>\n              <li><b>工具链：</b>SUMIFS/RANK.EQ/TODAY()做曝光日榜月榜；新抖/抖查查/巨量算数/DataEye看第三方；Excel+Tableau/帆软做看板；会写基础SQL取数</li>\n              <li><b>复盘节奏：</b>日报感知异动 → 周报拆解归因 → 双周会定策略调整；按\"原因+数据特征+可复制公式\"拆爆款</li>\n              <li><b>核心产出：</b>中秋国庆复盘把9个卖点分到\"曝光×拉新率\"四象限，识别出\"火且转化好/叫好不叫座/拉活型/长尾走量\"四档，指导资源分配</li>\n            </ul>\n          </div>\n        "
+              },
+              {
+                "label": "周拉新增长趋势",
+                "html": "<div class=\"endpoint-comparison\"><span>复盘前 <strong>71</strong></span><span aria-hidden=\"true\">→</span><span>复盘后 <strong>212</strong></span><span class=\"outcome\">+198.6%</span></div>"
+              },
+              {
+                "label": "结果",
+                "html": "<div class=\"result-tag\">周拉新71→212（+198.6%） · 中秋国庆识别出两大拉新主力卖点，合计153人拉新，占64.3%</div>"
+              },
+              {
+                "label": "数据基建全景",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <div class=\"source-grid source-grid-three\">\n              <div class=\"source-tile\">\n                <div>AIGC数据日报</div>\n                <div>日更</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>自养号周报</div>\n                <div>周更</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>拉新拉活明细</div>\n                <div>日更</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>DNU / 星图投稿</div>\n                <div>日更</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>账号管理唯一表</div>\n                <div>维护中</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>AI内容资产沉淀库</div>\n                <div>维护中</div>\n              </div>\n              <div class=\"source-tile\">\n                <div>月度绩效汇总</div>\n                <div>月更</div>\n              </div>\n            </div>\n          </div>\n        "
+              },
+              {
+                "label": "本周数据快照（10.5-10.11）",
+                "html": "\n          \n          <div class=\"detail-content source-grid source-grid-four\">\n            <div><div>389条</div><div>本周发布</div></div>\n            <div><div>1.43亿</div><div>总曝光</div></div>\n            <div><div>7,580万</div><div>抖音VV</div></div>\n            <div><div>6组</div><div>并行小组</div></div>\n          </div>\n        "
+              }
+            ],
+            "summary": {
+              "action": "建立作品级表现追踪，按卖点与账号调整内容方向。",
+              "outcome": "周拉新71→212 · 环比+198.6%"
+            }
+          },
+          {
+            "title": "脚本策划与复用",
+            "rows": [
+              {
+                "label": "解决什么问题",
+                "html": "\n          \n          <div class=\"detail-content\">爆款靠灵感、不可复制。需要把高拉新视频拆解成可套用的结构公式，让20人团队都能产出合格内容。</div>\n        "
+              },
+              {
+                "label": "为什么做这个决策",
+                "html": "\n          \n          <div class=\"detail-content\">团队扩到20人后，不可能每个人都靠灵感写脚本。新手上手慢、产出不稳定，同样的选题有人拍出来200万+有人只有5万。必须搞清楚\"高拉新视频到底做对了什么\"，把隐性经验变成显性公式。方法是抓拉新TOP13完整脚本逐句拆，同时抓3条高曝光低转化的反例做对比——正反对比才能看出差异在哪。</div>\n        "
+              },
+              {
+                "label": "具体做了什么",
+                "html": "<div class=\"detail-content\"><ul><li><b>拆正反案例：</b>逐句拆解拉新TOP13，对照3条高曝光低转化反例，找出剧情、人物关系、工具位置和话术上的差异。</li><li><b>提炼用户冲突：</b>从“车和选择被别人做主”、贷款算账、情侣选车等处境切入，让工具参与解决真实问题。</li><li><b>沉淀三套模板：</b>家庭伦理+工具救场、即时决策+强钩子、情怀车+认知反差，分别服务选车决策、现场解题与汽车兴趣需求。</li><li><b>推动团队复用：</b>把脚本结构、功能植入与具体动作写成检查项，通过模板库与工作流交给矩阵复用。</li></ul></div>"
+              },
+              {
+                "label": "好模型 vs 坏模型",
+                "html": "<div class=\"detail-content source-grid source-grid-two\"><div class=\"source-tile\"><b>可复用方向</b><ul><li>角色当下有必须解决的问题</li><li>小懂在剧情中承担解题任务</li><li>功能匹配当前冲突</li><li>观众知道点进去第一步做什么</li></ul></div><div class=\"source-tile\"><b>需要规避</b><ul><li>只有科普或段子，没有待解决需求</li><li>剧情已给出答案，工具只重复旁白</li><li>功能与场景错位</li><li>只报功能名，缺少动作和具体利益</li></ul></div></div>"
+              },
+              {
+                "label": "结果",
+                "html": "\n          \n          <div class=\"result-tag\">3套模板供62个号复用 · 200万+爆款从1条增至4条 · 拉新TOP内容结构对齐率显著提升</div>\n        "
+              },
+              {
+                "label": "爆款模板库核心公式",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <div class=\"source-tile\">\n              <div>爆款内容三要素</div>\n              <div>\n                <span class=\"source-tile\">价格反差</span>\n                <span class=\"source-tile\">情绪煽动</span>\n                <span class=\"source-tile\">价值观冲击</span>\n              </div>\n              <div>\n                例：\"买迈腾的钱咬咬牙上个4圈\"——用价格对比制造焦虑；\"到了\"口语化，突出降价力度；轻量化不用真实拍摄，素材复用性极强；评论区互动带动自然流量。\n              </div>\n            </div>\n          </div>\n        "
+              },
+              {
+                "label": "3套可复用模板",
+                "html": "<div class=\"detail-content source-grid source-grid-three\"><div class=\"source-tile\"><b>家庭伦理 + 工具救场</b><p>选择被做主 → 角色卡壳 → 小懂解题 → 主角翻盘。让观众代入自己的选车困境。</p></div><div class=\"source-tile\"><b>即时决策 + 强钩子</b><p>现场算账/估价 → 工具完成任务 → 角色做决定。突出当下能用、能解决问题。</p></div><div class=\"source-tile\"><b>情怀车 + 认知反差</b><p>老车被低估 → 工具查车/行情 → 情绪落点。用汽车兴趣连接找车与查行情需求。</p></div></div>"
+              }
+            ],
+            "summary": {
+              "action": "拆解高拉新脚本与反例，提炼剧情结构和功能植入模板。",
+              "outcome": "沉淀3套模板 · 200万+爆款从1条增至4条"
+            }
+          },
+          {
+            "title": "团队搭建",
+            "rows": [
+              {
+                "label": "解决什么问题",
+                "html": "\n          \n          <div class=\"detail-content\">接手时10人真人创意IP团队，考核单人月播放3000万，产能瓶颈明显。需要转型AIGC并扩编，同时设计配套考核和激励机制。</div>\n        "
+              },
+              {
+                "label": "管理闭环全景",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <figure class=\"source-figure\"><svg viewBox=\"0 0 860 580\" role=\"img\" aria-label=\"原文件中的流程示意\">\n              <defs>\n                <marker markerWidth=\"8\" markerHeight=\"6\" refX=\"8\" refY=\"3\" orient=\"auto\" id=\"arr\"><path d=\"M0,0 L8,3 L0,6\" fill=\"#666\"></path></marker>\n                <marker markerWidth=\"8\" markerHeight=\"6\" refX=\"8\" refY=\"3\" orient=\"auto\" id=\"arrg\"><path d=\"M0,0 L8,3 L0,6\" fill=\"#2e7d32\"></path></marker>\n                <marker markerWidth=\"8\" markerHeight=\"6\" refX=\"8\" refY=\"3\" orient=\"auto\" id=\"arro\"><path d=\"M0,0 L8,3 L0,6\" fill=\"#e67e22\"></path></marker>\n              </defs>\n\n              <!-- 1. 北极星目标 -->\n              <rect x=\"300\" y=\"10\" width=\"260\" height=\"56\" rx=\"8\" fill=\"#1a1a1a\"></rect>\n              <text x=\"430\" y=\"34\" fill=\"#fff\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">🎯 北极星目标</text>\n              <text x=\"430\" y=\"54\" fill=\"#ccc\" font-size=\"11\" text-anchor=\"middle\">拉新增量 · 自养号 × AI内容</text>\n\n              <!-- 箭头 北极星→双轨 -->\n              <line x1=\"430\" y1=\"66\" x2=\"430\" y2=\"90\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></line>\n\n              <!-- 2. 双轨分工 -->\n              <rect x=\"280\" y=\"92\" width=\"300\" height=\"56\" rx=\"8\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"430\" y=\"116\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">双轨分工</text>\n              <text x=\"430\" y=\"136\" font-size=\"11\" fill=\"#666\" text-anchor=\"middle\">实验田（创意组）探索 ＋ 复制田（二创组）放量</text>\n\n              <!-- 箭头 双轨→生产 -->\n              <line x1=\"430\" y1=\"148\" x2=\"430\" y2=\"172\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></line>\n\n              <!-- 3. 内容生产闭环 -->\n              <rect x=\"240\" y=\"174\" width=\"380\" height=\"56\" rx=\"8\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"430\" y=\"198\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">内容生产闭环</text>\n              <text x=\"430\" y=\"218\" font-size=\"11\" fill=\"#666\" text-anchor=\"middle\">任务 → 选题 → 脚本 → 制作 → 审核 → 发布</text>\n\n              <!-- 箭头 生产→数据 -->\n              <line x1=\"430\" y1=\"230\" x2=\"430\" y2=\"254\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></line>\n\n              <!-- 4. 数据回收 -->\n              <rect x=\"280\" y=\"256\" width=\"300\" height=\"56\" rx=\"8\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"430\" y=\"280\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">数据回收</text>\n              <text x=\"430\" y=\"300\" font-size=\"11\" fill=\"#666\" text-anchor=\"middle\">日维度感知高拉新 · 日报/周报/双周会</text>\n\n              <!-- 分叉箭头 -->\n              <path d=\"M 430 312 L 430 330 L 220 330 L 220 348\" fill=\"none\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></path>\n              <path d=\"M 430 312 L 430 330 L 640 330 L 640 348\" fill=\"none\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></path>\n\n              <!-- 5a. 复盘拆解（左） -->\n              <rect x=\"80\" y=\"350\" width=\"280\" height=\"60\" rx=\"8\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"220\" y=\"374\" font-size=\"13\" font-weight=\"700\" text-anchor=\"middle\">复盘拆解</text>\n              <text x=\"220\" y=\"394\" font-size=\"11\" fill=\"#666\" text-anchor=\"middle\">卖点×人群匹配 · 内容方法 · 新模板</text>\n\n              <!-- 5b. 优化动作（右）橙色 -->\n              <rect x=\"500\" y=\"350\" width=\"280\" height=\"60\" rx=\"8\" fill=\"#fff\" stroke=\"#e67e22\" stroke-width=\"1.5\"></rect>\n              <text x=\"640\" y=\"374\" font-size=\"13\" font-weight=\"700\" fill=\"#e67e22\" text-anchor=\"middle\">优化动作</text>\n              <text x=\"640\" y=\"394\" font-size=\"11\" fill=\"#666\" text-anchor=\"middle\">高曝低拉新→优化钩子 · 低曝高拉新→优化剧情</text>\n\n              <!-- 优化动作→回流生产闭环 -->\n              <path d=\"M 640 350 L 640 202 L 620 202\" fill=\"none\" stroke=\"#e67e22\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\" marker-end=\"url(#arro)\"></path>\n\n              <!-- 复盘拆解→模板沉淀 -->\n              <line x1=\"220\" y1=\"410\" x2=\"220\" y2=\"440\" stroke=\"#666\" stroke-width=\"1.5\" marker-end=\"url(#arr)\"></line>\n\n              <!-- 6. 模板沉淀与激励 -->\n              <rect x=\"150\" y=\"442\" width=\"340\" height=\"60\" rx=\"8\" fill=\"#e8f5e9\" stroke=\"#2e7d32\" stroke-width=\"1.5\"></rect>\n              <text x=\"320\" y=\"466\" font-size=\"13\" font-weight=\"700\" fill=\"#2e7d32\" text-anchor=\"middle\">模板沉淀与激励</text>\n              <text x=\"320\" y=\"486\" font-size=\"11\" fill=\"#2e7d32\" text-anchor=\"middle\">爆款六变量拆解 · 贡献维护人 · 创新激励</text>\n\n              <!-- 模板沉淀→规模化复制 -->\n              <line x1=\"320\" y1=\"502\" x2=\"320\" y2=\"526\" stroke=\"#2e7d32\" stroke-width=\"1.5\" marker-end=\"url(#arrg)\"></line>\n\n              <!-- 7. 规模化复制 -->\n              <rect x=\"200\" y=\"528\" width=\"240\" height=\"44\" rx=\"8\" fill=\"#fff\" stroke=\"#2e7d32\" stroke-width=\"1.5\"></rect>\n              <text x=\"320\" y=\"548\" font-size=\"12\" font-weight=\"700\" fill=\"#2e7d32\" text-anchor=\"middle\">规模化复制</text>\n              <text x=\"320\" y=\"565\" font-size=\"10\" fill=\"#2e7d32\" text-anchor=\"middle\">团队复用 · 提效工具沉淀</text>\n\n              <!-- 规模化复制→回流双轨分工（右侧大回流） -->\n              <path d=\"M 440 550 L 780 550 L 780 120 L 580 120\" fill=\"none\" stroke=\"#2e7d32\" stroke-width=\"1.5\" stroke-dasharray=\"5,3\" marker-end=\"url(#arrg)\"></path>\n            </svg></figure>\n          </div>\n        "
+              },
+              {
+                "label": "我怎么管这个团队",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <ul>\n              <li><b>组织与分工：</b>6组双轨制（IP组做自有IP、创新组试新方向、图文组出图），创意跑通后二创组批量复刻；个人账号分品宣型（高播放扩散）和效果型（高拉新转化），分别设定考核目标</li>\n              <li><b>目标与考核：</b>月度双维度目标三级拆解（团队→小组→个人）；考核从\"绝对播放量\"改为\"内容×拉新\"双维度；节假日节点加CPM4/CPM8星图播放激励</li>\n              <li><b>数据与迭代：</b>日维度数据感知（日报/周报/双周会），按\"曝光×拉新率\"四象限分卖点复盘，沉淀可复用模板并指定贡献人维护人</li>\n              <li><b>合规与带教：</b>P0-P3四级风险审核+星图引流词红线；入职四步走+1V1师傅+新手保护期，从3个组长带到5个</li>\n            </ul>\n          </div>\n        "
+              },
+              {
+                "label": "结果",
+                "html": "\n          \n          <div class=\"result-tag\">团队10→20人 · 组长3→5人 · 目标达成率稳定70%+ · 模板沉淀库持续运转</div>\n        "
+              },
+              {
+                "label": "团队结构",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <figure class=\"source-figure\"><svg viewBox=\"0 0 600 180\" role=\"img\" aria-label=\"原文件中的流程示意\">\n              <!-- TL -->\n              <rect x=\"250\" y=\"10\" width=\"100\" height=\"36\" rx=\"6\" fill=\"#1a1a1a\"></rect>\n              <text x=\"300\" y=\"33\" fill=\"#fff\" font-size=\"12\" font-weight=\"600\" text-anchor=\"middle\">TL（20人）</text>\n              <!-- 连接线 -->\n              <line x1=\"300\" y1=\"46\" x2=\"300\" y2=\"60\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"80\" y1=\"60\" x2=\"520\" y2=\"60\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"80\" y1=\"60\" x2=\"80\" y2=\"75\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"200\" y1=\"60\" x2=\"200\" y2=\"75\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"320\" y1=\"60\" x2=\"320\" y2=\"75\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"440\" y1=\"60\" x2=\"440\" y2=\"75\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"520\" y1=\"60\" x2=\"520\" y2=\"75\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <!-- 各组 -->\n              <rect x=\"30\" y=\"75\" width=\"100\" height=\"32\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"80\" y=\"95\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">IP1组</text>\n              <rect x=\"150\" y=\"75\" width=\"100\" height=\"32\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"200\" y=\"95\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">IP2组</text>\n              <rect x=\"270\" y=\"75\" width=\"100\" height=\"32\" rx=\"6\" fill=\"#e8f5e9\" stroke=\"#2e7d32\" stroke-width=\"1.5\"></rect>\n              <text x=\"320\" y=\"95\" font-size=\"11\" font-weight=\"600\" fill=\"#2e7d32\" text-anchor=\"middle\">创新1-3组</text>\n              <rect x=\"390\" y=\"75\" width=\"100\" height=\"32\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"440\" y=\"95\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">图文组</text>\n              <rect x=\"470\" y=\"75\" width=\"100\" height=\"32\" rx=\"6\" fill=\"#fff\" stroke=\"#1a1a1a\" stroke-width=\"1.5\"></rect>\n              <text x=\"520\" y=\"95\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">质检组</text>\n              <!-- 标注 -->\n              <text x=\"320\" y=\"130\" font-size=\"10\" fill=\"#2e7d32\" text-anchor=\"middle\">实验田：试新模板新方向</text>\n              <text x=\"80\" y=\"130\" font-size=\"10\" fill=\"#666\" text-anchor=\"middle\">自有IP</text>\n              <text x=\"440\" y=\"130\" font-size=\"10\" fill=\"#666\" text-anchor=\"middle\">出图</text>\n              <text x=\"520\" y=\"130\" font-size=\"10\" fill=\"#666\" text-anchor=\"middle\">上线审核</text>\n              <!-- 本周产出 -->\n              <text x=\"300\" y=\"165\" font-size=\"11\" fill=\"#999\" text-anchor=\"middle\">本周（5天）全组产出389条 · 总曝光1.43亿</text>\n            </svg></figure>\n          </div>\n        "
+              },
+              {
+                "label": "目标三级拆解",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <figure class=\"source-figure\"><svg viewBox=\"0 0 600 160\" role=\"img\" aria-label=\"原文件中的流程示意\">\n              <rect x=\"220\" y=\"5\" width=\"160\" height=\"32\" rx=\"6\" fill=\"#1a1a1a\"></rect>\n              <text x=\"300\" y=\"26\" fill=\"#fff\" font-size=\"11\" font-weight=\"600\" text-anchor=\"middle\">月度团队目标</text>\n              <line x1=\"300\" y1=\"37\" x2=\"300\" y2=\"50\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"120\" y1=\"50\" x2=\"480\" y2=\"50\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"120\" y1=\"50\" x2=\"120\" y2=\"65\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"300\" y1=\"50\" x2=\"300\" y2=\"65\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <line x1=\"480\" y1=\"50\" x2=\"480\" y2=\"65\" stroke=\"#999\" stroke-width=\"1.5\"></line>\n              <rect x=\"50\" y=\"65\" width=\"140\" height=\"30\" rx=\"5\" fill=\"#fff\" stroke=\"#1a1a1a\"></rect>\n              <text x=\"120\" y=\"84\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">创新组 3600万/750拉新</text>\n              <rect x=\"230\" y=\"65\" width=\"140\" height=\"30\" rx=\"5\" fill=\"#fff\" stroke=\"#1a1a1a\"></rect>\n              <text x=\"300\" y=\"84\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">小懂组 4800万/600拉新</text>\n              <rect x=\"410\" y=\"65\" width=\"140\" height=\"30\" rx=\"5\" fill=\"#fff\" stroke=\"#1a1a1a\"></rect>\n              <text x=\"480\" y=\"84\" font-size=\"10\" font-weight=\"600\" text-anchor=\"middle\">图文组 2100万/900拉新</text>\n              <line x1=\"120\" y1=\"95\" x2=\"120\" y2=\"108\" stroke=\"#ccc\" stroke-width=\"1\"></line>\n              <line x1=\"300\" y1=\"95\" x2=\"300\" y2=\"108\" stroke=\"#ccc\" stroke-width=\"1\"></line>\n              <line x1=\"480\" y1=\"95\" x2=\"480\" y2=\"108\" stroke=\"#ccc\" stroke-width=\"1\"></line>\n              <rect x=\"60\" y=\"108\" width=\"120\" height=\"26\" rx=\"4\" fill=\"#f5f5f5\"></rect>\n              <text x=\"120\" y=\"125\" font-size=\"9\" fill=\"#666\" text-anchor=\"middle\">拆到个人日更目标</text>\n              <rect x=\"240\" y=\"108\" width=\"120\" height=\"26\" rx=\"4\" fill=\"#f5f5f5\"></rect>\n              <text x=\"300\" y=\"125\" font-size=\"9\" fill=\"#666\" text-anchor=\"middle\">拆到个人日更目标</text>\n              <rect x=\"420\" y=\"108\" width=\"120\" height=\"26\" rx=\"4\" fill=\"#f5f5f5\"></rect>\n              <text x=\"480\" y=\"125\" font-size=\"9\" fill=\"#666\" text-anchor=\"middle\">拆到个人日更目标</text>\n              <text x=\"300\" y=\"150\" font-size=\"10\" fill=\"#999\" text-anchor=\"middle\">三级拆解：团队 → 小组 → 个人，可追溯</text>\n            </svg></figure>\n          </div>\n        "
+              }
+            ],
+            "summary": {
+              "action": "推行创意验证与批量复制双轨分工，配套目标、激励与带教。",
+              "outcome": "团队10→20人 · 组长3→5人 · 目标达成率70%+"
+            }
+          },
+          {
+            "title": "个人创作",
+            "rows": [
+              {
+                "label": "为什么TL还要自己做内容",
+                "html": "\n          \n          <div class=\"detail-content\">内容运营TL如果脱离一线，就会变成\"只会看数据不会改脚本\"的管理岗。自己日更4条的目的有三：①保持手感——知道什么脚本能爆、什么话术不行，拆爆款才有第一手判断；②验证方法论——沉淀的模板先自己跑一遍，确认能复制再推给团队；③标杆作用——团队看到TL自己也在出爆款，说服力比讲大道理强。个人运营4个AIGC方向账号：人间清醒观察室（精品泛流量情感）、穿越汽车（复刻号）、车没坏（垂类测试）、噜噜总动员（动画×汽车）。</div>\n        "
+              },
+              {
+                "label": "个人产能与代表作",
+                "html": "\n          \n          <div class=\"detail-content\">\n            <ul>\n              <li>日均稳定产出 <b>4条成片</b>，不因为带团队而减产</li>\n              <li>单条播放 <b>1000万+</b> 的AI汽车剧情代表作，单条涨粉 <b>3000+</b></li>\n              <li>个人验证跑通的内容方向，再拆成模板推给20人矩阵复用</li>\n            </ul>\n          </div>\n        "
+              },
+              {
+                "label": "个人代表作品",
+                "html": "\n          \n          <div class=\"evidence\">\n            <a href=\"https://v.douyin.com/B9tQ0GGxuFE/\" target=\"_blank\" rel=\"noopener noreferrer\">生活磨平了他的棱角，可他还在笑</a>\n            <a href=\"https://v.douyin.com/zcYH6als6VQ/\" target=\"_blank\" rel=\"noopener noreferrer\">爆款模板复刻</a>\n            <a href=\"https://v.douyin.com/5Z6BeX6Rg1s/\" target=\"_blank\" rel=\"noopener noreferrer\">大众辉腾</a>\n            <a href=\"https://v.douyin.com/JH3HY8eHjHI/\" target=\"_blank\" rel=\"noopener noreferrer\">虎头奔×机器人</a>\n            <a href=\"https://v.douyin.com/W3l0CybKzGE/\" target=\"_blank\" rel=\"noopener noreferrer\">霍希</a>\n          </div>\n        "
+              },
+              {
+                "label": "个人运营4个AIGC账号",
+                "html": "\n          \n          <div class=\"detail-content source-grid source-grid-two\">\n            <a href=\"https://v.douyin.com/OUxU7F9NNnk/\" target=\"_blank\" class=\"source-tile\" rel=\"noopener noreferrer\">\n              <div>人间清醒观察室</div>\n              <div>精品泛流量情感AIGC</div>\n            </a>\n            <a href=\"https://v.douyin.com/CbGmEMfgAKg/\" target=\"_blank\" class=\"source-tile\" rel=\"noopener noreferrer\">\n              <div>穿越汽车</div>\n              <div>复刻号</div>\n            </a>\n            <a href=\"https://v.douyin.com/LzLanOu0reg/\" target=\"_blank\" class=\"source-tile\" rel=\"noopener noreferrer\">\n              <div>车没坏</div>\n              <div>垂类测试号</div>\n            </a>\n            <a href=\"https://v.douyin.com/KDCnE00_Ogw/\" target=\"_blank\" class=\"source-tile\" rel=\"noopener noreferrer\">\n              <div>噜噜总动员</div>\n              <div>动画×汽车</div>\n            </a>\n          </div>\n        "
+              }
+            ],
+            "summary": {
+              "action": "运营4个AIGC账号，独立完成脚本、生成与剪辑，验证内容方向。",
+              "outcome": "个人日更4条 · 单条1000万+播放 · 单条涨粉3000+"
+            }
+          }
+        ],
+        "summary": "负责70号内容矩阵与20人团队，统筹 AIGC 生产、内容策略和用户增长。"
+      },
+      {
+        "company": "西安简单有为科技有限公司（UWANT友望）",
+        "role": "除螨仪策略部 · 内容运营",
+        "period": "2023.07 – 2024.03",
+        "okr": [
+          {
+            "objective": "O1：从0打造\"郝家豁\"IP账号，建立内容品牌心智",
+            "results": [
+              "KR1：粉丝量达 50万+，多条内容播放800万+",
+              "KR2：单月涨粉 1万+，离职时多条破千万"
+            ]
+          },
+          {
+            "objective": "O2：提升千川跑量素材效率，降低线索成本",
+            "results": [
+              "KR1：核心素材CTR 5%+、3秒完播 35%+",
+              "KR2：ROI稳定 1:3.5，线索成本较接手前 下降30%"
+            ]
+          }
+        ],
+        "competences": [
+          {
+            "title": "IP 账号运营",
+            "rows": [
+              {
+                "label": "具体做了什么",
+                "html": "\n            \n            <div class=\"detail-content\">\n              <ul>\n                <li>主导\"郝家豁\"账号选题、脚本、拍摄统筹、后期与复盘全链路</li>\n                <li>围绕人设持续优化人物关系、冲突节奏和商业植入方式</li>\n                <li>建立\"创意→投放测试→数据反馈→素材迭代\"周度机制</li>\n              </ul>\n            </div>\n          "
+              },
+              {
+                "label": "结果",
+                "html": "\n            \n            <div class=\"result-tag\">粉丝50万+ · 单条最高800万+播放 · 单月涨粉1万+</div>\n          "
+              }
+            ],
+            "summary": {
+              "action": "主导“郝家豁”账号选题、脚本、拍摄统筹与后期，持续迭代人设和剧情。",
+              "outcome": "账号粉丝50万+ · 单条最高800万+播放"
+            }
+          },
+          {
+            "title": "投放素材优化",
+            "rows": [
+              {
+                "label": "具体做了什么",
+                "html": "\n            \n            <div class=\"detail-content\">\n              <ul>\n                <li>按\"目标人群→痛点→卖点→信任证明→CTA\"结构设计跑量素材</li>\n                <li>建立\"创意→投放测试→数据反馈→素材迭代\"机制，按周迭代钩子、卖点顺序、产品露出与时长</li>\n                <li>同时负责多个营销账号全流程运营，单月涨粉1万+</li>\n              </ul>\n            </div>\n          "
+              },
+              {
+                "label": "结果",
+                "html": "\n            \n            <div class=\"result-tag\">CTR 5%+ · 3秒完播35%+ · ROI 1:3.5 · 线索成本-30%</div>\n          "
+              }
+            ],
+            "summary": {
+              "action": "围绕人群痛点设计素材，迭代开头钩子、卖点顺序与产品露出。",
+              "outcome": "CTR 5%+ · ROI 1:3.5 · 线索成本下降30%"
+            }
+          }
+        ],
+        "summary": "负责IP账号与投放素材，从选题、拍摄到后期和效果优化。"
+      }
+    ],
+    "cases": [
+      {
+        "title": "重点项目：中秋国庆 AI 小懂内容投放复盘",
+        "context": "2026/09/24–10/08 · 15天 · 119条有效视频 · VV、拉新与拉活分开复盘",
+        "blocks": [
+          {
+            "label": "背景",
+            "html": "假期大促期需集中投放9个卖点方向，纯小懂+二手车&amp;小懂两条产品线并行。需要在短时间内验证哪些卖点真正\"火且转化好\"，哪些是流量陷阱。"
+          },
+          {
+            "label": "我的角色",
+            "html": "统筹投放策略、数据回收与复盘拆解；主导爆款脚本四维拆解和可复用模板沉淀；输出下一轮投放建议。"
+          },
+          {
+            "label": "关键动作",
+            "html": "\n            ① 9个卖点按\"曝光×拉新率\"分四象限<br>\n            ② 拉新TOP13脚本逐句拆解，找6个结构共同点<br>\n            ③ 抓3条高曝光低转化反例做正反对比<br>\n            ④ 达人角色分化（头部4号vs尾部2号），输出下轮预算建议<br>\n            ⑤ 沉淀3套可复用模板+好模型4判断标准\n          "
+          },
+          {
+            "label": "核心结论",
+            "html": "AI帮选车+查优惠、AI语音讲车合计153人拉新，占总览238人的64.3%。三个流量型卖点贡献46.5% VV、19.3%拉新。二手车内容按卖点与二手车线子集分别看拉活；文档明细与总览相差1万 VV、1人拉新，保留差异。"
+          }
+        ],
+        "metrics": [
+          {
+            "value": "119条",
+            "label": "投放视频"
+          },
+          {
+            "value": "3,690万",
+            "label": "总曝光"
+          },
+          {
+            "value": "238",
+            "label": "总拉新"
+          },
+          {
+            "value": "2,443",
+            "label": "总拉活"
+          },
+          {
+            "value": "64.3%",
+            "label": "两卖点贡献拉新占比"
+          }
+        ],
+        "links": [
+          {
+            "title": "车贷利息(252万/67拉新)",
+            "url": "https://v.douyin.com/MRfNLNFXP3E/"
+          },
+          {
+            "title": "借野马见岳父(266万/35拉新)",
+            "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7691535611106168090"
+          },
+          {
+            "title": "揽胜接客(803拉活)",
+            "url": "https://v.douyin.com/CAJMdzhNJhQ/"
+          }
+        ],
+        "missingEvidence": false
+      },
+      {
+        "title": "⚠️ 踩坑与复盘：叫好不叫座的流量陷阱",
+        "context": "高曝光≠高转化，这是我交过最贵的学费",
+        "blocks": [
+          {
+            "label": "踩了什么坑",
+            "html": "精准估价、二手车交易避坑、AI约试驾合计1,715万 VV、46人拉新。按舍入 VV估算，三者均 VV约55.3万、124.8万、96.5万/条；拉新效率约为大盘0.60、0.12、0.40倍，并非都只有1/5–1/10。"
+          },
+          {
+            "label": "为什么会踩",
+            "html": "内容本身把活干完了——用户看完估价视频就走，没有\"再去小懂算一遍\"的动机；\"避坑\"内容用户是来学知识的，不带工具使用诉求；\"约试驾\"决策链太长，短视频用户不会当场约。"
+          },
+          {
+            "label": "怎么发现的",
+            "html": "只看播放量时完全没发现问题，反而觉得这几个方向做得很好。直到拉新数据按卖点拆开看，才发现曝光和拉新严重错配。这直接推动了双指标复盘体系的建立。"
+          },
+          {
+            "label": "后来怎么改的",
+            "html": "验证角色是否有真实待解问题、功能是否匹配、工具是否在剧情里参与解题、观众是否知道第一步做什么；以剧情反转自然收尾。下一轮做可比实验验证植入位置和动作话术，品牌曝光、拉新与拉活分别评价。"
+          }
+        ],
+        "metrics": [],
+        "links": [],
+        "missingEvidence": true
+      }
+    ],
+    "methods": [
+      {
+        "title": "让功能成为剧情解法",
+        "description": "从选车、算账、卖车的真实难题切入，让小懂自然参与解题。",
+        "flow": "用户困境 → 脚本拆解 → 工具解题 → 模板复用"
+      },
+      {
+        "title": "让内容对增长负责",
+        "description": "用播放、拉新与拉活判断内容价值，决定放量、改稿或换方向。",
+        "flow": "回收作品表现 → 找出差异 → 调整选题与分工 → 下一轮复盘"
+      },
+      {
+        "title": "把质量要求前置",
+        "description": "把六维质检与风险分级放进生产流程，减少返工、稳定出片。",
+        "flow": "生成初检 → 六维逐项打分 → P0-P3分级 → Bad Case记录 → 反馈Prompt迭代"
+      },
+      {
+        "title": "把经验变成团队资产",
+        "description": "先自己验证，再将脚本、Prompt和人物车型资产交给矩阵复用。",
+        "flow": "爆款验证 → 公式抽象 → SOP固化 → 申报上架 → 团队复用"
+      }
+    ],
+    "insights": [
+      {
+        "title": "AIGC 的价值，是稳定生产。",
+        "description": "创意仍靠判断，AI负责放大产能、一致性与可复用性。"
+      },
+      {
+        "title": "播放是入口，使用才是增长。",
+        "description": "功能要解决用户眼前的问题，而不是只在视频里露出。"
+      },
+      {
+        "title": "做什么，比多做一条更重要。",
+        "description": "持续识别有效人群、场景与卖点，把内容投入到有价值的方向。"
+      },
+      {
+        "title": "让好内容不依赖某个人。",
+        "description": "靠流程、质检和带教，让团队持续交付。"
+      }
+    ],
+    "skills": [
+      "火山引擎Agent画布",
+      "Seedance 2.5/2.0",
+      "即梦5.0 / Nano Banana",
+      "Claude / Codex / WorkBuddy",
+      "ChatGPT / Gemini / 画境AI / oiioii AI",
+      "Excel数据透视 / SUMIFS / RANK.EQ",
+      "Tableau / 帆软",
+      "基础SQL",
+      "新抖 / 抖查查 / 巨量算数 / 新榜 / DataEye",
+      "抖音 / 视频号 / 小红书",
+      "千川投放"
+    ],
+    "links": [
+      {
+        "title": "生活磨平了他的棱角，可他还在笑",
+        "url": "https://v.douyin.com/B9tQ0GGxuFE/"
+      },
+      {
+        "title": "爆款模板复刻",
+        "url": "https://v.douyin.com/zcYH6als6VQ/"
+      },
+      {
+        "title": "大众辉腾",
+        "url": "https://v.douyin.com/5Z6BeX6Rg1s/"
+      },
+      {
+        "title": "虎头奔×机器人",
+        "url": "https://v.douyin.com/JH3HY8eHjHI/"
+      },
+      {
+        "title": "霍希",
+        "url": "https://v.douyin.com/W3l0CybKzGE/"
+      },
+      {
+        "title": "人间清醒观察室 精品泛流量情感AIGC",
+        "url": "https://v.douyin.com/OUxU7F9NNnk/"
+      },
+      {
+        "title": "穿越汽车 复刻号",
+        "url": "https://v.douyin.com/CbGmEMfgAKg/"
+      },
+      {
+        "title": "车没坏 垂类测试号",
+        "url": "https://v.douyin.com/LzLanOu0reg/"
+      },
+      {
+        "title": "噜噜总动员 动画×汽车",
+        "url": "https://v.douyin.com/KDCnE00_Ogw/"
+      },
+      {
+        "title": "车贷利息(252万/67拉新)",
+        "url": "https://v.douyin.com/MRfNLNFXP3E/"
+      },
+      {
+        "title": "借野马见岳父(266万/35拉新)",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7691535611106168090"
+      },
+      {
+        "title": "揽胜接客(803拉活)",
+        "url": "https://v.douyin.com/CAJMdzhNJhQ/"
+      }
+    ],
+    "footer": [
+      "仇熙雯 · 长安大学(211) 广播电视编导 · 全国计算机设计大赛一等奖",
+      "ENTJ · 关注汽车垂类用户增长与AIGC内容工业化"
+    ]
+  },
+  "extensions": {
+    "methodApplications": [
+      {
+        "text": "落地成果：TOP13与反例拆解，沉淀3套内容模板与脚本检查项。",
+        "href": "#competence-0-2"
+      },
+      {
+        "text": "落地成果：复盘119条视频、9个卖点，识别出贡献64.3%拉新的两个主力卖点。",
+        "href": "#business-review"
+      },
+      {
+        "text": "已落地：六维质检与 P0–P3 风险样本库，结合模型能力边界优化生产链路。",
+        "href": "#competence-0-0"
+      },
+      {
+        "text": "已落地：验证后的模板申报上架，由62个活跃账号复用，配套贡献人与维护人。",
+        "href": "#competence-0-3"
+      }
+    ],
+    "reviewPlans": [
+      {
+        "title": "下一轮落地方案 · 待验证",
+        "steps": [
+          {
+            "label": "统一口径",
+            "text": "按作品、账号、平台、卖点、达人与活动回收数据。明确有效新增的业务定义、去重规则和归因窗口，将新增、拉活与曝光分开记录。"
+          },
+          {
+            "label": "建立实验",
+            "text": "围绕真实待解问题，分别验证工具位置、功能与场景匹配、植入处的具体动作及利益表达；保持剧情反转收尾，在可比条件下单轮测试一个关键变量。"
+          },
+          {
+            "label": "放量与回收",
+            "text": "以有效新增和新增成本判断放量，结合后续留存、质量与返工成本复核。尚未验证的方向进入测试池，成熟模板再进入矩阵复用。"
+          }
+        ]
+      },
+      {
+        "title": "把踩坑转成下一轮验证 · 待验证",
+        "steps": [
+          {
+            "label": "提出假设",
+            "text": "高曝光低转化可能与内容提前满足需求、话术抽象或行动链路过长有关。先把这些解释作为待验证假设，避免仅凭一次复盘就认定因果。"
+          },
+          {
+            "label": "改一个变量",
+            "text": "同一卖点保留可比剧情，分别测试具体到动作的 CTA、工具价值缺口或更短的承接路径，避免同时改剧情、渠道和预算。"
+          },
+          {
+            "label": "回到业务结果",
+            "text": "比较去重有效新增、激活后使用与单位成本；若内容更适合品牌触达或老用户拉活，则采用相应 KPI，分开评价。"
+          }
+        ]
+      }
+    ],
+    "techGroups": [
+      {
+        "title": "AIGC 生产与工作流",
+        "description": "脚本、图像、视频与工作流协作。",
+        "indexes": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ]
+      },
+      {
+        "title": "数据分析与看板",
+        "description": "作品分析、表现追踪与基础取数。",
+        "indexes": [
+          5,
+          6,
+          7
+        ]
+      },
+      {
+        "title": "内容洞察与矩阵分发",
+        "description": "选题洞察与多平台分发。",
+        "indexes": [
+          8,
+          9
+        ]
+      },
+      {
+        "title": "商业化投放",
+        "description": "素材测试与转化优化。",
+        "indexes": [
+          10
+        ]
+      }
+    ]
+  },
+  "campaignReview": {
+    "schemaVersion": 1,
+    "source": {
+      "file": "已粘贴的文本.txt",
+      "sha256": "86f8358b99baabd357ee80483f64c89eadf6355e55364dc2d0d97129a8626a8f",
+      "namedTable": "飞书《AI 小懂 AIGC 卖点 & 内容回收》· 数据回收 sheet（原文转述，未直接读取原表）",
+      "attribution": "原文称为链接点击后回流数据；曝光字段按内容 VV 展示。点击数、UV、成本、去重规则和归因窗口未提供。"
+    },
+    "overview": {
+      "period": "2026/09/24–10/08",
+      "days": 15,
+      "videos": 119,
+      "lines": [
+        {
+          "name": "纯小懂",
+          "videos": 107
+        },
+        {
+          "name": "二手车 & 小懂",
+          "videos": 12
+        }
+      ],
+      "sellingPoints": 9,
+      "vv": 36900000,
+      "acquisitions": 238,
+      "reactivations": 2443,
+      "acquisitionsPerMillion": 6.4498644986449865,
+      "reactivationsPerMillion": 66.2059620596206,
+      "meanVvPerPoint": 4100000
+    },
+    "points": [
+      {
+        "id": "selling-point-1",
+        "name": "AI 帮选车 + 查优惠",
+        "videos": 44,
+        "vv": 6910000,
+        "acquisitions": 89,
+        "reactivations": 210,
+        "sourceRate": 0.000013,
+        "sourceRole": "转化主力（铺量型）",
+        "meanVv": 157045.45454545456,
+        "acquisitionsPerMillion": 12.879884225759769,
+        "reactivationsPerMillion": 30.390738060781477,
+        "acquisitionMultiple": 1.9969232265988885,
+        "reactivationMultiple": 0.4590332519209318
+      },
+      {
+        "id": "selling-point-2",
+        "name": "AI 语音讲车",
+        "videos": 7,
+        "vv": 4990000,
+        "acquisitions": 64,
+        "reactivations": 594,
+        "sourceRate": 0.000013,
+        "sourceRole": "爆款 + 转化双优",
+        "meanVv": 712857.1428571428,
+        "acquisitionsPerMillion": 12.825651302605209,
+        "reactivationsPerMillion": 119.0380761523046,
+        "acquisitionMultiple": 1.9885148448156815,
+        "reactivationMultiple": 1.7979963201064426
+      },
+      {
+        "id": "selling-point-3",
+        "name": "小懂精准估价",
+        "videos": 15,
+        "vv": 8300000,
+        "acquisitions": 32,
+        "reactivations": 458,
+        "sourceRate": 0.000004,
+        "sourceRole": "叫好不叫座",
+        "meanVv": 553333.3333333334,
+        "acquisitionsPerMillion": 3.855421686746988,
+        "reactivationsPerMillion": 55.18072289156626,
+        "acquisitionMultiple": 0.5977523539536297,
+        "reactivationMultiple": 0.8334705995492406
+      },
+      {
+        "id": "selling-point-4",
+        "name": "二手车知识问答",
+        "videos": 16,
+        "vv": 3600000,
+        "acquisitions": 21,
+        "reactivations": 377,
+        "sourceRate": 0.000005999999999999999,
+        "sourceRole": "拉活型",
+        "meanVv": 225000,
+        "acquisitionsPerMillion": 5.833333333333333,
+        "reactivationsPerMillion": 104.72222222222223,
+        "acquisitionMultiple": 0.9044117647058824,
+        "reactivationMultiple": 1.5817642243143675
+      },
+      {
+        "id": "selling-point-5",
+        "name": "智能找二手车",
+        "videos": 7,
+        "vv": 3290000,
+        "acquisitions": 9,
+        "reactivations": 803,
+        "sourceRate": 0.0000029999999999999997,
+        "sourceRole": "拉活王",
+        "meanVv": 470000,
+        "acquisitionsPerMillion": 2.7355623100303954,
+        "reactivationsPerMillion": 244.07294832826747,
+        "acquisitionMultiple": 0.42412709764756973,
+        "reactivationMultiple": 3.6865705253021157
+      },
+      {
+        "id": "selling-point-6",
+        "name": "二手车交易避坑",
+        "videos": 4,
+        "vv": 4990000,
+        "acquisitions": 4,
+        "reactivations": 0,
+        "sourceRate": 8.000000000000001e-7,
+        "sourceRole": "纯曝光",
+        "meanVv": 1247500,
+        "acquisitionsPerMillion": 0.8016032064128256,
+        "reactivationsPerMillion": 0,
+        "acquisitionMultiple": 0.1242821778009801,
+        "reactivationMultiple": 0
+      },
+      {
+        "id": "selling-point-7",
+        "name": "AI 约试驾",
+        "videos": 4,
+        "vv": 3860000,
+        "acquisitions": 10,
+        "reactivations": 0,
+        "sourceRate": 0.0000029999999999999997,
+        "sourceRole": "叫好不叫座",
+        "meanVv": 965000,
+        "acquisitionsPerMillion": 2.5906735751295336,
+        "reactivationsPerMillion": 0,
+        "acquisitionMultiple": 0.40166325597596547,
+        "reactivationMultiple": 0
+      },
+      {
+        "id": "selling-point-8",
+        "name": "拍照识故障",
+        "videos": 21,
+        "vv": 900000,
+        "acquisitions": 8,
+        "reactivations": 1,
+        "sourceRate": 0.000009,
+        "sourceRole": "长尾走量",
+        "meanVv": 42857.142857142855,
+        "acquisitionsPerMillion": 8.888888888888888,
+        "reactivationsPerMillion": 1.111111111111111,
+        "acquisitionMultiple": 1.3781512605042014,
+        "reactivationMultiple": 0.016782644289807608
+      },
+      {
+        "id": "selling-point-9",
+        "name": "拍报价单帮砍价",
+        "videos": 1,
+        "vv": 50000,
+        "acquisitions": 0,
+        "reactivations": 0,
+        "sourceRate": null,
+        "sourceRole": "样本不足",
+        "meanVv": 50000,
+        "acquisitionsPerMillion": 0,
+        "reactivationsPerMillion": 0,
+        "acquisitionMultiple": 0,
+        "reactivationMultiple": 0
+      }
+    ],
+    "creators": [
+      {
+        "name": "汽车隐藏说明书",
+        "videos": 7,
+        "vv": 9610000,
+        "acquisitions": 62,
+        "reactivations": 382,
+        "role": "全能头部，爆款制造机，必投"
+      },
+      {
+        "name": "轮上诗集",
+        "videos": 7,
+        "vv": 7530000,
+        "acquisitions": 36,
+        "reactivations": 206,
+        "role": "爆款稳定输出，AI 语音讲车首选"
+      },
+      {
+        "name": "一条视频 car",
+        "videos": 2,
+        "vv": 2540000,
+        "acquisitions": 68,
+        "reactivations": 0,
+        "role": "拉新王，单条拉新率 0.0027%，适合做转化"
+      },
+      {
+        "name": "车藏半生",
+        "videos": 7,
+        "vv": 2660000,
+        "acquisitions": 19,
+        "reactivations": 803,
+        "role": "拉活王，二手车心智强，做召回"
+      },
+      {
+        "name": "汽车那点事儿",
+        "videos": 6,
+        "vv": 6410000,
+        "acquisitions": 10,
+        "reactivations": 458,
+        "role": "高曝光 + 拉活型，品牌广告位"
+      },
+      {
+        "name": "懂车它是谁",
+        "videos": 9,
+        "vv": 2230000,
+        "acquisitions": 20,
+        "reactivations": 330,
+        "role": "稳，性价比高，适合铺量"
+      },
+      {
+        "name": "汽车零件有话说",
+        "videos": 7,
+        "vv": 810000,
+        "acquisitions": 0,
+        "reactivations": 15,
+        "role": "曝光一般 + 零拉新，下轮可砍或换脚本"
+      },
+      {
+        "name": "汽车超硬核科普",
+        "videos": 15,
+        "vv": 740000,
+        "acquisitions": 3,
+        "reactivations": 0,
+        "role": "铺量但低效，15 条才 3 拉新"
+      }
+    ],
+    "samples": [
+      {
+        "rank": 1,
+        "creator": "一条视频 car",
+        "acquisitions": 67,
+        "vv": 2520000,
+        "sellingPoint": "AI 帮选车 + 查优惠",
+        "conflict": "4S 店贷款说 4 厘实际 9 厘 5，现场算账维权",
+        "url": "https://v.douyin.com/MRfNLNFXP3E/",
+        "acquisitionsPerMillion": 26.58730158730159
+      },
+      {
+        "rank": 2,
+        "creator": "汽车隐藏说明书",
+        "acquisitions": 35,
+        "vv": 2660000,
+        "sellingPoint": "AI 语音讲车",
+        "conflict": "亲戚借二手野马见岳父，手动挡不会开",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7691535611106168090",
+        "acquisitionsPerMillion": 13.157894736842106
+      },
+      {
+        "rank": 3,
+        "creator": "轮上诗集",
+        "acquisitions": 29,
+        "vv": 2220000,
+        "sellingPoint": "AI 语音讲车",
+        "conflict": "搬家二女婿开猛禽干活，妈只夸开奔驰的大女婿",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7691148707231698211",
+        "acquisitionsPerMillion": 13.063063063063062
+      },
+      {
+        "rank": 4,
+        "creator": "汽车隐藏说明书",
+        "acquisitions": 17,
+        "vv": 590000,
+        "sellingPoint": "二手车估价",
+        "conflict": "父亲开霸道欠工人 8 万工资，过年卖车发钱",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7689334067799559475",
+        "acquisitionsPerMillion": 28.8135593220339
+      },
+      {
+        "rank": 5,
+        "creator": "懂车它是谁",
+        "acquisitions": 10,
+        "vv": 180000,
+        "sellingPoint": "二手车知识",
+        "conflict": "老板开辉腾回厂，保安当帕萨特让停外面",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAA3w2IRsyKw9gBS13o7L5H1WqT6nU_grzI9llG9Fm55YI?from_tab_name=main&modal_id=7689654757463493934",
+        "acquisitionsPerMillion": 55.55555555555556
+      },
+      {
+        "rank": 6,
+        "creator": "车藏半生",
+        "acquisitions": 6,
+        "vv": 370000,
+        "sellingPoint": "智能找二手车",
+        "conflict": "领导早上嫌员工开揽胜招摇，下午借去接客",
+        "url": "https://v.douyin.com/CAJMdzhNJhQ/",
+        "acquisitionsPerMillion": 16.216216216216214
+      },
+      {
+        "rank": 7,
+        "creator": "车藏半生",
+        "acquisitions": 5,
+        "vv": 770000,
+        "sellingPoint": "AI 约试驾",
+        "conflict": "领导借员工奔驰撑场，吃饭让员工坐司机桌",
+        "url": "https://v.douyin.com/woHl0w1I6FM/",
+        "acquisitionsPerMillion": 6.4935064935064934
+      },
+      {
+        "rank": 8,
+        "creator": "小 Y 懂车",
+        "acquisitions": 5,
+        "vv": 130000,
+        "sellingPoint": "二手车知识",
+        "conflict": "拟人化：中石化 / 中石油 / 中海油 / 民营加油站对话",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7690026232263494955",
+        "acquisitionsPerMillion": 38.46153846153846
+      },
+      {
+        "rank": 9,
+        "creator": "汽车隐藏说明书",
+        "acquisitions": 4,
+        "vv": 4390000,
+        "sellingPoint": "二手车避坑",
+        "conflict": "婚礼前对象家人偷偷把 6 代 GTI 卖了给弟弟凑首付",
+        "url": "https://v.douyin.com/NgPkZ_1YFAk/",
+        "acquisitionsPerMillion": 0.9111617312072894
+      },
+      {
+        "rank": 10,
+        "creator": "车藏半生",
+        "acquisitions": 4,
+        "vv": 590000,
+        "sellingPoint": "AI 帮选车",
+        "conflict": "给亲妈提的车，婆婆直接坐进去当给自己的",
+        "url": "https://v.douyin.com/qKaQ-s4ZV7c/",
+        "acquisitionsPerMillion": 6.779661016949152
+      },
+      {
+        "rank": 11,
+        "creator": "汽车那点事儿",
+        "acquisitions": 4,
+        "vv": 800000,
+        "sellingPoint": "估价 + 对比",
+        "conflict": "婆婆要卖儿媳两门宝马换 \"全家能坐的\"",
+        "url": "https://v.douyin.com/jj1lyssI-9I/",
+        "acquisitionsPerMillion": 5
+      },
+      {
+        "rank": 12,
+        "creator": "懂车的小姬",
+        "acquisitions": 4,
+        "vv": 70000,
+        "sellingPoint": "AI 帮选车",
+        "conflict": "情侣吵架：途观 L/RAV4 / 星越 L 不同条件下选谁",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7690846071223880998",
+        "acquisitionsPerMillion": 57.14285714285714
+      },
+      {
+        "rank": 13,
+        "creator": "汽车那点事儿",
+        "acquisitions": 3,
+        "vv": 2890000,
+        "sellingPoint": "AI 约试驾",
+        "conflict": "给妈买车被嫂子安排成接孩子的车",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7693374181655776521",
+        "acquisitionsPerMillion": 1.0380622837370244
+      }
+    ],
+    "reactivationScopes": [
+      {
+        "name": "智能找二手车",
+        "reactivations": 803,
+        "rate": 0.00024400000000000002,
+        "sourceMultiple": "3.7 倍",
+        "scope": "卖点聚合",
+        "perMillion": 244.07294832826747,
+        "multiple": 3.6865705253021157,
+        "calculation": "按卖点 VV 与人数重算"
+      },
+      {
+        "name": "二手车知识问答",
+        "reactivations": 377,
+        "rate": 0.000105,
+        "sourceMultiple": "1.6 倍",
+        "scope": "卖点聚合",
+        "perMillion": 104.72222222222223,
+        "multiple": 1.5817642243143675,
+        "calculation": "按卖点 VV 与人数重算"
+      },
+      {
+        "name": "AI 语音讲车",
+        "reactivations": 594,
+        "rate": 0.000119,
+        "sourceMultiple": "1.8 倍",
+        "scope": "卖点聚合",
+        "perMillion": 119.0380761523046,
+        "multiple": 1.7979963201064426,
+        "calculation": "按卖点 VV 与人数重算"
+      },
+      {
+        "name": "小懂精准估价（二手车线）",
+        "reactivations": 458,
+        "rate": 0.000312,
+        "sourceMultiple": "4.7 倍",
+        "scope": "二手车线子集",
+        "perMillion": 312,
+        "multiple": 4.7125665165779775,
+        "calculation": "按原文子集率估算，未提供子集 VV"
+      },
+      {
+        "name": "二手车线知识问答",
+        "reactivations": 343,
+        "rate": 0.000453,
+        "sourceMultiple": "6.9 倍",
+        "scope": "二手车线子集",
+        "perMillion": 453,
+        "multiple": 6.842284076954563,
+        "calculation": "按原文子集率估算，未提供子集 VV"
+      }
+    ],
+    "groups": [
+      {
+        "name": "两个主力卖点",
+        "vv": 11900000,
+        "acquisitions": 153,
+        "reactivations": 804,
+        "vvShare": 0.3224932249322493,
+        "acquisitionShare": 0.6428571428571429,
+        "reactivationShare": 0.32910356119525175
+      },
+      {
+        "name": "三个流量型卖点",
+        "vv": 17150000,
+        "acquisitions": 46,
+        "reactivations": 458,
+        "vvShare": 0.46476964769647694,
+        "acquisitionShare": 0.19327731092436976,
+        "reactivationShare": 0.18747441670077772
+      },
+      {
+        "name": "其他及明细差异",
+        "vv": 7850000,
+        "acquisitions": 39,
+        "vvShare": 0.2127371273712737,
+        "acquisitionShare": 0.1638655462184874
+      }
+    ],
+    "coreCreators": {
+      "name": "指定四个头部账号",
+      "vv": 22340000,
+      "acquisitions": 185,
+      "reactivations": 1391,
+      "vvShare": 0.605420054200542,
+      "acquisitionShare": 0.7773109243697479,
+      "reactivationShare": 0.56938190749079
+    },
+    "storyComparison": [
+      {
+        "name": "父亲卖霸道发工资",
+        "vv": 590000,
+        "acquisitions": 17,
+        "interpretation": "角色当下需要估价，工具承担剧情内的解题任务",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAAdzLeFjYjN_qX904nc9Mh3E72VHvstv68Ei63aygKlfEl7MJCx0369Stf4Z68sCFW?from_tab_name=main&modal_id=7689334067799559475",
+        "perMillion": 28.8135593220339
+      },
+      {
+        "name": "C63 估价旁白",
+        "vv": 3750000,
+        "acquisitions": 2,
+        "interpretation": "剧情已识别车辆，工具以重复信息的旁白出现",
+        "url": "https://www.douyin.com/user/MS4wLjABAAAA1EVDcJB9udtxMrJdFmsk5pFzzMR8IGtqjGUl2VCCdY0?from_tab_name=main&modal_id=7690468448844959017",
+        "perMillion": 0.5333333333333333
+      }
+    ],
+    "storyEfficiencyRatio": 54.025423728813564,
+    "reconciliation": {
+      "detailVideos": 119,
+      "detailVv": 36890000,
+      "detailAcquisitions": 237,
+      "detailReactivations": 2443,
+      "vvGap": 10000,
+      "acquisitionGap": 1
+    },
+    "corrections": [
+      "总览为3,690万 VV、238人拉新；9卖点明细合计3,689万 VV、237人拉新，分别差1万 VV与1人。保留差异，不向任一卖点补数。",
+      "两个主力卖点合计153人，占总览238人的64.3%；原文“65%”作为近似说法，不再展示为精确比例。",
+      "三个流量型卖点的拉新效率约为大盘0.12–0.60倍，并非都只有1/5–1/10。均 VV 分别约55.3万、124.8万、96.5万/条。",
+      "“二手车内容拉活3–7倍”仅适用于部分卖点或二手车线子集。卖点聚合下，知识问答约1.58倍、智能找二手车约3.69倍；不同粒度不可相加。",
+      "四个指定头部账号合计拉活1,391人，占总览56.9%，不支持原文73%的说法；曝光约60.5%、拉新约77.7%。",
+      "父亲卖车样本17人/59万 VV，对比 C63 样本2人/375万 VV，按舍入 VV 估算效率约54.0倍，并非原文14倍；两条观察样本不能证明单因素因果。",
+      "TOP13中“懂车的小姬”4人/7万 VV约57.14人/百万 VV，高于贷款维权样本67人/252万 VV的26.59人/百万 VV。贷款维权是此表拉新人数最高，不是率最高；没有成本数据，不给单条 ROI 排名。",
+      "同一 GTI 样本在 TOP13表列439万 VV、4人拉新，模板段落又列59万 VV；暂按 TOP13表展示439万，原始单条数据待回源核验。",
+      "模板不是卖点分组：不能把两卖点64.3%的贡献归因于“家庭伦理模板”。话术具体度、场景需求、功能匹配与工具位置应联合判断。"
+    ]
+  },
+  "reviewCharts": [
+    "assets/review-vv-vs-growth.png"
+  ],
+  "pages": {
+    "capabilities": {
+      "title": "关于我",
+      "mobileTitle": "关于我",
+      "html": "<aside class=\"creator-about\" aria-labelledby=\"about-title\" id=\"home\"><div class=\"about-inner\"><div class=\"about-copy\"><p class=\"section-kicker\">ABOUT ME</p><h1 id=\"about-title\" class=\"hero-heading\">关于我</h1><h2 data-bind=\"name\" class=\"about-name\">仇熙雯</h2><p data-bind=\"role\" class=\"profile-role\"></p><p class=\"profile-description\" data-bind=\"intro\"></p><ul class=\"profile-facts\"><li><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-map-pin\" aria-hidden=\"true\"><path d=\"M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0\"></path><circle cx=\"12\" cy=\"10\" r=\"3\"></circle></svg><span data-bind=\"location\">杭州</span><span class=\"fact-divider\">/</span><span>24岁</span></li><li><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-graduation-cap\" aria-hidden=\"true\"><path d=\"M21.42 10.922a1 1 0 0 0-.019-1.838L12.83 5.18a2 2 0 0 0-1.66 0L2.6 9.08a1 1 0 0 0 0 1.832l8.57 3.908a2 2 0 0 0 1.66 0z\"></path><path d=\"M22 10v6\"></path><path d=\"M6 12.5V16a6 3 0 0 0 12 0v-3.5\"></path></svg><span>长安大学（211）· 广播电视编导</span></li><li><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-briefcase-business\" aria-hidden=\"true\"><path d=\"M12 12h.01\"></path><path d=\"M16 6V4a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2\"></path><path d=\"M22 13a18.15 18.15 0 0 1-20 0\"></path><rect width=\"20\" height=\"14\" x=\"2\" y=\"6\" rx=\"2\"></rect></svg><span>3年汽车垂类 · 1.5年带团队</span></li></ul><button class=\"text-button\" id=\"print-profile\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-printer\" aria-hidden=\"true\"><path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"></path><path d=\"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6\"></path><rect x=\"6\" y=\"14\" width=\"12\" height=\"8\" rx=\"1\"></rect></svg>打印简介</button></div></div><div class=\"hero-metrics\" aria-label=\"懂车帝 AIGC 矩阵成果\"><div><strong>4,533<span>万</span></strong><span>矩阵周曝光</span></div><div><strong>+198.6<span>%</span></strong><span>周拉新环比 · 71 → 212</span></div><div><strong>62<span>个</span></strong><span>活跃账号 · 70号矩阵</span></div><div><strong>20<span>人+</span></strong><span>团队规模 · 10人起步</span></div></div></aside>\n    <section class=\"section paper-band\" id=\"capabilities\" aria-labelledby=\"capabilities-title\">\n      <div class=\"section-top\"><div><p class=\"section-kicker\">01 / CAPABILITY OVERVIEW</p><h2 id=\"capabilities-title\">能力概述</h2></div></div>\n      <div class=\"capability-grid\" id=\"capability-grid\"></div>\n    </section>",
+      "route": "#/capabilities"
+    },
+    "experience": {
+      "title": "工作经历",
+      "mobileTitle": "工作经历",
+      "html": "<section class=\"section\" id=\"experience\" aria-labelledby=\"experience-title\">\n      <div class=\"section-top\"><div><p class=\"section-kicker\">02 / EXPERIENCE</p><h1 id=\"experience-title\">工作经历</h1></div><button class=\"text-button\" id=\"print-journey\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-printer\" aria-hidden=\"true\"><path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"></path><path d=\"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6\"></path><rect x=\"6\" y=\"14\" width=\"12\" height=\"8\" rx=\"1\"></rect></svg>打印工作经历</button></div>\n      <div id=\"experience-list\"></div>\n    </section>",
+      "route": "#/experience"
+    },
+    "methods": {
+      "title": "方法论沉淀",
+      "mobileTitle": "方法论",
+      "html": "<section class=\"section\" id=\"methods\" aria-labelledby=\"methods-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">03 / METHODOLOGY</p><h1 id=\"methods-title\">方法论沉淀</h1></div></div><div class=\"method-grid\" id=\"method-grid\"></div></section>",
+      "route": "#/methods"
+    },
+    "insights": {
+      "title": "AIGC 用户增长的判断",
+      "mobileTitle": "增长判断",
+      "html": "<section class=\"section\" id=\"insights\" aria-labelledby=\"insights-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">04 / PERSPECTIVES</p><h1 id=\"insights-title\">AIGC 用户增长的判断</h1></div></div><div class=\"insight-list\" id=\"insight-list\"></div></section>",
+      "route": "#/insights"
+    },
+    "skills": {
+      "title": "技术栈",
+      "mobileTitle": "技术栈",
+      "html": "<section class=\"section\" id=\"skills\" aria-labelledby=\"skills-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">05 / TECH STACK</p><h1 id=\"skills-title\">技术栈</h1></div></div><div class=\"skills-list\" id=\"skills-list\"></div></section>",
+      "route": "#/skills"
+    }
+  },
+  "design": {
+    "heroImage": "assets/studio-character.png",
+    "backgroundImage": "assets/studio-background.png",
+    "fonts": [
+      "assets/fonts/kanit-latin-400-normal.woff2",
+      "assets/fonts/kanit-latin-800-normal.woff2"
+    ]
+  },
+  "retiredCopy": {
+    "profile": {
+      "intro": "3年汽车垂类经验，1.5年带团队。负责70号内容矩阵，从选题、脚本、AI生成到数据复盘，搭建可复用的内容生产与用户增长体系。",
+      "about": "关注汽车垂类用户增长与 AIGC 内容工业化，期待交流内容策略、矩阵运营、AI生产体系与团队管理。"
+    },
+    "projects": {
+      "holiday": {
+        "title": "AI 小懂中秋及国庆星图数据复盘",
+        "description": "围绕选车、比价与二手车需求，我拆解内容卖点和高拉新脚本，结合标准化生产与作品级复盘，推动内容从获得播放走向解决问题、带来用户增长。"
+      },
+      "production": {
+        "title": "从个人试做，到标准化生产",
+        "description": "搭建选题到复盘的9步链路，结合多模型路由、Prompt与资产库、六维质检，把 AI 出片做成产能与质量可控的生产体系。"
+      },
+      "organization": {
+        "title": "10人真人 IP，转向20人 AIGC 矩阵",
+        "description": "建立实验田与复制田的双轨分工，推动目标三级拆解、内容与拉新双维绩效、分级审核与带教机制，完成团队扩编和组织转型。"
+      }
+    }
+  }
+}
