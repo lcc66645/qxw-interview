@@ -10,22 +10,60 @@ footer { background: #10171e70; color: #b5c1c7; }
 .published-downloads { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 24px; padding: 12px max(22px, calc((100% - 1120px) / 2)); background: #10171e70; border-top: 1px solid var(--line); }
 .published-downloads .text-button { min-height: 44px; color: #d9e5eb; }
 body:not([data-page="capabilities"]) #main { background: #0b111960; }
-.portrait-intro { --portrait-scale: 1.48; --portrait-headroom: 0px; height: min(780px, calc(100svh - 220px)); min-height: 340px; overflow: hidden; isolation: isolate; background: transparent; }
+.portrait-intro { --portrait-scale: 1.48; --portrait-headroom: 0px; --portrait-base: min(780px, calc(100svh - 220px)); --portrait-art-height: calc((var(--portrait-base) - var(--portrait-headroom)) * var(--portrait-scale)); height: calc(var(--portrait-art-height) + var(--portrait-headroom) + 36px); min-height: 0; overflow: hidden; isolation: isolate; background: transparent; }
 .portrait-room { position: absolute; inset: -3%; width: 106%; height: 106%; object-fit: cover; opacity: .45; filter: blur(3px) saturate(.75); transform: translate(var(--scene-x, 0px), var(--scene-y, 0px)); mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 98%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 50%, transparent 98%); }
-.portrait-image { position: absolute; inset: auto; left: 50%; top: calc(var(--portrait-headroom) + (100% - var(--portrait-headroom)) * .02); width: auto; max-width: none; height: calc((100% - var(--portrait-headroom)) * var(--portrait-scale)); aspect-ratio: 1672 / 941; object-fit: contain; transform: translateX(-50%); mask-image: linear-gradient(to bottom, transparent, #000 2%, #000 74%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 2%, #000 74%, transparent); }
-.portrait-stage { position: absolute; inset: var(--portrait-headroom) 0 0; z-index: 1; pointer-events: none; mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%); -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 78%, transparent 100%); }
+.portrait-image { position: absolute; inset: auto; left: 50%; top: calc(var(--portrait-headroom) + 18px); width: auto; max-width: none; height: var(--portrait-art-height); aspect-ratio: 1672 / 941; object-fit: contain; transform: translateX(-50%); opacity: var(--scene-opacity, 1); mask-image: linear-gradient(to bottom, transparent, #000 2%, #000 96%, transparent); -webkit-mask-image: linear-gradient(to bottom, transparent, #000 2%, #000 96%, transparent); }
+.portrait-stage { position: absolute; inset: 0; z-index: 1; pointer-events: none; opacity: var(--scene-opacity, 1); }
 .portrait-stage canvas { display: block; width: 100%; height: 100%; }
 .scene-ready .portrait-image { visibility: hidden; }
 .portrait-copy { inset: 46px auto auto max(32px, calc((100% - 1216px) / 2)); max-width: 320px; text-align: left; z-index: 2; }
 .portrait-copy h1 { font-size: 52px; text-shadow: 0 2px 24px #111b24; }
 .portrait-copy .section-kicker { color: #d8e5ea; text-shadow: 0 1px 12px #111b24; }
-.portrait-kind { z-index: 2; left: max(32px, calc((100% - 1216px) / 2)); bottom: 25px; color: #c0cdd3; }
-.portrait-next { z-index: 2; right: max(88px, calc((100% - 1104px) / 2)); bottom: 21px; color: #eef5f8; }
-.portrait-pause { position: absolute; z-index: 2; right: max(32px, calc((100% - 1216px) / 2)); bottom: 15px; color: #e6f1f5; background: #17222aa8; border: 1px solid #e5f0f32e; }
+.portrait-kind { z-index: 2; left: max(32px, calc((100% - 1216px) / 2)); top: min(calc(100svh - 169px), calc(100% - 45px)); bottom: auto; color: #c0cdd3; }
+.portrait-next { z-index: 2; right: max(88px, calc((100% - 1104px) / 2)); top: min(calc(100svh - 186px), calc(100% - 46px)); bottom: auto; color: #eef5f8; }
+.portrait-pause { position: absolute; z-index: 2; right: max(32px, calc((100% - 1216px) / 2)); top: min(calc(100svh - 180px), calc(100% - 56px)); bottom: auto; color: #e6f1f5; background: #17222aa8; border: 1px solid #e5f0f32e; }
 .portrait-pause:disabled { cursor: default; opacity: .45; }
+.portrait-next { background: #142022e6; padding: 7px 10px; border-radius: 4px; }
+.portrait-kind { text-shadow: 0 1px 5px #000; }
+.resume-unfolding .portrait-next, .resume-unfolding .portrait-kind, .resume-unfolding .portrait-pause { visibility: hidden; }
 .portrait-intro:not(.scene-ready)[data-motion="playing"] .portrait-image { animation: portrait-breath 6s ease-in-out infinite; }
 @keyframes portrait-breath { 0%, 100% { transform: translateX(-50%) translateY(0) scale(1); } 50% { transform: translateX(-50%) translateY(-3px) scale(1.004); } }
 .creator-about { background: transparent; }
+.creator-about { position: relative; z-index: 3; transform-origin: 0 0; }
+.creator-about .about-inner { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 56px; }
+.resume-sheet { background: #151d20f5; border: 1px solid #c2d4cd40; }
+.resume-sheet:focus { outline: none; }
+.resume-sheet.resume-in-flight { pointer-events: none; will-change: transform; }
+.resume-history { padding-top: 8px; min-width: 0; }
+.resume-history > h3 { font-size: 15px; color: #9ecbb9; margin: 0 0 18px; font-weight: 500; }
+.resume-history article { border-top: 1px solid var(--line); padding: 18px 0; }
+.resume-history h4 { font-size: 17px; font-weight: 500; margin: 4px 0 8px; }
+.resume-history p { font-size: 13px; color: #c2d0ca; line-height: 1.8; margin: 0 0 6px; }
+.resume-history .resume-period { font-size: 11px; color: #a7b5ae; }
+.resume-history .resume-achievement { color: #b3ddc8; }
+.resume-email { font-size: 13px; color: #c9d9d0; overflow-wrap: anywhere; }
+.capability-case { margin-top: 16px; border-left: 2px solid #74ab92; padding-left: 18px; }
+.capability-case h4 { font-size: 16px; font-weight: 500; line-height: 1.8; margin: 0 0 9px; }
+.capability-case .capability-proof { color: #a9ddc6; font-size: 13px; }
+.capability-case .case-anchor { font-size: 12px; }
+.practice-case { grid-column: 2; border-top: 1px solid var(--line); margin-top: 18px; padding-top: 16px; }
+.practice-case h5, .method-case h5 { font-size: 15px; font-weight: 500; line-height: 1.8; margin: 8px 0; }
+.practice-case p, .method-case p { font-size: 13px; line-height: 1.9; color: #c6d2cd; margin: 0 0 10px; }
+.practice-case .proof-purpose, .method-case .proof-purpose { color: #a7c4b7; }
+.practice-case .proof-result, .method-case .proof-result { color: #b5e0cb; }
+.method-case { margin: 22px 0; padding-top: 18px; border-top: 1px solid var(--line); }
+.badcase-list { margin-top: 30px; }
+.badcase-list > h5 { font-size: 17px; font-weight: 500; line-height: 1.8; margin: 0 0 18px; }
+.badcase-item { border-top: 1px solid var(--line); padding: 22px 0; }
+.badcase-item h6 { font-size: 15px; font-weight: 500; margin: 0 0 14px; line-height: 1.8; color: #e6e9df; }
+.badcase-item p { font-size: 13px; line-height: 1.9; color: #c7d1cb; }
+.badcase-item .proof-purpose { color: #b4c6bc; }
+.badcase-item .badcase-action { color: #b9e0cb; }
+.badcase-comparison { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 24px; margin: 18px 0; }
+.badcase-comparison > div { border-left: 2px solid #c5a685; padding: 2px 0 2px 14px; }
+.badcase-comparison > div + div { border-color: #8ec6ac; }
+.badcase-comparison dt { color: #c1ccc5; font-size: 12px; line-height: 1.9; }
+.badcase-comparison dd { margin: 8px 0 0; color: #f0eee4; font-size: 17px; line-height: 1.7; font-variant-numeric: tabular-nums; }
 .paper-band { background: #101a2375; color: #edf2f5; --line: #dce8ed2b; }
 .paper-band h2, .capability-item h3, .capability-number { color: #eef4f6; }
 .paper-band .section-kicker, .paper-band .section-note, .capability-item p { color: #c5d0d6; }
@@ -53,20 +91,24 @@ body:not([data-page="capabilities"]) #main { background: #0b111960; }
 #project-dialog:has(.expanded-visual) > .dialog-close { color: #edf3ef; background: #303a36; }
 @media (max-width: 900px) { .portrait-intro { --portrait-scale: 1.18; } .portrait-copy { top: 30px; max-width: 220px; } .portrait-copy h1 { font-size: 42px; } }
 @media (max-width: 640px) {
-  .portrait-intro { --portrait-scale: 1.12; --portrait-headroom: 88px; height: min(560px, calc(100svh - 235px)); min-height: 300px; }
+  .portrait-intro { --portrait-scale: 1.12; --portrait-headroom: 88px; --portrait-base: max(300px, min(560px, calc(100svh - 235px))); }
   .portrait-copy { left: 22px; top: 24px; max-width: 130px; }
   .portrait-copy h1 { font-size: 30px; }
   .portrait-copy .section-kicker { font-size: 7px; line-height: 1.6; max-width: 115px; }
   .portrait-copy.is-long-name h1 { font-size: 20px; }
-  .portrait-kind { left: 22px; bottom: 22px; font-size: 8px; }
-  .portrait-next { right: 74px; bottom: 19px; }
-  .portrait-pause { right: 22px; bottom: 10px; }
+  .portrait-kind { left: 22px; bottom: auto; font-size: 8px; }
+  .portrait-next { right: 74px; bottom: auto; }
+  .portrait-pause { right: 22px; bottom: auto; }
   .portrait-room { opacity: .36; object-position: 58% center; }
   #studio-backdrop img { filter: blur(20px) saturate(.7) brightness(.76); object-position: 45% center; }
   .okr-row { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .okr-row h5 { font-size: 15px; }
   .practice-heading { grid-row: auto; }
   .practice-deliverable { grid-column: 1; }
+  .practice-case { grid-column: 1; }
+  .creator-about .about-inner { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .badcase-comparison { grid-template-columns: minmax(0, 1fr); gap: 16px; }
+  .badcase-comparison dd { font-size: 16px; }
 }
 @media (prefers-reduced-motion: reduce) { .portrait-image { animation: none !important; } }
 @media (max-width: 640px) and (max-height: 650px) { .portrait-intro { --portrait-scale: 1.4; } }
@@ -76,4 +118,6 @@ body:not([data-page="capabilities"]) #main { background: #0b111960; }
   .paper-band, .paper-band h2, .capability-number, .capability-item h3, .capability-item p, .practice-support, .practice-action, .case-stage > p, .job-intro, .project-visual figcaption { color: #444; }
   .okr-row { break-inside: avoid; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }
+  .creator-about { transform: none !important; background: #fff; border: 0; }
+  .resume-history h3, .resume-history h4, .resume-history p, .resume-history .resume-achievement, .resume-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
 }

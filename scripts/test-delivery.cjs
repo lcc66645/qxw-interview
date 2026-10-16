@@ -56,6 +56,8 @@ async function assertReadable(page) {
           assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
           assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
           assert.equal(await page.locator('.practice-deliverable').count(), 5);
+          assert.equal(await page.locator('.practice-case').count(), 7);
+          assert.equal(await page.locator('.badcase-item').count(), 3);
           assert.equal(await page.locator('.project-visual').count(), 5);
           assert.equal(await page.locator('.case-stage').count(), 6);
           assert.deepEqual(await page.locator('.case-stage[data-stage="5"] .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);

@@ -92,6 +92,7 @@
     $('#copy-email').replaceChildren(document.createTextNode(data.profile.email), iconElement('copy'));
     const portrait = $('.portrait-image');
     if (portrait) {
+      portrait.closest('section').dataset.hasBook = String(!data.media.portrait);
       portrait.src = data.media.portrait || initial.design.heroImage;
       portrait.alt = data.media.portrait ? `${data.profile.name}的个人肖像` : '工作室中戴眼镜的AIGC创作者，伸手递出作品画册';
       $('.portrait-kind').textContent = data.media.portrait ? 'PORTRAIT' : 'AIGC AVATAR';
@@ -109,12 +110,24 @@
     const title = text(copy, 'h1', data.profile.name); title.dataset.bind = 'name';
     section.append(copy);
     text(section, 'span', '', 'portrait-kind');
-    const next = text(section, 'a', '关于我', 'portrait-next'); next.href = '#home'; next.append(iconElement('arrow-down'));
+    const next = text(section, 'a', '个人简历', 'portrait-next'); next.href = '#home'; next.append(iconElement('arrow-down'));
     const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'icon-button portrait-pause'; toggle.dataset.togglePortrait = '';
     toggle.setAttribute('aria-label', '暂停人物动态'); toggle.title = '暂停人物动态'; toggle.setAttribute('aria-pressed', 'false'); toggle.append(iconElement('pause')); section.append(toggle);
     $('#main').prepend(section);
     const about = $('#about-title'); const heading = document.createElement('h2');
     heading.id = about.id; heading.className = about.className; heading.textContent = about.textContent; about.replaceWith(heading);
+    const history = document.createElement('div'); history.className = 'resume-history';
+    text(history, 'h3', '工作经历');
+    source.jobs.forEach((job, index) => {
+      const item = document.createElement('article');
+      text(item, 'p', job.period, 'resume-period');
+      text(item, 'h4', index === 0 ? '懂车帝' : '简单有为 · UWANT友望');
+      text(item, 'p', job.role);
+      text(item, 'p', index === 0 ? '70号内容矩阵 · 20人团队 · 周拉新71→212' : '“郝家豁”粉丝50万+ · 千川素材ROI 1:3.5', 'resume-achievement');
+      history.append(item);
+    });
+    const contact = text(history, 'a', data.profile.email, 'resume-email'); contact.href = `mailto:${data.profile.email}`; contact.dataset.bind = 'email';
+    $('.about-inner').append(history);
   }
   function visualPath(key) {
     return data.media[key] || ({ production: initial.images[1], growth: initial.reviewCharts[0], team: initial.images[2] })[key];
@@ -136,19 +149,25 @@
       text(article, 'span', String(index + 1).padStart(2, '0'), 'capability-number');
       const content = document.createElement('div');
       text(content, 'h3', capability.title);
-      text(content, 'p', capability.description);
+      const proof = initial.presentation.capabilityCases[index];
+      text(content, 'p', `目的：${proof.purpose}`, 'capability-purpose');
+      const example = document.createElement('div'); example.className = 'capability-case';
+      text(example, 'h4', proof.title); text(example, 'p', proof.action);
+      text(example, 'p', proof.result, 'capability-proof');
+      const link = text(example, 'a', '查看案例', 'case-anchor'); link.href = pageHref('experience', proof.href); link.append(iconElement('arrow-up-right')); content.append(example);
       article.append(content);
       $('#capability-grid').append(article);
     });
   }
-  function renderCompetence(parent, competence, support) {
+  function renderCompetence(parent, competence, support, example) {
     text(parent, 'p', support?.action || competence.summary.action, 'practice-action');
     text(parent, 'p', competence.summary.outcome, 'result-tag');
     if (!support) return;
     const detail = document.createElement('div'); detail.className = 'practice-support';
-    text(detail, 'p', support.goal, 'practice-goal');
+    text(detail, 'p', example ? `目的：${example.purpose}` : support.goal, 'practice-goal');
     const list = document.createElement('ul'); support.steps.forEach(step => text(list, 'li', step)); detail.append(list); parent.append(detail);
     if (support.deliverable) text(parent, 'p', `我交付：${support.deliverable}`, 'practice-deliverable');
+    if (example) renderCaseProof(parent, example, 'practice-case', false);
     if (support.visual) evidenceFigure(parent, support.visual, support.caption);
     if (support.visual === 'growth') {
       const comparison = document.createElement('div'); comparison.className = 'weekly-comparison';
@@ -160,6 +179,12 @@
       });
       text(comparison, 'p', '环比 +198.6%', 'comparison-result'); parent.append(comparison);
     }
+  }
+  function renderCaseProof(parent, example, className, showPurpose = true) {
+    const section = document.createElement('section'); section.className = className;
+    if (showPurpose) text(section, 'p', `目的：${example.purpose}`, 'proof-purpose');
+    text(section, 'h5', example.title); text(section, 'p', example.action, 'proof-action');
+    text(section, 'p', example.result, 'proof-result'); parent.append(section);
   }
   function renderOKR(parent, job) {
     const section = document.createElement('section'); section.className = 'job-okr'; section.setAttribute('aria-label', '懂车帝工作OKR');
@@ -196,7 +221,8 @@
         const heading = document.createElement('div'); heading.className = 'practice-heading';
         text(heading, 'span', String(sequence + 1).padStart(2, '0'), 'competence-number');
         text(heading, 'h4', support.title || competence.title); point.append(heading);
-        renderCompetence(point, competence, support); article.append(point);
+        const example = jobIndex === 0 ? initial.presentation.practiceCases[index] : initial.presentation.earlierCases[index];
+        renderCompetence(point, competence, support, example); article.append(point);
       });
       if (jobIndex === 0) {
         const works = document.createElement('section'); works.className = 'authored-work';
@@ -283,10 +309,31 @@
       ['植入过晚', '剧情问题已经解决后再报功能，用户缺少使用理由。脚本审核改查工具是否参与解题、角色是否因结果作出决定，而不是只查有没有出现“小懂”。'],
       ['指标混用', '智能找二手车拉新9人、拉活803人；不能因拉新低就淘汰。将其保留在拉活方向，单独评估任务与受众，避免和新用户选车内容混排。']
     ]);
+    renderBadCases(lessons);
     parent.append(lessons);
     const links = document.createElement('div'); links.className = 'case-links';
     ['贷款维权', '借车讲车', '借车接客'].forEach((title, index) => externalLink(links, title, source.links[index + 9].url));
     parent.append(links);
+  }
+  function renderBadCases(parent) {
+    const group = document.createElement('div'); group.className = 'badcase-list';
+    text(group, 'h5', 'Bad Case / 用具体内容校准判断');
+    const examples = [
+      { title: '01 / 工具只重复信息，没解决问题', purpose: '判断用户看完是否仍有一个需要小懂完成的任务。', failed: 'C63估价旁白', failedData: '375万VV / 2人拉新', better: '父亲卖霸道发工资', betterData: '59万VV / 17人拉新', diagnosis: 'C63剧情已经识别车辆，估价旁白只是重复信息；卖霸道发工资则存在当下估价需求。我的拆解重点是工具有没有改变角色的决定，而不是功能出现了几次。', action: '脚本审核逐项标记“未解决任务—工具动作—决策结果”；剧情已解决后硬加功能的稿件重写植入位置。', url: initial.campaignReview.storyComparison[1].url },
+      { title: '02 / 播放高，但不是拉新的优先方向', purpose: '区分内容传播能力与新用户的使用动机。', failed: '小懂精准估价', failedData: '830万VV / 32人拉新', better: 'AI帮选车+查优惠', betterData: '691万VV / 89人拉新', diagnosis: '这一轮估价获得更多VV，拉新却少于帮选车+查优惠。我按卖点比较作品结果，将高VV但低拉新的内容单独回查需求与话术，再判断下一轮是否适合继续承担拉新任务。', action: '下一轮拉新选题优先检查选车、比价、算账任务；不因某卖点VV高，就直接增加复制量。' },
+      { title: '03 / 剧情冲突强，功能仍可能不匹配', purpose: '检查故事中的难题是否真的需要当前植入功能。', failed: '给妈买车，被安排成接孩子的车 / AI约试驾', failedData: '289万VV / 3人拉新', better: '4S店贷款算账维权 / 帮选车+查优惠', betterData: '252万VV / 67人拉新', diagnosis: '接孩子的家庭冲突不自动产生试驾需求；贷款现场算账则直接对应优惠与购车信息。我将“冲突吸引人”和“功能能解题”分开评估。', action: '改稿时先写清功能与角色难题的对应关系；没有对应关系就更换卖点或重写场景，不只补一句下载提示。', url: initial.campaignReview.samples[12].url }
+    ];
+    examples.forEach(example => {
+      const item = document.createElement('article'); item.className = 'badcase-item';
+      text(item, 'h6', example.title); text(item, 'p', `目的：${example.purpose}`, 'proof-purpose');
+      const comparison = document.createElement('dl'); comparison.className = 'badcase-comparison';
+      [[example.failed, example.failedData], [example.better, example.betterData]].forEach(([title, result]) => {
+        const row = document.createElement('div'); text(row, 'dt', title); text(row, 'dd', result); comparison.append(row);
+      }); item.append(comparison);
+      text(item, 'p', example.diagnosis, 'badcase-diagnosis'); text(item, 'p', `我的处理：${example.action}`, 'badcase-action');
+      if (example.url) externalLink(item, '查看分析样本', example.url);
+      group.append(item);
+    }); parent.append(group);
   }
   function renderTechStack() {
     initial.extensions.techGroups.forEach(group => {
@@ -302,7 +349,7 @@
       const article = document.createElement('article'); article.className = 'method-item';
       text(article, 'span', String(index + 1).padStart(2, '0'), 'method-number');
       text(article, 'h3', method.title); text(article, 'p', method.description);
-      text(article, 'p', initial.presentation.methodResults[index], 'method-proof');
+      renderCaseProof(article, initial.presentation.methodCases[index], 'method-case');
       const application = initial.extensions.methodApplications[index];
       const link = text(article, 'a', '相关实践', 'method-application'); link.href = pageHref('experience', application.href.slice(1));
       link.append(iconElement('arrow-up-right')); $('#method-grid').append(article);
@@ -339,7 +386,11 @@
       if (parent.tagName === 'DETAILS') parent.open = true;
       parent = parent.parentElement;
     }
-    requestAnimationFrame(() => target.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    requestAnimationFrame(() => {
+      const end = $('.portrait-intro')?.dataset.resumeEndScroll;
+      if (anchor === 'home' && end) window.scrollTo({ top: Number(end) + 1, behavior: 'instant' });
+      else target.scrollIntoView({ block: 'start', behavior: 'instant' });
+    });
   }
   function renderPage(id, anchor = '') {
     disposeMotion();
@@ -562,6 +613,11 @@
       main.classList.remove('motion-enabled');
       main.querySelectorAll('canvas').forEach(canvas => canvas.remove());
       main.querySelectorAll('.scene-ready').forEach(element => element.classList.remove('scene-ready'));
+      main.querySelectorAll('.resume-sheet').forEach(element => {
+        element.classList.remove('resume-sheet', 'resume-in-flight'); element.style.removeProperty('transform'); element.style.removeProperty('--resume-progress');
+      });
+      main.querySelector('.portrait-intro')?.style.removeProperty('--scene-opacity');
+      main.querySelector('.portrait-intro')?.classList.remove('resume-unfolding');
       const embeddedImages = new Map([
         ...initial.images.map((path, index) => [path, images[index]]),
         ...initial.reviewCharts.map((path, index) => [path, reviewCharts[index]]),

@@ -42,7 +42,8 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4196/';
       assert(await page.evaluate(() => {
         const hero = document.querySelector('.portrait-intro').getBoundingClientRect();
         const about = document.querySelector('.creator-about').getBoundingClientRect();
-        return Math.abs(about.top - hero.bottom) < 2 && about.top < innerHeight - 20;
+        const art = document.querySelector('.portrait-image').getBoundingClientRect();
+        return Math.abs(about.top - hero.bottom) < 2 && art.top >= hero.top && art.bottom <= hero.bottom;
       }));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       await page.screenshot({ path: `/tmp/qxw-portrait-final-${width}.png` });
@@ -55,6 +56,6 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4196/';
     await page.emulateMedia({ media: 'print' });
     assert(await page.locator('.capability-item').evaluateAll(els => els.every(el => getComputedStyle(el).opacity === '1')));
     assert.deepEqual(errors, []);
-    console.log('PASS portrait then About, next-section hint, entry fades, listener disposal after 30 view switches, reduced motion, five viewport sizes, long edited name, and print visibility.');
+    console.log('PASS taller portrait then resume, full image height, entry fades, listener disposal after 30 view switches, reduced motion, five viewport sizes, long edited name, and print visibility.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

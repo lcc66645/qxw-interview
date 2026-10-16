@@ -50,14 +50,18 @@ async function pixels(page, compare = false) {
       await page.setViewportSize({ width, height }); await page.evaluate(() => scrollTo(0, 0)); await page.waitForTimeout(250);
       const sample = await pixels(page); assert(sample.lit > 100 && sample.transparent > 100, `${width}: ${JSON.stringify(sample)}`);
       assert(sample.widthRatio > (width >= 1000 ? .68 : .80), `Character must fill the hero: ${width}: ${JSON.stringify(sample)}`);
-      assert(sample.heightRatio > .85, `Character must fill hero height: ${width}: ${JSON.stringify(sample)}`);
+      const expectedHeight = await page.evaluate(() => document.querySelector('.portrait-image').clientHeight / document.querySelector('.portrait-stage').clientHeight);
+      assert(sample.heightRatio > expectedHeight * .90, `Full character must fill its measured image area: ${width}: ${JSON.stringify(sample)}`);
       assert(Number(await page.locator('.portrait-stage').getAttribute('data-scale')) > 1, 'Do not restore the undersized .94 scene');
       assert(await page.locator('.portrait-copy').evaluate(copy => {
         const title = copy.getBoundingClientRect(), hero = copy.closest('section').getBoundingClientRect();
         return title.left >= hero.left && title.right <= hero.right && title.bottom < hero.bottom;
       }));
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-      assert(await page.locator('.portrait-intro').evaluate(el => el.getBoundingClientRect().bottom < innerHeight - 20));
+      assert(await page.locator('.portrait-image').evaluate(el => {
+        const image = el.getBoundingClientRect(), hero = el.closest('section').getBoundingClientRect();
+        return image.top >= hero.top && image.bottom <= hero.bottom;
+      }), 'The image including the foreground resume must fit vertically');
       await page.screenshot({ path: path.join(output, `studio-${width}.png`) });
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });

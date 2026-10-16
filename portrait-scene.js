@@ -1,11 +1,75 @@
 (() => {
   'use strict';
+  function mountResume(section, image, media) {
+    const sheet = document.querySelector('.creator-about');
+    if (!sheet || section.dataset.hasBook !== 'true') return { update() {}, dispose() {} };
+    let frame = 0, disposed = false, layout, focusOnArrival = false;
+    const clamp = value => Math.max(0, Math.min(1, value));
+    function update() {
+      if (disposed || !layout) return;
+      if (media.matches) {
+        sheet.classList.remove('resume-sheet', 'resume-in-flight'); sheet.style.removeProperty('transform');
+        sheet.style.removeProperty('--resume-progress'); section.style.removeProperty('--scene-opacity');
+        section.classList.remove('resume-unfolding');
+        sheet.dataset.resumeProgress = '1'; return;
+      }
+      const progress = clamp((scrollY - layout.start) / (layout.end - layout.start));
+      const eased = progress * progress * (3 - 2 * progress);
+      // The affine book face unfolds into the real, selectable resume, not an image of it.
+      const book = layout.book;
+      const a = book.width / layout.width, b = book.rise / layout.width;
+      const c = book.skew / layout.height, d = book.height / layout.height;
+      const remaining = 1 - eased;
+      sheet.style.transform = `matrix(${a + (1 - a) * eased},${b * remaining},${c * remaining},${d + (1 - d) * eased},${(book.x - layout.x) * remaining},${(book.y - layout.y) * remaining})`;
+      sheet.style.setProperty('--resume-progress', progress.toFixed(4));
+      sheet.classList.add('resume-sheet'); sheet.classList.toggle('resume-in-flight', progress < .995);
+      sheet.dataset.resumeProgress = progress.toFixed(4);
+      section.style.setProperty('--scene-opacity', String(1 - eased * .94));
+      section.classList.toggle('resume-unfolding', progress > .18);
+      if (focusOnArrival && progress >= .995) { focusOnArrival = false; sheet.focus({ preventScroll: true }); }
+    }
+    function measure() {
+      if (disposed) return;
+      sheet.style.transform = 'none';
+      const rect = sheet.getBoundingClientRect(), art = image.getBoundingClientRect();
+      const header = document.querySelector('.header').getBoundingClientRect().height;
+      const y = rect.top + scrollY, end = Math.max(1, y - header - 24);
+      const start = Math.min(end - 100, Math.max(section.offsetTop + art.height * .15, end - innerHeight * .92));
+      layout = { x: rect.left + scrollX, y, width: rect.width, height: rect.height, start, end,
+        book: { x: art.left + scrollX + art.width * .28, y: art.top + scrollY + art.height * .75,
+          width: art.width * .17, rise: art.height * .05, skew: art.width * .065, height: art.height * .22 } };
+      section.dataset.resumeStartScroll = start.toFixed(2); section.dataset.resumeEndScroll = end.toFixed(2);
+      update();
+    }
+    function schedule() { if (!frame) frame = requestAnimationFrame(() => { frame = 0; update(); }); }
+    function resize() { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { frame = 0; measure(); }); }
+    function enter(event) {
+      if (!layout) return;
+      if (event?.type === 'click') { event.preventDefault(); event.stopPropagation(); focusOnArrival = true; }
+      if (scrollY < layout.end) scrollTo({ top: layout.end + 1, behavior: media.matches || event?.type === 'focusin' ? 'instant' : 'smooth' });
+    }
+    const next = section.querySelector('.portrait-next');
+    sheet.tabIndex = -1;
+    const observer = new ResizeObserver(resize); observer.observe(sheet); observer.observe(image);
+    window.addEventListener('scroll', schedule, { passive: true }); window.addEventListener('resize', resize);
+    media.addEventListener('change', update); sheet.addEventListener('focusin', enter); next.addEventListener('click', enter);
+    measure();
+    return { update, dispose() {
+      disposed = true; cancelAnimationFrame(frame); observer.disconnect();
+      window.removeEventListener('scroll', schedule); window.removeEventListener('resize', resize);
+      media.removeEventListener('change', update); sheet.removeEventListener('focusin', enter); next.removeEventListener('click', enter);
+      sheet.classList.remove('resume-sheet', 'resume-in-flight'); sheet.style.removeProperty('transform');
+      sheet.style.removeProperty('--resume-progress'); section.style.removeProperty('--scene-opacity');
+      section.classList.remove('resume-unfolding');
+    } };
+  }
   function mount(section) {
     if (!section) return () => {};
     const image = section.querySelector('.portrait-image');
     const stage = section.querySelector('.portrait-stage');
     const toggle = section.querySelector('[data-toggle-portrait]');
     const media = matchMedia('(prefers-reduced-motion: reduce)');
+    const resume = mountResume(section, image, media);
     let disposed = false, paused = false, visible = true, contextLost = false, frame = 0, elapsed = 0, lastTime = 0, count = 0;
     let renderer, geometry, material, texture, scene, camera, mesh;
     const pointer = { x: 0, y: 0, targetX: 0, targetY: 0 };
@@ -49,6 +113,7 @@
       toggle.setAttribute('aria-label', label); toggle.title = label;
       toggle.innerHTML = window.portfolioIcons?.[paused ? 'play' : 'pause'] || toggle.innerHTML;
       draw();
+      resume.update();
       if (allowed() && renderer) frame = requestAnimationFrame(tick);
     }
     function resize() {
@@ -58,11 +123,12 @@
       renderer.setSize(width, height, false);
       camera.aspect = width / height; camera.updateProjectionMatrix();
       const worldHeight = 2 * Math.tan(camera.fov * Math.PI / 360) * camera.position.z;
-      const scale = Number.parseFloat(getComputedStyle(section).getPropertyValue('--portrait-scale')) || 1.48;
+      const artHeight = image.clientHeight, artTop = image.offsetTop;
+      const scale = artHeight / height;
       mesh.scale.set(worldHeight * scale * image.naturalWidth / image.naturalHeight, worldHeight * scale, 1);
-      // Anchor the hairline near the top; enlarging must not crop the face.
-      mesh.position.y = worldHeight * ((1 - scale) / 2 - 0.02);
-      stage.dataset.scale = String(scale);
+      mesh.position.y = worldHeight * (.5 - artTop / height - scale / 2);
+      stage.dataset.subjectHeight = String(artHeight);
+      stage.dataset.scale = getComputedStyle(section).getPropertyValue('--portrait-scale').trim();
       draw();
     }
     function move(event) {
@@ -121,7 +187,7 @@
               p.x += sin(uTime * 1.3 + uv.y * 14.0 + uv.x * 5.0) * hair * 0.0055 * uMotion;
               p.y += cos(uTime * 1.1 + uv.x * 13.0) * hair * 0.002 * uMotion;
               float book = pow(1.0 - uv.y, 2.0) * (1.0 - smoothstep(0.52, 0.87, uv.x));
-              p.z += book * 0.28 + breath * torso * 0.008;
+              p.z += book * 0.06 + breath * torso * 0.008;
               gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
             }`,
           fragmentShader: `
@@ -129,7 +195,7 @@
             uniform sampler2D uTexture;
             void main() {
               vec4 color = texture2D(uTexture, vUv);
-              float edges = smoothstep(0.0, 0.16, vUv.y) * smoothstep(0.0, 0.055, vUv.x) * (1.0 - smoothstep(0.96, 1.0, vUv.x)) * (1.0 - smoothstep(0.985, 1.0, vUv.y));
+              float edges = smoothstep(0.0, 0.035, vUv.y) * smoothstep(0.0, 0.025, vUv.x) * (1.0 - smoothstep(0.98, 1.0, vUv.x)) * (1.0 - smoothstep(0.985, 1.0, vUv.y));
               gl_FragColor = vec4(color.rgb, color.a * edges);
               if (gl_FragColor.a < 0.002) discard;
               #include <tonemapping_fragment>
@@ -148,7 +214,7 @@
     }).catch(() => { if (!disposed) stage.dataset.status = 'fallback'; });
     sync();
     return () => {
-      disposed = true; cancelAnimationFrame(frame); clearInterval(preferenceCheck);
+      disposed = true; cancelAnimationFrame(frame); clearInterval(preferenceCheck); resume.dispose();
       visibilityObserver.disconnect(); resizeObserver.disconnect();
       section.removeEventListener('pointermove', move); section.removeEventListener('pointerleave', leave);
       toggle.removeEventListener('click', onToggle);

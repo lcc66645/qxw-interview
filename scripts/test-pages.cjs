@@ -69,6 +69,12 @@ async function checkPage(page, id) {
           assert.equal(await page.locator('.project-visual:visible').count(), 5);
           assert.equal(await page.locator('.weekly-comparison .comparison-row').count(), 2);
           assert.equal(await page.locator('.practice-point:visible').count(), 7);
+          assert.equal(await page.locator('.practice-case').count(), 7);
+          assert.equal(await page.locator('.badcase-item').count(), 3);
+          assert.equal(await page.locator('.badcase-comparison > div').count(), 6);
+          assert(await page.locator('.practice-point .practice-goal').evaluateAll(elements => elements.every(element => element.textContent.startsWith('目的：'))));
+          assert(await page.locator('.practice-case').evaluateAll(elements => elements.every(element => element.querySelector('h5') && element.querySelector('.proof-action') && element.querySelector('.proof-result'))));
+          for (const text of ['375万VV / 2人拉新', '59万VV / 17人拉新', '289万VV / 3人拉新', '252万VV / 67人拉新']) assert((await page.locator('.badcase-list').innerText()).includes(text));
           assert.equal(await page.locator('.case-stage').count(), 6);
           assert.equal(await page.locator('.review-actions > div').count(), 3);
           assert(await page.locator('#experience-list').evaluate(el => el.lastElementChild.id === 'business-review' && el.children[1].id === 'employer-1'));
@@ -84,6 +90,13 @@ async function checkPage(page, id) {
           })), 'Every evidence graphic must use a dark presentation');
           await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = el.id === 'business-review'));
         }
+        if (id === 'capabilities') {
+          assert.equal(await page.locator('.capability-case').count(), 5);
+          assert.equal(await page.locator('.capability-purpose').count(), 5);
+          assert.equal(await page.locator('.capability-proof').count(), 5);
+          assert.equal(await page.locator('.resume-history article').count(), 2);
+        }
+        if (id === 'methods') assert.equal(await page.locator('.method-case .proof-purpose, .method-case .proof-result').count(), 8);
         if ([1440,390].includes(width)) await page.screenshot({ path: path.join(output, `${id}-${width}.png`) });
       }
       console.log(`PASS five secondary views at ${width}x${height}`);
