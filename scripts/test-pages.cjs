@@ -1,6 +1,7 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
+const { createHash } = require('node:crypto');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const data = require('../data/portfolio.json');
 const base = process.env.BASE_URL || 'http://127.0.0.1:4211/';
@@ -31,6 +32,13 @@ async function check(page, id) {
   assert.equal(data.presentation.productionCost.durationSeconds, 15);
   assert.deepEqual(data.presentation.productionCost.segments.map(item => item.tokens), [495, 135]);
   assert(!fs.existsSync('interview-growth-answers.md'));
+  const attachment = data.attachments[0];
+  const promptBytes = fs.readFileSync(attachment.path); const promptText = promptBytes.toString('utf8');
+  assert.equal(createHash('sha256').update(promptBytes).digest('hex'), attachment.sha256);
+  assert.equal([...promptText.matchAll(/^## ENV-\d{2}｜/gm)].length, 12);
+  assert.equal([...promptText.matchAll(/^## CH-\d{2}｜/gm)].length, 5);
+  assert.equal([...promptText.matchAll(/^### V\d{2}-[A-Z]｜/gm)].length, 23);
+  data.presentation.evidenceBoards.creation.representative.samples.forEach(sample => sample.fields.forEach(([, quote]) => assert(promptText.includes(quote), sample.id)));
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   try {
     const context = await browser.newContext({ reducedMotion: 'reduce' });
@@ -54,12 +62,15 @@ async function check(page, id) {
           assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), dimension.points.map(item => item.evidence));
           assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), dimension.metrics.map(item => item.value));
           assert((await page.locator('.dimension-points').innerText()).length < 650, 'Capability summaries stay concise alongside visual evidence');
-          assert((await page.locator('main').innerText()).length < 1800, 'Default visual board must remain scannable');
+          assert((await page.locator('main').innerText()).length < ({ experience: 2200, methods: 1200, insights: 2400 }[id]), 'Default visual boards keep bounded copy; complete prompts remain in disclosures/attachment');
         }
         if (id === 'experience') {
           assert.equal(await page.locator('.growth-krs > div').count(), 3);
           assert.equal(await page.locator('.growth-krs dd').first().textContent(), '300人 / 人 / 月');
           assert((await page.locator('.growth-krs p').first().textContent()).includes('规划'));
+          assert.deepEqual(await page.locator('.policy-content-types dt').allTextContents(), ['品宣型', '效果型']);
+          assert((await page.locator('.policy-labels').innerText()).includes('至少80%'));
+          assert((await page.locator('.growth-policy').innerText()).includes('排期要求'));
           assert.deepEqual(await page.locator('.campaign-metrics dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
           const groups = [[0, 1], [2, 5, 6]];
           for (const [groupIndex, indices] of groups.entries()) {
@@ -94,6 +105,19 @@ async function check(page, id) {
           await page.locator('#production-cost-control > summary').click();
         }
         if (id === 'insights') {
+          assert.deepEqual(await page.locator('.creator-case-metrics dd').allTextContents(), ['1天', '1–2次', '23条']);
+          assert((await page.locator('.creator-case-metrics dt').nth(1).textContent()).includes('每30秒'));
+          assert.equal(await page.locator('#creator-xiaolaoban .creator-decisions > div').count(), 4);
+          assert.equal(await page.locator('.prompt-sample[open]').count(), 0);
+          const download = page.locator('[data-attachment="xiaolaoban-prompts"]');
+          assert.equal(await download.getAttribute('href'), attachment.path);
+          assert.equal(await download.getAttribute('download'), attachment.filename);
+          for (const sample of data.presentation.evidenceBoards.creation.representative.samples) {
+            await page.locator(`#${sample.id} > summary`).click();
+            assert.deepEqual(await page.locator(`#${sample.id} blockquote`).allTextContents(), sample.fields.map(([,quote]) => quote));
+            assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+            await page.locator(`#${sample.id} > summary`).click();
+          }
           assert.equal(await page.locator('#featured-evidence a, .account-links a').count(), 9);
           assert.equal(await page.locator('.creation-step-link').count(), 9);
           assert.equal(await page.locator('.creation-stage').count(), 9);

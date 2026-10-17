@@ -320,7 +320,7 @@
   function renderOKR(parent, job) {
     const section = document.createElement('section'); section.className = 'job-okr'; section.id = 'team-okr'; section.setAttribute('aria-label', '懂车帝工作OKR');
     text(section, 'h2', 'OKR / 先定目标，再拆管理动作', 'board-title');
-    text(section, 'p', '新增规划：300人 / 人 / 月；阶段表现、组织交付与复用成果分别管理。', 'board-note');
+    text(section, 'p', '核心考核拉新；内容排期至少80%承接业务卖点。300人 / 人 / 月为规划，阶段结果与管理交付分别呈现。', 'board-note');
     job.okr.forEach((item, index) => {
       const row = document.createElement('details'); row.className = 'okr-row'; row.id = `okr-${index + 1}`;
       const objective = document.createElement('summary');
@@ -466,7 +466,7 @@
     renderProductionCost(parent); renderMatrixBudget(parent);
   }
   function renderInsights() {
-    const parent = renderDimension(2, { afterIntro: renderCreationBoard });
+    const parent = renderDimension(2, { afterIntro: parent => { renderCreatorCase(parent); renderCreationBoard(parent); } });
     const works = document.createElement('section'); works.className = 'authored-work';
     text(works, 'h2', '个人代表作品');
     const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
@@ -514,6 +514,19 @@
     board.keyResults.forEach(([label, value, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); text(row, 'dd', value); text(row, 'p', action); list.append(row);
     }); goals.append(list);
+    const policy = board.operatingPolicy;
+    const priorities = document.createElement('section'); priorities.className = 'growth-policy';
+    text(priorities, 'h3', policy.title);
+    text(priorities, 'p', policy.valueChain, 'policy-value-chain');
+    text(priorities, 'p', policy.decision, 'board-note');
+    const split = document.createElement('div'); split.className = 'policy-allocation'; split.setAttribute('aria-hidden', 'true');
+    [policy.sellingPointPercent, policy.explorationPercent].forEach(value => { const segment = document.createElement('span'); segment.style.flexBasis = `${value}%`; split.append(segment); });
+    priorities.append(split);
+    const labels = document.createElement('div'); labels.className = 'policy-labels';
+    text(labels, 'strong', policy.sellingPointLabel); text(labels, 'span', policy.explorationLabel); priorities.append(labels);
+    text(priorities, 'p', `排期要求：${policy.execution}`, 'board-note'); goals.append(priorities);
+    const types = document.createElement('dl'); types.className = 'policy-content-types';
+    policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); priorities.append(types);
     const result = boardSection(parent, 'growth-evidence', '数据判断 / 把资源投向什么内容');
     const campaign = initial.campaignReview; const totals = campaign.overview;
     text(result, 'p', `AI小懂中秋国庆项目 · ${totals.period} · ${totals.days}天`, 'board-note');
@@ -542,6 +555,36 @@
     board.decisions.forEach(([label, title, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
     }); path.append(decisions);
+  }
+  function renderCreatorCase(parent) {
+    const work = initial.presentation.evidenceBoards.creation.representative;
+    const section = boardSection(parent, work.id, work.title);
+    text(section, 'p', work.subtitle, 'creator-case-subtitle');
+    text(section, 'p', work.purpose, 'board-objective');
+    text(section, 'p', work.personalRole, 'board-note');
+    metrics(section, work.metrics).classList.add('creator-case-metrics');
+    externalLink(section, '观看代表成片', source.links[0].url, 'case-anchor');
+    const attachment = initial.attachments.find(item => item.id === 'xiaolaoban-prompts');
+    const download = text(section, 'a', attachment.label, 'case-anchor prompt-download');
+    download.href = attachment.dataUrl || attachment.path; download.download = attachment.filename;
+    download.dataset.attachment = attachment.id; download.prepend(iconElement('download'));
+    flowMap(section, work.pipeline);
+    text(section, 'p', work.assets, 'board-note');
+    const decisions = document.createElement('dl'); decisions.className = 'creator-decisions';
+    work.decisions.forEach(([label, signal, action]) => {
+      const row = document.createElement('div'); text(row, 'dt', label);
+      const body = document.createElement('dd'); text(body, 'h3', signal); text(body, 'p', action); row.append(body); decisions.append(row);
+    }); section.append(decisions);
+    const samples = document.createElement('div'); samples.className = 'prompt-samples';
+    text(samples, 'h3', '镜头提示词 / 判断如何落到执行');
+    work.samples.forEach(sample => {
+      const detail = workDisclosure(samples, sample.id, `${sample.shot} / ${sample.purpose}`); detail.classList.add('prompt-sample');
+      text(detail, 'h4', sample.title); text(detail, 'p', sample.judgment, 'prompt-judgment');
+      const fields = document.createElement('dl'); fields.className = 'prompt-fields';
+      sample.fields.forEach(([label, excerpt]) => {
+        text(fields, 'dt', label); const value = document.createElement('dd'); text(value, 'blockquote', excerpt); fields.append(value);
+      }); detail.append(fields);
+    }); section.append(samples);
   }
   function renderCreationBoard(parent) {
     const board = initial.presentation.evidenceBoards.creation;
@@ -579,6 +622,7 @@
     if (['production-cost-control', 'matrix-budget-control', 'production-workflow', 'team-okr'].includes(anchor)) return ['methods', anchor];
     if (['case-growth', 'case-team', 'case-creation', 'case-results'].includes(anchor)) return ['skills', anchor];
     if (anchor === 'featured-evidence' || anchor === 'creation-tools') return ['insights', anchor];
+    if (['creator-xiaolaoban', 'prompt-opening', 'prompt-performance', 'prompt-brand'].includes(anchor)) return ['insights', anchor];
     if (/^okr-[1-3]$/.test(anchor)) return ['methods', anchor];
     return [id, anchor];
   }
@@ -794,6 +838,13 @@
       const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob);
     });
   }
+  async function inlineAttachment(attachment) {
+    const blob = new Blob([await (await readSource(attachment.path)).arrayBuffer()], { type: 'text/markdown;charset=utf-8' });
+    const dataUrl = await new Promise((resolve, reject) => {
+      const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = reject; reader.readAsDataURL(blob);
+    });
+    return { ...attachment, dataUrl };
+  }
   let sourceCache;
   function exportSources() {
     if (!sourceCache) sourceCache = Promise.all([
@@ -812,11 +863,12 @@
         const license = await (await readSource('assets/vendor/three-LICENSE')).text();
         return `/*\n${license}\n*/\n${code}`;
       }),
-      readSource('portrait-scene.js').then(response => response.text())
-    ]).then(([base, theme, js, images, reviewCharts, fonts, motion, heroImage, backgroundImage, studioCSS, three, portraitScript]) => {
+      readSource('portrait-scene.js').then(response => response.text()),
+      Promise.all(initial.attachments.map(inlineAttachment))
+    ]).then(([base, theme, js, images, reviewCharts, fonts, motion, heroImage, backgroundImage, studioCSS, three, portraitScript, attachments]) => {
       let css = base + '\n' + theme + '\n' + studioCSS;
       initial.design.fonts.forEach((path, index) => { css = css.replaceAll(path, fonts[index]); });
-      return [css, js, images, reviewCharts, { ...initial.design, fonts, heroImage, backgroundImage }, motion, three, portraitScript];
+      return [css, js, images, reviewCharts, { ...initial.design, fonts, heroImage, backgroundImage }, motion, three, portraitScript, attachments];
     }).catch(error => { sourceCache = null; throw error; });
     return sourceCache;
   }
@@ -827,8 +879,8 @@
     const button = $('#export-site'); button.disabled = true;
     try {
       collectForm(); refreshCurrentView();
-      const [css, js, images, reviewCharts, design, motion, three, portraitScript] = initial.exported
-        ? [$('style[data-embedded]').textContent, $('script[data-embedded]').textContent, initial.images, initial.reviewCharts, initial.design, $('script[data-motion]').textContent, $('script[data-three]').textContent, $('script[data-portrait]').textContent]
+      const [css, js, images, reviewCharts, design, motion, three, portraitScript, attachments] = initial.exported
+        ? [$('style[data-embedded]').textContent, $('script[data-embedded]').textContent, initial.images, initial.reviewCharts, initial.design, $('script[data-motion]').textContent, $('script[data-three]').textContent, $('script[data-portrait]').textContent, initial.attachments]
         : await exportSources();
       const clone = document.documentElement.cloneNode(true);
       clone.querySelectorAll('dialog').forEach(dialog => dialog.removeAttribute('open'));
@@ -847,6 +899,11 @@
       });
       main.querySelector('.experience-tabs')?.remove();
       main.querySelectorAll('details').forEach(detail => { detail.open = true; });
+      clone.querySelectorAll('[data-attachment]').forEach(link => {
+        const attachment = attachments.find(item => item.id === link.dataset.attachment);
+        if (!attachment?.dataUrl) throw new Error('Unembedded export attachment');
+        link.href = attachment.dataUrl;
+      });
       const embeddedImages = new Map([
         ...initial.images.map((path, index) => [path, images[index]]),
         ...initial.reviewCharts.map((path, index) => [path, reviewCharts[index]]),
@@ -872,7 +929,7 @@
       clone.querySelector('script[data-embedded]')?.remove();
       let payload = clone.querySelector('#portfolio-data');
       if (!payload) { payload = document.createElement('script'); payload.id = 'portfolio-data'; payload.type = 'application/json'; clone.querySelector('body').append(payload); }
-      payload.textContent = JSON.stringify({ ...initial, profile: data.profile, projects: data.projects, media: data.media, images, reviewCharts, design, exported: true }).replace(/</g, '\\u003c');
+      payload.textContent = JSON.stringify({ ...initial, profile: data.profile, projects: data.projects, media: data.media, images, reviewCharts, design, attachments, exported: true }).replace(/</g, '\\u003c');
       const library = document.createElement('script'); library.dataset.three = 'true'; library.textContent = three; clone.querySelector('body').append(library);
       const portrait = document.createElement('script'); portrait.dataset.portrait = 'true'; portrait.textContent = portraitScript; clone.querySelector('body').append(portrait);
       const animation = document.createElement('script'); animation.dataset.motion = 'true'; animation.textContent = motion; clone.querySelector('body').append(animation);

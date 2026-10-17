@@ -18,6 +18,8 @@
 
 `presentation.evidenceBoards`定义新增可视化结构。份额图、9卖点表直接从`campaignReview`计算，不另存一套指标；两组份额使用同一0–100%长度标尺。300人/人/月只作为规划，分析样本数量和模板数量分为过程与交付，不冒充增长KR。九步导航在当前视图定位并展开对应环节，支持刷新；首步默认展开。没有收到真实后台/分镜截图，不生成假截图或虚构单条作品结果。补充材料要求见`materials-needed.md`。
 
+新增《小老板》个人作品拆解：实际使用内部Auto Agent、ChatGPT图片模型、Seedance2.5/2.0；1天耗时、每30秒单元平均返工1–2次分别展示。提示词方案包括12场景/5角色/7段/23镜，精选三段对应前5秒、表演与品牌判断，原始Markdown原字节保存在`downloads/xiaolaoban-prompts.md`。附件在独立HTML和二次导出中以内嵌data URL下载，静态首屏也不留失效相对链接。源文档的生成指令只作内容，不执行。增长新增拉新优先、至少80%卖点内容/约20%探索排期与品宣型/效果型分工；不把排期当实际占比、不把Q2测算当成绩。
+
 `data/portfolio.json`和`templates/page.html`是生成输入。执行`node scripts/build-pages.cjs`更新`index.html`与`portfolio-data.js`。`app.js`负责路由、编辑、打印、图像查看与离线导出；`studio.css`为最后的视觉层。Three.js仅对首页人物的局部发丝/眉毛做图像网格动画，非完整人体3D。支持暂停、减少动态、离屏停止、静态回退和资源清理。
 
 原始项目证据保留在`data/campaign-review.json`及共享数据中：119条、3,690万VV、238拉新、2,443拉活；9卖点明细与总览的差异不补数。153/238=64.3%，不把VV当UV或点击，不将团队结果全算个人创作。495/135token是15秒不同清晰度的消耗；额度不等于支出、规范上线不等于已降本。详细审阅在`content-review.md`，不作为页面正文。
@@ -30,5 +32,6 @@
 2. `node scripts/test-creator-motion.cjs`、`test-hero-capabilities.cjs`、`test-studio-scene.cjs`：动态、生命周期、人物像素与响应式取景。
 3. `HTML_PATH=downloads/portfolio-final.html node scripts/test-standalone.cjs`：UTF-8、无正文代码、无脚本首屏、离线导航、人物动画；生成ZIP。
 4. `node scripts/build-download-manifest.cjs`；随后用同一`HTML_PATH`执行`test-delivery.cjs`，检查实际ZIP、25种组合与二次导出；`test-public-downloads.cjs`检查同源下载字节。
+5. `node scripts/test-creator-attachment.cjs`：原创作品深链、提示词原文、附件在JS开/关的离线HTML中完整下载、320px布局。在线附件和离线二次导出都校验字节，不只检查链接存在。
 
 最终文件在`downloads/portfolio-final.html`和`downloads/portfolio-final.zip`，完整内嵌字体、图像、资料和脚本，可再次导出。聊天客户端将HTML当源码预览时使用ZIP下载。发布需正常快进推送到已授权的`main`，不得force；`scripts/check-pages-deployment.cjs`核对对应提交的Pages部署。公开下载文件与清单SHA-256应一致。

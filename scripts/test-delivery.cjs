@@ -67,6 +67,9 @@ async function assertReadable(page) {
           assert.equal(await page.locator('.management-table tbody tr').count(), 8);
         }
         if (id === 'insights') {
+          const attachment = data.attachments[0]; const url = await page.locator('[data-attachment]').getAttribute('href');
+          assert(url.startsWith('data:text/markdown;'));
+          assert(Buffer.from(url.slice(url.indexOf(',') + 1), 'base64').equals(fs.readFileSync(attachment.path)));
           assert.equal(await page.locator('.creation-stage').count(), 9);
           await page.locator('.creation-step-link').last().click();
           await page.waitForFunction(() => document.querySelector('#creation-step-9')?.open);
@@ -107,7 +110,15 @@ async function assertReadable(page) {
       await assertReadable(copy);
       assert.equal(await copy.locator('.header [data-bind="name"]').textContent(), '离线导出验证');
       assert.equal(await copy.locator('.review-table tbody tr').count(), 4);
-      if (javaScriptEnabled) { await copy.locator('nav [data-page-link="capabilities"]').click(); await copy.locator('.portrait-intro').waitFor(); await assertReadable(copy); }
+      if (javaScriptEnabled) {
+        await copy.locator('nav [data-page-link="capabilities"]').click(); await copy.locator('.portrait-intro').waitFor(); await assertReadable(copy);
+        await copy.locator('nav [data-page-link="insights"]').click(); await copy.locator('[data-attachment]').waitFor();
+        const attachment = data.attachments[0]; const url = await copy.locator('[data-attachment]').getAttribute('href');
+        assert(Buffer.from(url.slice(url.indexOf(',') + 1), 'base64').equals(fs.readFileSync(attachment.path)));
+        const downloaded = copy.waitForEvent('download'); await copy.locator('[data-attachment]').click();
+        const file = await downloaded; assert.equal(file.suggestedFilename(), attachment.filename);
+        assert(fs.readFileSync(await file.path()).equals(fs.readFileSync(attachment.path)));
+      }
       await offline.close();
     }
     assert.deepEqual(unexpected, []); assert.deepEqual(errors, []);
