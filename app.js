@@ -165,12 +165,12 @@
       $('#capability-grid').append(article);
     });
   }
-  function renderDimension(index, { before, afterIntro } = {}) {
+  function renderDimension(index, { before, afterIntro, showMetrics = true, showCaseLink = true } = {}) {
     const dimension = initial.presentation.dimensions[index];
     const parent = $('#dimension-content'); parent.dataset.dimension = dimension.key;
     if (before) before(parent);
     text(parent, 'p', dimension.thesis, 'dimension-thesis');
-    if (index === 2) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
+    if (index === 2 && showMetrics) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
     if (afterIntro) afterIntro(parent);
     const list = document.createElement('div'); list.className = 'dimension-points';
     dimension.points.forEach(point => {
@@ -178,9 +178,11 @@
       text(item, 'h2', point.title); const copy = document.createElement('div');
       text(copy, 'p', point.action); text(copy, 'p', point.evidence, 'dimension-evidence'); item.append(copy); list.append(item);
     }); parent.append(list);
-    if (index !== 2) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
-    const link = text(parent, 'a', dimension.caseLabel, 'case-anchor dimension-link');
-    link.href = pageHref(dimension.casePage || 'skills', dimension.caseAnchor); link.append(iconElement('arrow-up-right'));
+    if (index !== 2 && showMetrics) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
+    if (showCaseLink) {
+      const link = text(parent, 'a', dimension.caseLabel, 'case-anchor dimension-link');
+      link.href = pageHref(dimension.casePage || 'skills', dimension.caseAnchor); link.append(iconElement('arrow-up-right'));
+    }
     return parent;
   }
   function renderCompetence(parent, competence, support, example) {
@@ -396,9 +398,10 @@
       [['我的判断', decision], ['我的动作', action], ['交付与验证', output]].forEach(([label, value]) => {
         text(reasoning, 'dt', label); text(reasoning, 'dd', value);
       }); section.append(reasoning);
+      if (id === 'case-growth') renderCampaignEvidence(section);
       if (id === 'case-team') {
         const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
-        const budgetLink = text(section, 'a', '查看渠道转向、预算申请与结算检查', 'case-anchor'); budgetLink.href = pageHref('experience', 'matrix-budget-control'); budgetLink.append(iconElement('arrow-up-right'));
+        renderMatrixBudget(section);
       }
       parent.append(section);
     });
@@ -407,7 +410,7 @@
     metrics(results, [
       { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
       { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
-    ]);
+    ]).classList.add('campaign-metrics');
     text(results, 'p', '我的交付：9个卖点表现对照、TOP13脚本与3条反例拆解、3套内容模板，以及下一轮选题和投放验证建议。', 'case-deliverables');
     text(results, 'p', '识别两大拉新主力卖点，贡献153人拉新（64.3%）；智能找二手车带来803人拉活。', 'review-highlight');
     const wrap = document.createElement('div'); wrap.className = 'review-table-wrap'; wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', '业务卖点成果对比');
@@ -463,25 +466,29 @@
     const workflow = workDisclosure(parent, 'production-workflow', '交付标准与内容资产');
     evidenceFigure(workflow, 'production', '9步交付与六维质检');
     evidenceFigure(workflow, 'team', '团队分工与矩阵协作');
-    renderProductionCost(parent); renderMatrixBudget(parent);
+    renderProductionCost(parent);
   }
   function renderInsights() {
-    const parent = renderDimension(2, { afterIntro: parent => { renderCreatorCase(parent); renderCreationBoard(parent); } });
+    const parent = renderDimension(2, { showMetrics: false, showCaseLink: false });
+    renderCreationBoard(parent);
     const works = document.createElement('section'); works.className = 'authored-work';
     text(works, 'h2', '个人代表作品');
     const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
     works.append(evidence); parent.append(works); renderEvidence();
-    const tools = workDisclosure(parent, 'creation-tools', '创作工具与素材管理');
-    text(tools, 'p', source.skills.slice(0, 5).join(' · '), 'dimension-tools');
   }
   function renderEvidence() {
-    source.links.slice(0, 5).forEach(link => {
+    source.links.slice(0, 5).forEach((link, index) => {
       const item = externalLink($('#featured-evidence'), link.title, link.url);
+      item.classList.add('representative-link');
       item.prepend(iconElement('play'));
+      if (index === 0) {
+        const detail = workDisclosure($('#featured-evidence'), 'creator-case-detail', '《小老板》 / 制作拆解与提示词附件');
+        detail.classList.add('authored-case'); renderCreatorCase(detail);
+      }
     });
     const accounts = document.createElement('div'); accounts.className = 'account-links';
     ['人间清醒观察室', '穿越汽车', '车没坏', '噜噜总动员'].forEach((name, index) => externalLink(accounts, name, source.links[index + 5].url));
-    $('#featured-evidence').after(accounts);
+    $('.dimension-point > div').append(accounts);
   }
 
   function boardSection(parent, id, title) {
@@ -527,10 +534,17 @@
     text(priorities, 'p', `排期要求：${policy.execution}`, 'board-note'); goals.append(priorities);
     const types = document.createElement('dl'); types.className = 'policy-content-types';
     policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); priorities.append(types);
-    const result = boardSection(parent, 'growth-evidence', '数据判断 / 把资源投向什么内容');
+    const path = boardSection(parent, 'growth-channels', '增长链路 / 触达如何接上产品使用');
+    flowMap(path, board.path);
+    const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
+    board.decisions.forEach(([label, title, action]) => {
+      const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
+    }); path.append(decisions);
+  }
+  function renderCampaignEvidence(parent) {
+    const board = initial.presentation.evidenceBoards.growth;
+    const result = boardSection(parent, 'growth-evidence', '卖点分析 / 从曝光贡献到新增贡献');
     const campaign = initial.campaignReview; const totals = campaign.overview;
-    text(result, 'p', `AI小懂中秋国庆项目 · ${totals.period} · ${totals.days}天`, 'board-note');
-    metrics(result, [{ label: '项目视频', value: `${totals.videos}条` }, { label: '内容VV', value: `${(totals.vv / 10000).toLocaleString('en-US')}万` }, { label: '项目拉新', value: `${totals.acquisitions}人` }, { label: '项目拉活', value: `${totals.reactivations.toLocaleString('en-US')}人` }]).classList.add('campaign-metrics');
     const chart = document.createElement('figure'); chart.className = 'share-chart';
     text(chart, 'figcaption', '各卖点组合的播放份额与拉新份额 · 占项目总量 · 0–100%');
     [[0, 1], [2, 5, 6]].forEach((indices, index) => {
@@ -549,12 +563,6 @@
     const full = workDisclosure(result, 'selling-point-data', '9个卖点 / 作品量与增长效率对照');
     boardTable(full, '项目卖点表现', ['卖点', '条数', 'VV', '拉新', '拉活', '拉新 / 百万VV'], campaign.points.map(point => [point.name, point.videos, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]), 'selling-point-table');
     text(full, 'p', '拍报价单仅1条，继续积累样本；百万VV拉新用于比较曝光效率，不是点击转化率。', 'board-note');
-    const path = boardSection(parent, 'growth-channels', '增长链路 / 触达如何接上产品使用');
-    flowMap(path, board.path);
-    const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
-    board.decisions.forEach(([label, title, action]) => {
-      const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
-    }); path.append(decisions);
   }
   function renderCreatorCase(parent) {
     const work = initial.presentation.evidenceBoards.creation.representative;
@@ -568,7 +576,6 @@
     const download = text(section, 'a', attachment.label, 'case-anchor prompt-download');
     download.href = attachment.dataUrl || attachment.path; download.download = attachment.filename;
     download.dataset.attachment = attachment.id; download.prepend(iconElement('download'));
-    flowMap(section, work.pipeline);
     text(section, 'p', work.assets, 'board-note');
     const decisions = document.createElement('dl'); decisions.className = 'creator-decisions';
     work.decisions.forEach(([label, signal, action]) => {
@@ -589,24 +596,20 @@
   function renderCreationBoard(parent) {
     const board = initial.presentation.evidenceBoards.creation;
     const section = boardSection(parent, 'creation-workflow', '个人工作流 / 从用户问题到成片，再回到数据');
-    text(section, 'p', '亲自完成选题、脚本、生成与剪辑；用资产约束解决一致性，用复盘判断内容是否值得复制。', 'board-note');
-    const map = document.createElement('ol'); map.className = 'creation-map';
+    const tools = text(section, 'p', '工具概述：内部画布Auto Agent组织制作，ChatGPT生成图片，Seedance 2.5 / 2.0生成视频；Excel回收分析，Prompt与素材库支持复用。', 'board-note'); tools.id = 'creation-tools';
+    const steps = document.createElement('div'); steps.className = 'creation-map';
     board.stages.forEach((stage, index) => {
-      const item = document.createElement('li'); const link = text(item, 'a', '', 'creation-step-link');
-      link.href = pageHref('insights', `creation-step-${index + 1}`);
-      text(link, 'span', String(index + 1).padStart(2, '0')); text(link, 'strong', stage.name); link.append(iconElement('arrow-down')); map.append(item);
-    }); section.append(map);
-    const steps = document.createElement('div'); steps.className = 'creation-stages';
-    board.stages.forEach((stage, index) => {
-      const detail = document.createElement('details'); detail.className = 'creation-stage'; detail.id = `creation-step-${index + 1}`; detail.open = index === 0;
-      const summary = document.createElement('summary'); text(summary, 'span', String(index + 1).padStart(2, '0'), 'flow-number');
-      text(summary, 'span', stage.name, 'creation-stage-name'); text(summary, 'span', stage.skill, 'creation-stage-skill'); summary.append(iconElement('arrow-down')); detail.append(summary);
+      const detail = document.createElement('details'); detail.className = 'creation-stage'; detail.id = `creation-step-${index + 1}`;
+      const summary = document.createElement('summary'); summary.className = 'creation-step-link'; text(summary, 'span', String(index + 1).padStart(2, '0'), 'flow-number');
+      text(summary, 'strong', stage.name, 'creation-stage-name'); summary.append(iconElement('arrow-down')); detail.append(summary);
+      text(detail, 'h3', stage.skill, 'stage-skill');
       const content = document.createElement('dl'); content.className = 'stage-content';
       [['工具', stage.tools], ['我的操作', stage.action], ['交付物', stage.output], ['验收判断', stage.check], ['实践', stage.example]].forEach(([label, value]) => { text(content, 'dt', label); text(content, 'dd', value); });
-      detail.append(content); steps.append(detail);
+      detail.append(content);
+      if (index === 6) boardTable(detail, '生成问题 → 修正动作 → 验收', ['真实问题', '我的处理', '验收重点'], board.failures, 'creation-failure-table');
+      if (index === 8) text(detail, 'p', '有效脚本入模板库；失败镜头回填人物、车型与场景约束，进入下一轮生产。', 'board-return');
+      steps.append(detail);
     }); section.append(steps);
-    text(section, 'p', '复盘 → 有效脚本入模板库；失败镜头回填人物 / 车型 / 场景约束 → 下一轮生产。', 'board-return');
-    boardTable(parent, '生成问题 → 修正动作 → 验收', ['真实问题', '我的处理', '验收重点'], board.failures, 'creation-failure-table');
   }
 
   function resolveLocation(id, anchor = '') {
@@ -619,7 +622,8 @@
       'case-stage-4': ['skills', 'case-team'], 'case-stage-5': ['skills', 'case-results'], 'case-stage-6': ['skills', 'pitfall-review']
     };
     if (aliases[anchor]) return aliases[anchor];
-    if (['production-cost-control', 'matrix-budget-control', 'production-workflow', 'team-okr'].includes(anchor)) return ['methods', anchor];
+    if (['production-cost-control', 'production-workflow', 'team-okr'].includes(anchor)) return ['methods', anchor];
+    if (['matrix-budget-control', 'growth-evidence', 'selling-point-data'].includes(anchor)) return ['skills', anchor];
     if (['case-growth', 'case-team', 'case-creation', 'case-results'].includes(anchor)) return ['skills', anchor];
     if (anchor === 'featured-evidence' || anchor === 'creation-tools') return ['insights', anchor];
     if (['creator-xiaolaoban', 'prompt-opening', 'prompt-performance', 'prompt-brand'].includes(anchor)) return ['insights', anchor];
@@ -734,6 +738,12 @@
     });
   }
   $('#main').addEventListener('click', event => {
+    const workflow = event.target.closest('summary.creation-step-link');
+    if (workflow) {
+      const detail = workflow.parentElement;
+      history.replaceState(null, '', pageHref('insights', detail.open ? '' : detail.id));
+      return;
+    }
     const experience = event.target.closest('[data-experience-tab]');
     if (experience) {
       const key = experience.getAttribute('aria-expanded') === 'true' ? '' : experience.dataset.experienceTab;

@@ -9,6 +9,23 @@ const output = process.env.QA_OUTPUT || '/tmp/qxw-three-dimensions-qa';
 fs.mkdirSync(output, { recursive: true });
 const ids = Object.keys(data.pages);
 const route = id => new URL(`index.html${data.pages[id].route}`, base).href;
+async function checkCampaignEvidence(page) {
+  await page.locator('#case-growth > summary').click();
+  assert.deepEqual(await page.locator('.campaign-metrics dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
+  for (const [groupIndex, indices] of [[0, 1], [2, 5, 6]].entries()) {
+    const points = indices.map(i => data.campaignReview.points[i]);
+    const values = [points.reduce((n,p) => n + p.vv, 0) / data.campaignReview.overview.vv * 100, points.reduce((n,p) => n + p.acquisitions, 0) / data.campaignReview.overview.acquisitions * 100];
+    const group = page.locator('.share-group').nth(groupIndex);
+    assert.deepEqual(await group.locator('strong').allTextContents(), values.map(v => `${v.toFixed(1)}%`));
+    assert(await group.locator('.share-track').evaluateAll((tracks, values) => tracks.every((track, i) => Math.abs(track.firstElementChild.getBoundingClientRect().width / track.getBoundingClientRect().width * 100 - values[i]) < .15), values));
+  }
+  assert.equal(await page.locator('.focus-table tbody tr').count(), 3);
+  await page.locator('#selling-point-data > summary').click();
+  assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
+  for (const [i, point] of data.campaignReview.points.entries()) assert.deepEqual(await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents(), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
+  assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+  await page.locator('#selling-point-data > summary').click(); await page.locator('#case-growth > summary').click();
+}
 async function check(page, id) {
   await page.locator(`main > #${id}`).waitFor();
   assert.equal(await page.locator('body').getAttribute('data-page'), id);
@@ -21,6 +38,10 @@ async function check(page, id) {
   assert.equal(identifiers.length, new Set(identifiers).size);
   assert.equal(await page.locator('.experience-tabs, .practice-point, .case-stage, .growth-operation-loop, .decision-timeline, .role-mapping').count(), 0);
   const copy = await page.locator('main').textContent();
+  if (id !== 'skills') {
+    for (const phrase of ['小懂', '119条', 'TOP13', '3,690万', '64.3%']) assert(!copy.includes(phrase), `Case leaked into ${id}: ${phrase}`);
+    assert.equal(await page.locator('#growth-evidence, .selling-point-table, #matrix-budget-control').count(), 0);
+  }
   for (const phrase of ['简单有为', 'UWANT', '郝家豁', '千川', '来源', '口径', '待补', '稳定水位', '保证打正', '贡献了65%', '企业付费转化提升', 'Agent配置上线']) assert(!copy.includes(phrase), phrase);
 }
 
@@ -60,7 +81,7 @@ async function check(page, id) {
           assert.equal(await page.locator('.dimension-point').count(), 3);
           assert.equal(await page.locator('.dimension-thesis').textContent(), dimension.thesis);
           assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), dimension.points.map(item => item.evidence));
-          assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), dimension.metrics.map(item => item.value));
+          assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), id === 'insights' ? [] : dimension.metrics.map(item => item.value));
           assert((await page.locator('.dimension-points').innerText()).length < 650, 'Capability summaries stay concise alongside visual evidence');
           assert((await page.locator('main').innerText()).length < ({ experience: 2200, methods: 1200, insights: 2400 }[id]), 'Default visual boards keep bounded copy; complete prompts remain in disclosures/attachment');
         }
@@ -71,21 +92,6 @@ async function check(page, id) {
           assert.deepEqual(await page.locator('.policy-content-types dt').allTextContents(), ['品宣型', '效果型']);
           assert((await page.locator('.policy-labels').innerText()).includes('至少80%'));
           assert((await page.locator('.growth-policy').innerText()).includes('排期要求'));
-          assert.deepEqual(await page.locator('.campaign-metrics dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
-          const groups = [[0, 1], [2, 5, 6]];
-          for (const [groupIndex, indices] of groups.entries()) {
-            const points = indices.map(i => data.campaignReview.points[i]);
-            const values = [points.reduce((n,p) => n + p.vv, 0) / data.campaignReview.overview.vv * 100, points.reduce((n,p) => n + p.acquisitions, 0) / data.campaignReview.overview.acquisitions * 100];
-            const group = page.locator('.share-group').nth(groupIndex);
-            assert.deepEqual(await group.locator('strong').allTextContents(), values.map(v => `${v.toFixed(1)}%`));
-            assert(await group.locator('.share-track').evaluateAll((tracks, values) => tracks.every((track, i) => Math.abs(track.firstElementChild.getBoundingClientRect().width / track.getBoundingClientRect().width * 100 - values[i]) < .15), values));
-          }
-          assert.equal(await page.locator('.focus-table tbody tr').count(), 3);
-          await page.locator('#selling-point-data > summary').click();
-          assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
-          for (const [i, point] of data.campaignReview.points.entries()) assert.deepEqual(await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents(), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
-          assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-          await page.locator('#selling-point-data > summary').click();
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.okr-row').count(), 3); assert.equal(await page.locator('.okr-results li').count(), 8);
@@ -105,6 +111,17 @@ async function check(page, id) {
           await page.locator('#production-cost-control > summary').click();
         }
         if (id === 'insights') {
+          assert.equal(await page.locator('.creation-stage[open], #creator-case-detail[open], .creation-stages, details#creation-tools').count(), 0);
+          assert(await page.locator('.stage-content').evaluateAll(items => items.every(el => !el.checkVisibility())));
+          assert(await page.locator('#creation-tools').evaluate(el => el.closest('section').id === 'creation-workflow'));
+          assert(await page.locator('#dimension-content').evaluate(el => {
+            const children = [...el.children];
+            return children.indexOf(el.querySelector('.dimension-points')) < children.indexOf(el.querySelector('#creation-workflow')) && children.indexOf(el.querySelector('#creation-workflow')) < children.indexOf(el.querySelector('.authored-work'));
+          }));
+          const copy = await page.locator('.dimension-points').innerText();
+          for (const value of ['4个账号', '1000万', '抖音自然流拉新50+', '月均涨粉3万+']) assert(copy.includes(value));
+          assert(await page.locator('.representative-link').evaluateAll(items => items.every((item, i) => !i || (item.getBoundingClientRect().top >= items[i - 1].getBoundingClientRect().bottom && Math.abs(item.getBoundingClientRect().left - items[i - 1].getBoundingClientRect().left) < 1))));
+          await page.locator('#creator-case-detail > summary').click();
           assert.deepEqual(await page.locator('.creator-case-metrics dd').allTextContents(), ['1天', '1–2次', '23条']);
           assert((await page.locator('.creator-case-metrics dt').nth(1).textContent()).includes('每30秒'));
           assert.equal(await page.locator('#creator-xiaolaoban .creator-decisions > div').count(), 4);
@@ -118,16 +135,17 @@ async function check(page, id) {
             assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
             await page.locator(`#${sample.id} > summary`).click();
           }
-          assert.equal(await page.locator('#featured-evidence a, .account-links a').count(), 9);
+          assert.equal(await page.locator('.representative-link, .account-links a').count(), 9);
           assert.equal(await page.locator('.creation-step-link').count(), 9);
           assert.equal(await page.locator('.creation-stage').count(), 9);
-          assert.equal(await page.locator('.creation-stage[open]').count(), 1);
+          assert.equal(await page.locator('.creation-stage[open]').count(), 0);
           assert.equal(await page.locator('.creation-failure-table tbody tr').count(), 3);
           for (const [i, stage] of data.presentation.evidenceBoards.creation.stages.entries()) {
-            const detail = page.locator('.creation-stage').nth(i); if (i) await detail.locator('summary').click();
-            assert.deepEqual(await detail.locator('dd').allTextContents(), [stage.tools, stage.action, stage.output, stage.check, stage.example]);
+            const detail = page.locator('.creation-stage').nth(i); await detail.locator('summary').click();
+            assert.deepEqual(await detail.locator('.stage-content dd').allTextContents(), [stage.tools, stage.action, stage.output, stage.check, stage.example]);
             await detail.locator('summary').click();
           }
+          await page.locator('#creator-case-detail > summary').click();
           await page.locator('.creation-step-link').nth(4).click();
           await page.waitForFunction(() => document.querySelector('#creation-step-5')?.open);
           assert.equal(await page.locator('#creation-step-5').evaluate(el => el.open), true);
@@ -138,6 +156,7 @@ async function check(page, id) {
         if (id === 'skills') {
           assert(await page.locator('#business-review').evaluate(el => el.open));
           assert.equal(await page.locator('.case-perspective').count(), 4); assert.equal(await page.locator('.case-perspective[open]').count(), 0);
+          await checkCampaignEvidence(page);
           assert.deepEqual(await page.locator('.case-results .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
           assert.equal(await page.locator('.review-table tbody tr').count(), 4); assert.equal(await page.locator('.badcase-item').count(), 3);
           for (const [row, index] of [0, 1, 2, 4].entries()) {
@@ -168,7 +187,8 @@ async function check(page, id) {
       ['#/experience/competence-0-0', 'methods', 'production-workflow'], ['#/experience/competence-0-4', 'insights', ''],
       ['#/experience/growth-goal', 'experience', ''], ['#/experience/case-stage-3', 'skills', 'case-growth'],
       ['#/experience/case-stage-4', 'skills', 'case-team'], ['#/experience/pitfall-review', 'skills', 'pitfall-review'],
-      ['#/experience/production-cost-control', 'methods', 'production-cost-control'], ['#competence-0-2', 'experience', '']
+      ['#/experience/production-cost-control', 'methods', 'production-cost-control'], ['#competence-0-2', 'experience', ''],
+      ['#/experience/matrix-budget-control', 'skills', 'matrix-budget-control'], ['#/experience/growth-evidence', 'skills', 'growth-evidence']
     ]) {
       await page.goto(new URL(`index.html${hash}`, base).href); await check(page, expected);
       if (target) { assert(await page.locator(`#${target}`).isVisible()); assert(await page.locator(`#${target}`).evaluate(el => el.tagName !== 'DETAILS' || el.open)); }

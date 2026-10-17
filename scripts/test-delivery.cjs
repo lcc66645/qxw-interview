@@ -54,11 +54,9 @@ async function assertReadable(page) {
         assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
         for (const href of await page.locator('main a[href^="https:"]').evaluateAll(items => items.map(item => item.href))) evidence.add(href);
         if (['experience', 'methods', 'insights'].includes(id)) assert.equal(await page.locator('.dimension-point').count(), 3);
-        if (id === 'experience') {
-          assert.deepEqual(await page.locator('.share-row strong').allTextContents(), ['32.2%', '64.3%', '46.5%', '19.3%']);
-          await page.locator('#selling-point-data > summary').click();
-          assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
-          await page.locator('#selling-point-data > summary').click();
+        if (id !== 'skills') {
+          const copy = await page.locator('main').textContent();
+          for (const phrase of ['小懂', '119条', 'TOP13', '3,690万', '64.3%']) assert(!copy.includes(phrase));
         }
         if (id === 'methods') {
           assert.equal(await page.locator('#dimension-content').evaluate(el => el.firstElementChild.id), 'team-okr');
@@ -67,6 +65,10 @@ async function assertReadable(page) {
           assert.equal(await page.locator('.management-table tbody tr').count(), 8);
         }
         if (id === 'insights') {
+          assert.equal(await page.locator('.creation-stage[open]').count(), 0);
+          assert.equal(await page.locator('.creation-map > .creation-stage').count(), 9);
+          assert.equal(await page.locator('.creation-stages').count(), 0);
+          assert(await page.locator('.representative-link').evaluateAll(items => items.every((el, i) => !i || el.getBoundingClientRect().top >= items[i - 1].getBoundingClientRect().bottom)));
           const attachment = data.attachments[0]; const url = await page.locator('[data-attachment]').getAttribute('href');
           assert(url.startsWith('data:text/markdown;'));
           assert(Buffer.from(url.slice(url.indexOf(',') + 1), 'base64').equals(fs.readFileSync(attachment.path)));
@@ -78,6 +80,10 @@ async function assertReadable(page) {
           await page.locator('nav [data-page-link="insights"]').click();
         }
         if (id === 'skills') {
+          assert.deepEqual(await page.locator('.share-row strong').allTextContents(), ['32.2%', '64.3%', '46.5%', '19.3%']);
+          await page.locator('#case-growth > summary').click(); await page.locator('#selling-point-data > summary').click();
+          assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
+          await page.locator('#selling-point-data > summary').click(); await page.locator('#case-growth > summary').click();
           assert.equal(await page.locator('.badcase-item').count(), 3);
           assert.equal(await page.locator('#business-review').count(), 1);
           assert.equal(await page.locator('.case-perspective').count(), 4);
@@ -112,7 +118,7 @@ async function assertReadable(page) {
       assert.equal(await copy.locator('.review-table tbody tr').count(), 4);
       if (javaScriptEnabled) {
         await copy.locator('nav [data-page-link="capabilities"]').click(); await copy.locator('.portrait-intro').waitFor(); await assertReadable(copy);
-        await copy.locator('nav [data-page-link="insights"]').click(); await copy.locator('[data-attachment]').waitFor();
+        await copy.locator('nav [data-page-link="insights"]').click(); await copy.locator('#creator-case-detail > summary').click(); await copy.locator('[data-attachment]').waitFor();
         const attachment = data.attachments[0]; const url = await copy.locator('[data-attachment]').getAttribute('href');
         assert(Buffer.from(url.slice(url.indexOf(',') + 1), 'base64').equals(fs.readFileSync(attachment.path)));
         const downloaded = copy.waitForEvent('download'); await copy.locator('[data-attachment]').click();
