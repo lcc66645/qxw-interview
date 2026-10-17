@@ -150,21 +150,34 @@
     figure.append(button); text(figure, 'figcaption', data.media[key] ? caption.split(' · ')[0] : caption); parent.append(figure);
   }
   function renderCapabilities() {
-    source.capabilities.forEach((capability, index) => {
+    initial.presentation.dimensions.forEach((dimension, index) => {
       const article = document.createElement('article');
       article.className = 'capability-item';
       text(article, 'span', String(index + 1).padStart(2, '0'), 'capability-number');
       const content = document.createElement('div');
-      text(content, 'h3', capability.title);
-      const proof = initial.presentation.capabilityCases[index];
-      text(content, 'p', `目的：${proof.purpose}`, 'capability-purpose');
+      text(content, 'h3', dimension.title);
       const example = document.createElement('div'); example.className = 'capability-case';
-      text(example, 'h4', proof.title); text(example, 'p', proof.action);
-      text(example, 'p', proof.result, 'capability-proof');
-      const link = text(example, 'a', '查看案例', 'case-anchor'); link.href = pageHref('experience', proof.href); link.append(iconElement('arrow-up-right')); content.append(example);
+      text(example, 'p', dimension.thesis);
+      text(example, 'p', dimension.proof, 'capability-proof');
+      const link = text(example, 'a', '查看能力与证据', 'case-anchor'); link.href = pageHref(dimension.page); link.append(iconElement('arrow-up-right')); content.append(example);
       article.append(content);
       $('#capability-grid').append(article);
     });
+  }
+  function renderDimension(index) {
+    const dimension = initial.presentation.dimensions[index];
+    const parent = $('#dimension-content'); parent.dataset.dimension = dimension.key;
+    text(parent, 'p', dimension.thesis, 'dimension-thesis');
+    const list = document.createElement('div'); list.className = 'dimension-points';
+    dimension.points.forEach(point => {
+      const item = document.createElement('section'); item.className = 'dimension-point';
+      text(item, 'h2', point.title); const copy = document.createElement('div');
+      text(copy, 'p', point.action); text(copy, 'p', point.evidence, 'dimension-evidence'); item.append(copy); list.append(item);
+    }); parent.append(list);
+    metrics(parent, dimension.metrics); parent.querySelector('.metric-list').classList.add('dimension-metrics');
+    const link = text(parent, 'a', dimension.caseLabel, 'case-anchor dimension-link');
+    link.href = pageHref(dimension.casePage || 'skills', dimension.caseAnchor); link.append(iconElement('arrow-up-right'));
+    return parent;
   }
   function renderCompetence(parent, competence, support, example) {
     text(parent, 'p', support?.action || competence.summary.action, 'practice-action');
@@ -316,48 +329,8 @@
     }); parent.append(section);
   }
   function renderExperience() {
-    const list = $('#experience-list');
-    source.jobs.forEach((job, jobIndex) => {
-      const article = document.createElement('article'); article.className = 'job'; article.id = `employer-${jobIndex}`;
-      const header = document.createElement('div'); header.className = 'job-heading';
-      const name = document.createElement('div');
-      text(name, 'h3', '懂车帝');
-      text(name, 'p', job.role); text(name, 'p', job.company, 'job-company');
-      header.append(name); text(header, 'span', job.period, 'job-period'); article.append(header);
-      text(article, 'p', job.summary, 'job-intro');
-      renderOKR(article, job);
-      const navigation = document.createElement('div'); navigation.className = 'experience-tabs'; navigation.setAttribute('role', 'group'); navigation.setAttribute('aria-label', '工作实践与项目复盘');
-      article.append(navigation);
-      const addPanel = (panel, key, label, sequence) => {
-        const button = document.createElement('button'); button.type = 'button'; button.id = `experience-button-${key}`; button.dataset.experienceTab = key;
-        button.setAttribute('aria-expanded', 'false'); button.setAttribute('aria-controls', panel.id);
-        text(button, 'span', String(sequence + 1).padStart(2, '0'), 'experience-tab-number'); text(button, 'span', label);
-        navigation.append(button); panel.classList.add('experience-panel'); panel.dataset.experiencePanel = key;
-        panel.hidden = true; panel.setAttribute('role', 'region'); panel.setAttribute('aria-labelledby', button.id); article.append(panel);
-      };
-      const order = initial.presentation.practiceOrder;
-      order.forEach((index, sequence) => {
-        const competence = job.competences[index];
-        const support = initial.presentation.practices[index];
-        const point = document.createElement('section'); point.className = 'practice-point';
-        point.id = `competence-${jobIndex}-${index}`;
-        const heading = document.createElement('div'); heading.className = 'practice-heading';
-        text(heading, 'span', String(sequence + 1).padStart(2, '0'), 'competence-number');
-        text(heading, 'h4', support.title || competence.title); point.append(heading);
-        const example = initial.presentation.practiceCases[index];
-        renderCompetence(point, competence, support, example);
-        addPanel(point, point.id, initial.presentation.practiceLabels[index], sequence);
-      });
-      if (jobIndex === 0) {
-        const works = document.createElement('section'); works.className = 'authored-work';
-        text(works, 'h4', '个人代表作品');
-        const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
-        works.append(evidence); article.querySelector('#competence-0-4').append(works);
-        const review = document.createElement('section'); review.id = 'project-review-panel';
-        renderProjectCase(review); addPanel(review, 'business-review', '项目复盘', order.length);
-      }
-      list.append(article);
-    });
+    const parent = renderDimension(0);
+    text(parent, 'p', '分析工具：Excel数据透视、SUMIFS / RANK.EQ、看板；SQL用于基础查询。', 'dimension-tools');
   }
   function selectExperiencePanel(key) {
     $$('[data-experience-panel]').forEach(panel => {
@@ -375,11 +348,11 @@
   function renderProjectCase(parent) {
     const heading = text(parent, 'h4', '懂车帝 / 项目案例', 'portfolio-case-title');
     heading.id = 'case-study-title';
-    const details = document.createElement('details'); details.className = 'review-tip portfolio-case'; details.id = 'business-review';
+    const details = document.createElement('details'); details.className = 'review-tip portfolio-case'; details.id = 'business-review'; details.open = true;
     const summary = document.createElement('summary');
     text(summary, 'span', 'CASE 01', 'tip-label');
     const title = document.createElement('span'); title.className = 'tip-heading';
-    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '业务目标、链路诊断与规模复制');
+    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '卖点判断、模板交付、脚本验证');
     summary.append(title); details.append(summary);
     const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body';
     details.append(body); parent.append(details);
@@ -398,42 +371,29 @@
       text(row, 'dt', title); text(row, 'dd', action); list.append(row);
     }); parent.append(list);
   }
-  function caseStage(number, title, capability) {
-    const section = document.createElement('details'); section.className = 'case-stage'; section.dataset.stage = String(number); section.id = number === 6 ? 'pitfall-review' : `case-stage-${number}`;
+  function caseDisclosure(id, title) {
+    const section = document.createElement('details'); section.className = 'case-perspective'; section.id = id;
     const summary = document.createElement('summary');
-    text(summary, 'span', String(number).padStart(2, '0'), 'case-stage-number'); text(summary, 'h4', title); summary.append(iconElement('arrow-down')); section.append(summary);
-    text(section, 'p', `核心能力：${capability}`, 'case-stage-capability');
+    text(summary, 'h4', title); summary.append(iconElement('arrow-down')); section.append(summary);
     return section;
   }
   function renderBusinessReview(parent) {
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
-    text(parent, 'p', '我的职责：回收119条视频的增长表现，比较9个业务卖点，逐句拆解TOP13脚本及3条反例；交付卖点优先级、3套模板与下一轮达人选题和投放建议。', 'case-responsibility');
-    const stages = initial.presentation.growthStrategy.caseStages;
-    stages.forEach(({ title, decision, action, output, capability }, index) => {
-      const section = caseStage(index + 1, title, capability);
+    text(parent, 'p', '个人负责：9卖点分析、TOP13与3条反例拆解、3套模板及脚本检查项交付。', 'case-responsibility');
+    initial.presentation.casePerspectives.forEach(({ id, title, decision, action, output }) => {
+      const section = caseDisclosure(id, title);
       const reasoning = document.createElement('dl'); reasoning.className = 'case-reasoning';
       [['我的判断', decision], ['我的动作', action], ['交付与验证', output]].forEach(([label, value]) => {
         text(reasoning, 'dt', label); text(reasoning, 'dd', value);
       }); section.append(reasoning);
-      if (index === 0) {
-        const link = text(section, 'a', '查看人群、目标模型与渠道布局', 'case-anchor'); link.href = pageHref('experience', 'growth-strategy'); link.append(iconElement('arrow-up-right'));
-      }
-      if (index === 1) renderGrowthLoop(section);
-      if (index === 2) {
-        renderGrowthDiagnostics(section);
-        const examples = document.createElement('div'); examples.className = 'script-examples';
-        [['贷款维权', '4S店贷款算账冲突 → 工具介入解题', '252万VV · 67人拉新'], ['借车讲车', '借野马见岳父，不会开手动挡 → AI语音讲车', '266万VV · 35人拉新']].forEach(([title, script, result]) => {
-          const item = document.createElement('article'); text(item, 'h5', title); text(item, 'p', script); text(item, 'strong', result); examples.append(item);
-        }); section.append(examples);
-      }
-      if (index === 3) {
-        evidenceFigure(section, 'production', '团队日常AIGC生产流程 · 承接脚本、资产与方法复用', 'case-workflow');
+      if (id === 'case-team') {
         const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
         const budgetLink = text(section, 'a', '查看渠道转向、预算申请与结算检查', 'case-anchor'); budgetLink.href = pageHref('experience', 'matrix-budget-control'); budgetLink.append(iconElement('arrow-up-right'));
       }
       parent.append(section);
     });
-    const results = caseStage(5, '活动整体表现与个人交付', '结果评估与贡献表达');
+    const results = document.createElement('section'); results.className = 'case-results'; results.id = 'case-results';
+    text(results, 'h4', '项目整体结果与个人交付');
     metrics(results, [
       { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
       { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
@@ -453,14 +413,8 @@
     }); table.append(body); wrap.append(table); results.append(wrap);
     evidenceFigure(results, 'growth', '播放表现与拉新贡献 · 中秋国庆星图项目', 'review-chart');
     text(results, 'p', '两个主力卖点占32.2%的VV、64.3%的拉新；三个高播放低拉新卖点占46.5%的VV、19.3%的拉新。下一轮优先验证选车优惠和语音讲车的需求匹配与脚本表达。', 'review-highlight');
-    parent.append(results);
-    const lessons = caseStage(6, '反例诊断与下一轮验证', '复盘诊断与实验设计判断');
-    text(lessons, 'p', '我将复盘差异转化为以下验证方案，分别明确测试变量、业务评价与执行反馈。');
-    reviewActions(lessons, [
-      ['验证内容机制', '在相近达人、卖点和分发条件下，单轮优先测试工具介入位置或行动表达，分开记录VV、拉新与拉活，不同时调整多个关键变量。'],
-      ['补齐业务评价', '放量前将获客成本、回流后的功能使用与留存纳入评估；本轮的播放与回流结果不直接代表长期用户价值。'],
-      ['形成执行闭环', '将高播放低拉新样本交回脚本审核，优先验证选车优惠和语音讲车方向；对找二手车保留独立的拉活评价，下一轮复盘再决定复制范围。']
-    ]);
+    parent.insertBefore(results, parent.querySelector('.case-perspective'));
+    const lessons = caseDisclosure('pitfall-review', '反例与下一轮验证');
     renderBadCases(lessons);
     parent.append(lessons);
     const links = document.createElement('div'); links.className = 'case-links';
@@ -488,40 +442,25 @@
     }); parent.append(group);
   }
   function renderTechStack() {
-    initial.extensions.techGroups.forEach(group => {
-      const article = document.createElement('article'); article.className = 'tech-group';
-      const heading = document.createElement('div'); text(heading, 'h3', group.title); text(heading, 'p', group.description);
-      const tools = document.createElement('div'); tools.className = 'tech-tools';
-      group.indexes.forEach(index => text(tools, 'span', source.skills[index]));
-      const application = document.createElement('div'); application.className = 'tech-application';
-      text(application, 'p', `实际交付：${group.deliverable}`);
-      const link = text(application, 'a', '查看相关实践', 'case-anchor'); link.href = pageHref('experience', group.href); link.append(iconElement('arrow-up-right'));
-      article.append(heading, tools, application); $('#skills-list').append(article);
-    });
+    renderProjectCase($('#dimension-content')); renderReviewTips();
   }
   function renderMethods() {
-    source.methods.forEach((method, index) => {
-      const article = document.createElement('article'); article.className = 'method-item';
-      text(article, 'span', String(index + 1).padStart(2, '0'), 'method-number');
-      text(article, 'h3', method.title); text(article, 'p', method.description);
-      text(article, 'p', method.flow, 'method-flow');
-      renderCaseProof(article, initial.presentation.methodCases[index], 'method-case');
-      const application = initial.extensions.methodApplications[index];
-      const link = text(article, 'a', '相关实践', 'method-application'); link.href = pageHref('experience', application.href.slice(1));
-      link.append(iconElement('arrow-up-right')); $('#method-grid').append(article);
-    });
+    const parent = renderDimension(1);
+    evidenceFigure(parent, 'team', '团队分工与矩阵协作');
+    const workflow = workDisclosure(parent, 'production-workflow', '交付标准与内容资产');
+    evidenceFigure(workflow, 'production', '9步交付与六维质检');
+    renderProductionCost(parent); renderMatrixBudget(parent);
+    const okr = workDisclosure(parent, 'team-okr', '懂车帝 / 工作目标与关键结果');
+    renderOKR(okr, source.jobs[0]);
   }
   function renderInsights() {
-    source.insights.forEach((insight, index) => {
-      const article = document.createElement('article'); article.className = 'insight-item';
-      text(article, 'span', String(index + 1).padStart(2, '0'));
-      const body = document.createElement('div');
-      text(body, 'h3', insight.title.replace(/^\d+\.\s*/, '')); text(body, 'p', insight.description);
-      text(body, 'p', `我的决策：${insight.decision}`, 'insight-decision');
-      text(body, 'p', `下一步：${insight.next}`, 'insight-next');
-      const link = text(body, 'a', '相关案例', 'case-anchor'); link.href = pageHref('experience', insight.href); link.append(iconElement('arrow-up-right'));
-      article.append(body); $('#insight-list').append(article);
-    });
+    const parent = renderDimension(2);
+    const works = document.createElement('section'); works.className = 'authored-work';
+    text(works, 'h2', '个人代表作品');
+    const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
+    works.append(evidence); parent.append(works); renderEvidence();
+    const tools = workDisclosure(parent, 'creation-tools', '创作工具与素材管理');
+    text(tools, 'p', source.skills.slice(0, 5).join(' · '), 'dimension-tools');
   }
   function renderEvidence() {
     source.links.slice(0, 5).forEach(link => {
@@ -533,8 +472,25 @@
     $('#featured-evidence').after(accounts);
   }
 
+  function resolveLocation(id, anchor = '') {
+    const aliases = {
+      'competence-0-0': ['methods', 'production-workflow'], 'competence-0-1': ['experience', ''],
+      'competence-0-2': ['experience', ''], 'competence-0-3': ['methods', ''], 'competence-0-4': ['insights', ''],
+      'growth-strategy': ['experience', ''], 'growth-goal': ['experience', ''], 'growth-channels': ['experience', ''],
+      'business-review': ['skills', 'business-review'], 'pitfall-review': ['skills', 'pitfall-review'],
+      'case-stage-1': ['skills', 'case-growth'], 'case-stage-2': ['skills', 'case-growth'], 'case-stage-3': ['skills', 'case-growth'],
+      'case-stage-4': ['skills', 'case-team'], 'case-stage-5': ['skills', 'case-results'], 'case-stage-6': ['skills', 'pitfall-review']
+    };
+    if (aliases[anchor]) return aliases[anchor];
+    if (['production-cost-control', 'matrix-budget-control', 'production-workflow', 'team-okr'].includes(anchor)) return ['methods', anchor];
+    if (['case-growth', 'case-team', 'case-creation', 'case-results'].includes(anchor)) return ['skills', anchor];
+    if (anchor === 'featured-evidence' || anchor === 'creation-tools') return ['insights', anchor];
+    if (/^okr-[1-3]$/.test(anchor)) return ['methods', anchor];
+    return [id, anchor];
+  }
   function pageHref(id, anchor = '') {
-    return `${pages[id].route}${anchor ? `/${anchor}` : ''}`;
+    const [page, target] = resolveLocation(id, anchor);
+    return `${pages[page].route}${target ? `/${target}` : ''}`;
   }
   function openAnchor(anchor) {
     if (!anchor) return;
@@ -555,10 +511,14 @@
     document.body.dataset.page = id;
     $('#main').innerHTML = pages[id].html;
     if (id === 'capabilities') { renderPortrait(); renderCapabilities(); }
-    if (id === 'experience') { renderExperience(); renderReviewTips(); renderEvidence(); }
+    if (id === 'experience') renderExperience();
     if (id === 'methods') renderMethods();
     if (id === 'insights') renderInsights();
     if (id === 'skills') renderTechStack();
+    if (id !== 'capabilities') {
+      const print = document.createElement('button'); print.type = 'button'; print.id = 'print-journey'; print.className = 'icon-button';
+      print.title = '打印当前内容'; print.setAttribute('aria-label', print.title); print.append(iconElement('printer')); $('.section-top').append(print);
+    }
     renderProfile();
     disposeMotion = window.PortfolioMotion?.mount($('#main'), initial.icons) || (() => {});
     $$('[data-page-link]').forEach(link => {
@@ -572,13 +532,14 @@
     try { hash = decodeURIComponent(location.hash.slice(1)); } catch { return; }
     const [id, anchor = ''] = hash.replace(/^\//, '').split('/');
     if (hasPage(id)) {
-      if (location.hash !== pageHref(id, anchor)) history.replaceState(null, '', pageHref(id, anchor));
-      renderPage(id, anchor);
+      const [page, target] = resolveLocation(id, anchor);
+      if (location.hash !== pageHref(page, target)) history.replaceState(null, '', pageHref(page, target));
+      renderPage(page, target);
       return;
     }
     if (/^(competence-|business-review|pitfall-review|work$)/.test(hash)) {
       history.replaceState(null, '', pageHref('experience', hash));
-      renderPage('experience', hash);
+      const [page, target] = resolveLocation('experience', hash); renderPage(page, target);
     } else if (hash) openAnchor(hash);
     else renderPage(defaultPage);
   }

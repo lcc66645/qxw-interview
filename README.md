@@ -1,108 +1,32 @@
-# 仇熙雯 · AIGC 用户增长运营 TL · 作品集
+# 仇熙雯 AIGC 作品集
 
-根据用户提供的 `portfolio.html` 整合真实资料、工作经历、方法论、行业判断与技能栈。首页保持人物尺寸和完整画幅，姓名下方直接展示关于我，右侧展示经历与成果；窄屏文字移到人物上下，避免遮挡。“能力概述”粒子按钮及占位已删除，原有五项能力案例保留。已移除打开简历、纸张热点、隐藏与展开效果。人物只保留轻微发丝风动和偶尔挑眉，不再整体浮动、缩放或跟随鼠标旋转；五个栏目共用唯一一层工作室背景及同样的模糊、明暗参数。经历以目的、案例、操作、成果配合图表展开，不恢复作品滚动带、能力速览或项目卡片介绍区。
+原生HTML/CSS/JavaScript，无运行时CDN或安装依赖。站点：https://lcc66645.github.io/qxw-interview/
 
-## 内容顺序
+## 当前结构
 
-1. 关于我
-2. 工作经历：懂车帝内容产出与团队负责（含 AI 小懂星图全流程案例）
-3. 方法论沉淀
-4. AIGC 用户增长的判断
-5. 技术栈
+五个二级视图共用一个入口、导航和工作室背景：
 
-作品集只有一个 `index.html` 入口，五个栏目是同一站点内的二级内容页。顶部导航在当前页面内切换内容并标记当前栏目，不重新加载 HTML、不新开网页，也不纵向拼接全部内容。工作经历直接按职责、动作与成果分点，移除“生产体系与组织实践”卡片区。联系方式为共用的顶部弹窗与页脚邮箱。岗位能力迁移部分已删除。
+- `#/capabilities`：关于我、立体人物和三个核心能力摘要。
+- `#/experience`：用户增长思维。
+- `#/methods`：团队管理执行，质量、成本、OKR证据默认收起。
+- `#/insights`：个人AIGC创作能力、5条作品和4个账号。
+- `#/skills`：真实案例，保留AI小懂项目数据、三个能力视角和3条反例。
 
-- `#/capabilities`：关于我与简明能力列表。
-- `#/experience`：仅展示懂车帝；三项OKR收起，下面横向切换五项实践与项目复盘，每次只显示所选内容。
-- `#/methods`：方法论沉淀。
-- `#/insights`：AIGC 用户增长的判断。
-- `#/skills`：技术栈。
+历史路由键保留，顶部名称已更新。旧工作分点、成本、案例深链接自动定位到对应新视图。没有独立问答稿、时间线、岗位迁移或虚构雇主经历。
 
-## 本地查看
+`presentation.dimensions`是三个维度的展示内容，每维一句核心判断、三项动作与数据证据。JD截图仅指导内容优先级；不补写B端付费、SaaS续费、Agent配置上线或产品/算法迭代业绩。基础SQL不写成高级SQL。
 
-直接打开 `index.html`，或在此目录启动任意静态文件服务器。入口 HTML 和共享脚本均已生成，查看不需要安装依赖或执行构建。二级页使用 hash 路由，刷新不会触发 GitHub Pages 的路径 404。
+`data/portfolio.json`和`templates/page.html`是生成输入。执行`node scripts/build-pages.cjs`更新`index.html`与`portfolio-data.js`。`app.js`负责路由、编辑、打印、图像查看与离线导出；`studio.css`为最后的视觉层。Three.js仅对首页人物的局部发丝/眉毛做图像网格动画，非完整人体3D。支持暂停、减少动态、离屏停止、静态回退和资源清理。
 
-## GitHub Pages
+原始项目证据保留在`data/campaign-review.json`及共享数据中：119条、3,690万VV、238拉新、2,443拉活；9卖点明细与总览的差异不补数。153/238=64.3%，不把VV当UV或点击，不将团队结果全算个人创作。495/135token是15秒不同清晰度的消耗；额度不等于支出、规范上线不等于已降本。详细审阅在`content-review.md`，不作为页面正文。
 
-发布分支为 `main`，站点根目录已有 `.nojekyll`，使用现有 GitHub Pages 分支发布流程。
+## 验证与交付
 
-- 网页：https://lcc66645.github.io/qxw-interview/
-- 独立HTML：https://lcc66645.github.io/qxw-interview/downloads/portfolio-final.html
-- ZIP下载：https://lcc66645.github.io/qxw-interview/downloads/portfolio-final.zip
+本机验证：`python -m http.server 4211 --bind 127.0.0.1`。浏览器脚本可设置`BASE_URL`、`PLAYWRIGHT_MODULE`与`CHROMIUM_PATH`。
 
-站点底部提供同源“下载HTML”和“下载ZIP”入口，使用原生 `download` 属性下载文件。ZIP只包含独立HTML，不包含源码工程。`downloads/manifest.json` 保存交付文件字节数及SHA-256；重新生成HTML和ZIP后执行 `node scripts/build-download-manifest.cjs`。
+1. `node scripts/test-pages.cjs`：25种视图/尺寸组合、三维内容、真实数据、12个链接、历史路由、编辑和图片上传、打印、查看器及离线交互。替代已删除的五职责/六工作入口/六步骤专项套件。用`PREVIEW_PATH=downloads/portfolio-final.html`生成默认交付文件。
+2. `node scripts/test-creator-motion.cjs`、`test-hero-capabilities.cjs`、`test-studio-scene.cjs`：动态、生命周期、人物像素与响应式取景。
+3. `HTML_PATH=downloads/portfolio-final.html node scripts/test-standalone.cjs`：UTF-8、无正文代码、无脚本首屏、离线导航、人物动画；生成ZIP。
+4. `node scripts/build-download-manifest.cjs`；随后用同一`HTML_PATH`执行`test-delivery.cjs`，检查实际ZIP、25种组合与二次导出；`test-public-downloads.cjs`检查同源下载字节。
 
-## 更新内容
-
-- `data/portfolio.json`：共享个人资料、项目、经历内容和五页的主体模板；`extensions` 保留方法论案例链接与技术栈分组。
-- `templates/page.html`：共用导航、页脚、编辑弹窗和项目弹窗。
-- `scripts/build-pages.cjs`：用上面两份输入生成唯一入口 `index.html` 和共享 `portfolio-data.js`，修改后执行 `node scripts/build-pages.cjs`。重复生成不会产生差异。
-- `app.js`：按当前页面渲染栏目、跨页案例定位、资料编辑、联系弹窗、打印与离线导出。
-- `style.css`：原有功能布局、详情、表格与打印样式；基础色已改为中性灰。
-- `creator.css`：Creator 视觉层、本地 Kanit 字体、黑白能力列表、精简经历分点和案例排版。
-- `motion.js`：仅保留轻量入场渐显，支持减少动态效果和路由卸载清理。
-- `studio.css`：最后加载的工作室背景、人物融合、透明分区和移动端排版。
-- `portrait-scene.js`：Three.js图像网格与着色器，仅对局部发丝和眉毛做轻微变化，提供暂停和静态回退；这不是完整的人体3D模型。自定义肖像不套用预设人物的发丝与眉毛位置。
-- `assets/vendor/three-0.160.1.min.js`：本地Three.js浏览器构建，附MIT许可证与校验记录，无运行时CDN请求。
-- `data/portfolio.json.design`：本地字体及肖像主视觉；导出时一起内嵌。
-- `data/portfolio.json.presentation`：工作分点的目的、操作、交付物、展示顺序、OKR短标题及深色图表配置，以及方法论成果数据。
-- `presentation.capabilityCases`、`practiceCases`、`methodCases`：分别为五项核心竞争力、懂车帝五条实践、四项方法论提供目的、真实案例、个人动作与成果。`practiceLabels`控制横向入口名称。已删除旧雇主数据及对应工具组，不将其成果转移到懂车帝。
-- `presentation.productionCost`、`matrixBudget`：两个按需展开的管理案例，展示实测片段消耗、三档模型规范、渠道转向、CPM任务准备与追加资源申请；对应深链接为`#/experience/production-cost-control`、`#/experience/matrix-budget-control`。积分额度不作为实际支出，不发布未经兑换关系及账单验证的日成本估算，也不声称已实现成本下降或CPA改善。
-- `presentation.growthStrategy`：业务、人群、规划目标、历史曝光快照及用户路径/运营闭环。`#/experience/growth-strategy`按需展开，目标与渠道分别支持`growth-goal`、`growth-channels`深链接。300人/人/月是目标模型，36.7%是6月底抖音日VV份额，不能分别当作业绩或新增渠道份额。面试问题只用于校验思考深度，不生成问答文档。五项工作融合判断、取舍、动作和能力体现；案例按业务问题组织，渠道与预算展示决策而非日期流水账。
-- `assets/qxw-*.png`：按真实项目数据重建的深色流程图、执行分工图与成果图，不是后台截图。使用 `PLAYWRIGHT_MODULE=<Playwright路径> node scripts/build-evidence-visuals.cjs` 重新生成；读取共享内容及活动数据，检查固定画幅内的文字与区块不溢出。
-
-右上角设置按钮打开资料编辑，修改保存在当前浏览器的 `qxw-portfolio-v2` 中，五个二级内容页共享资料。可替换个人肖像及生产、增长、团队三处项目图片，支持PNG、JPG、WebP，单张不超过4MB；容量不足时仍可导出保存。自定义图片随离线文件内嵌。项目文字编辑仅保留当前展示的星图案例。旧版本默认文案会迁移，自定义内容保留。要让所有访客看到同一份更新，需要修改共享数据、重新生成入口，再发布入口、共享脚本与资产。
-
-周曝光、周数据快照和假期项目数据分别保留，不合并成同一周期。12个抖音作品/账号链接保留原地址。复盘优先展示目标人群、个人动作、项目推进和成果，不在作品集里展示数据校验、来源说明和待补截图提示。
-
-方法论只展示个人已落地的内容、生产、团队与增长实践，不再展示面向其他公司的岗位迁移内容。
-
-## 复盘数据与图表
-
-最新粘贴的中秋国庆复盘文本用于星图案例、相关工作经历及方法论。`data/campaign-review.json` 保存9个卖点、8位列示达人、TOP13样本、来源哈希、计算结果及原文差异；同一数据保存在共享资料的 `campaignReview`，网页不需要运行时请求 JSON。
-
-- 懂车帝先展示三组OKR与原有八条关键结果，不虚构目标值、达成进度或成本收益。随后按目标与人群→脚本策略→个人验证→生产交付→矩阵分发与复盘展开五条实践，保留原有案例ID与链接。每条展示个人判断、动作、交付物与已有结果。
-- 页面案例按核心竞争力及工作流程拆为六个收起的环节：业务目标与增长分析、内容策略与脚本诊断、生产交付与团队协作、矩阵经营与资源优先级、活动整体表现与个人交付、反例诊断与下一轮验证。结果环节保留四项指标、四行卖点数据及对比图；生产环节保留流程图。项目整体数字不作为个人独立创作量或因果增量。
-- Bad Case另展示三组具体对照：C63估价旁白375万VV/2人拉新与父亲卖霸道59万VV/17人拉新；精准估价830万VV/32人与帮选车+查优惠691万VV/89人；家庭接孩子场景约试驾289万VV/3人与贷款算账252万VV/67人。每组包含目的、我的判断及下一轮修改动作，不把历史对照写成因果实验。
-- 重新提取：`node scripts/prepare-review-data.cjs <粘贴复盘文本路径>`。
-- 重新生成图像：`python scripts/build-review-charts.py`，需要 Matplotlib 与 Noto Sans CJK 字体；也可用 `QXW_CHART_FONT` 指定字体文件。打开网站不需要这些生成依赖。
-- 源数据更新后，须同步 `data/portfolio.json` 中的 `campaignReview` 和相关叙述，再生成页面；导出的 HTML 包含数据及当前展示的图像。
-
-内部核对记录：2026/09/24–10/08总览与9卖点明细相差1万VV、1人拉新，保留在数据文件中，不向任何卖点补数。两个主力卖点份额按153/238显示64.3%。效率比较不解释为点击转化率、因果增量或有成本依据的ROI。页面不展示完整明细或校验说明，避免干扰个人贡献主线。
-
-字体为本地 Kanit（拉丁字形400/800）和中文系统字体回退，无 Google Fonts 运行时请求。字体来自 `@fontsource/kanit@5.3.0`，许可证在 `assets/fonts/LICENSE`；界面图标来自 Lucide 0.468.0，许可证见 `assets/lucide-LICENSE`。
-
-## Creator 设计适配
-
-- 上传的 prompt 是视觉参考，不覆盖真实姓名、职业、履历或项目。Jack、五年设计经验、模板示例项目和21张外站GIF未作为个人成果导入。
-- 最新用户指定戴眼镜、白衬衫、递出作品册的工作室形象。`assets/studio-character.png` 为透明人物层，`assets/studio-background.png` 为去人物的房间背景；保留AIGC AVATAR标记，不冒充本人照片。旧银色外套图片不再显示。Marquee、能力速览和项目叠卡仍移除。
-- 工作经历仅保留懂车帝五条职责分点、目的与操作、周拉新对比、流程和团队图及真实作品链接。个人作品置于“创作验证”。项目图片支持弹窗和100–300%缩放。没有将五个二级内容页合并成长页。
-- 五个栏目共享模糊工作室背景与半透明深色处理，文字区保留足够对比。人物保留上一版尺寸公式，首段高度增加为图片高度加顶部留白及上下边缘，避免放大首段时连人物一起变大；底部过渡缩小以露出简历。平板与手机独立取景，手机给姓名留出顶部空间。静态回退共用同一尺寸参数。字号使用固定断点，不使用vw缩放，字距为0。
-- 关于我直接呈现，`app.js`将个人介绍和已有经历数据放入首屏左右留白；窄屏改用普通文档排列。能力按钮、粒子及占位均移除，保留原有能力详情与深链接。离线导出保留同样布局和交互，脚本禁用时介绍仍可阅读。
-- 保留无需安装的静态架构；Three.js仅用于首屏，未迁移React/Vite。场景离屏或标签隐藏时停止逐帧渲染，减少动态效果时静止，WebGL不可用时显示透明图片。路由卸载释放观察器、监听器、定时器与GPU资源。
-
-导出 HTML 会内嵌完整资料、三个样式层、Three.js及其许可、人物场景脚本、图标与图像资产。离线文件保留人物动态与背景，使用相同的五个内容视图，支持刷新、历史记录和再次导出。导出源站时请通过 HTTP 静态预览打开；页面展示和资料编辑也可直接打开 `index.html`。打印只处理当前栏目，结束后恢复详情展开状态。
-
-独立文件采用UTF-8 BOM，内含当前栏目的静态首屏，即使预览禁用脚本也不会只有空白主内容；正常浏览器继续加载交互和人物动画。导出时所有静态首屏图片也转为内嵌资源。聊天或编辑器的源码预览可能把HTML当文本显示；交付时同时提供只含独立HTML的ZIP下载包，解压后使用浏览器打开，不需要安装依赖。
-
-## 验证
-
-增长主线检查：`BASE_URL=http://127.0.0.1:4210/ PLAYWRIGHT_MODULE=<Playwright路径> node scripts/test-growth-strategy.cjs`，覆盖五项工作的判断与取舍、无独立问答稿和时间线、规划目标与历史份额独立计算、六项案例、双链路、五种尺寸及离线交付。
-
-成本案例检查：`BASE_URL=http://127.0.0.1:4208/ PLAYWRIGHT_MODULE=<Playwright路径> node scripts/test-production-cost.cjs`，覆盖实测单位、三档规范、预算申请与额度边界、五种尺寸展开/收起、案例第4环节链接、离线及禁用脚本可读性。
-
-可选浏览器测试：安装 Playwright 并准备 Chromium 后，先启动静态服务，再执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-pages.cjs`。也可用 `PLAYWRIGHT_MODULE` 和 `CHROMIUM_PATH` 指定已有工具路径，`QA_OUTPUT` 指定截图与离线文件目录，`PREVIEW_PATH` 指定独立预览的输出位置。测试覆盖五个视图和五种尺寸、站内切换不加载新文档、不新开标签、案例定位、资料同步、历史导航及离线导出。
-
-正常动效检查：使用同一静态服务执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-creator-motion.cjs`，检查关于我直接呈现、完整人物画幅、入场渐显、30次路由切换后的观察器与监听器清理、减少动态效果、长姓名排版和打印显示。
-
-首屏检查：执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-hero-capabilities.cjs`，检查七种尺寸下文字区域与人物alpha不重叠、完整画幅、无能力按钮或占位、保留能力深链接、减少动态效果；逐区域检查发丝和眉毛实际像素变化，以及眼睛、身体、画册保持静止。截图在 `/tmp/qxw-hero-qa/`。
-
-内容严谨性检查：执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-content-quality.cjs`，验证活动证据未改写、占比与周环比独立重算、八条KR、个人交付、样本与卖点汇总区分、四条案例支撑的判断、三组工具交付、旧默认文案迁移和自定义内容保留。`content-review.md`记录修改依据与证据缺口，不属于网页正文。
-
-工作经历交互检查：执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-experience-navigation.cjs`，覆盖五种尺寸下的三项OKR收起、六项单行横向入口、互斥展开/收起、六步案例折叠、键盘、深链接、前进后退、刷新、完整打印及恢复、无旧雇主数据的离线文件和禁用脚本时可阅读的首屏。当前技术栈为三组工具与实际交付。
-
-立体场景检查：执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-studio-scene.cjs`，检查五种尺寸下的非空画布像素与柔和alpha、发丝实际像素变化、无鼠标视差、暂停、减少动态效果、离屏停止、路由清理、离线动画和无WebGL回退。移动端30fps、桌面45fps上限，设备像素比最高1.5。
-
-最终文件检查：先用 `PREVIEW_PATH=/workspace/portfolio-final.html` 执行五视图测试生成默认文件，再执行 `HTML_PATH=/workspace/portfolio-final.html node scripts/test-standalone.cjs`，检查中文、无正文代码泄漏、禁用脚本静态首屏、离线五栏目和动画，并生成及校验同名ZIP。
-
-交付包复查：执行 `HTML_PATH=/workspace/portfolio-final.html node scripts/test-delivery.cjs`，从实际ZIP解压文件，以正确HTML MIME加载，检查25个栏目/尺寸组合、图片与12个作品链接、手机图片放大、联系、编辑及二次导出。测试编辑仅写入临时文件，不改变交付内容。
+最终文件在`downloads/portfolio-final.html`和`downloads/portfolio-final.zip`，完整内嵌字体、图像、资料和脚本，可再次导出。聊天客户端将HTML当源码预览时使用ZIP下载。发布需正常快进推送到已授权的`main`，不得force；`scripts/check-pages-deployment.cjs`核对对应提交的Pages部署。公开下载文件与清单SHA-256应一致。

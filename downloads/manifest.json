@@ -2,13 +2,13 @@
   "files": [
     {
       "file": "portfolio-final.html",
-      "bytes": 11648783,
-      "sha256": "7b111c9fccba2ee5b36a1acc4b2a7b3f554cf1f2db32c0c2399eeb6de50bbffd"
+      "bytes": 11649240,
+      "sha256": "dd1a4a953f01910f02b68c921c1434b8287f06147ebc530bac278d70335db8ba"
     },
     {
       "file": "portfolio-final.zip",
-      "bytes": 8185565,
-      "sha256": "0592bd19cc5da0ef2ce76ab966c150a918fe0980c7e05f0b775e4e4005c718e0"
+      "bytes": 8187336,
+      "sha256": "2d1a2b881d4832a1adde8d22e95a6c1fa420d5f86d18607e72e5df1f36c92e44"
     }
   ]
 }

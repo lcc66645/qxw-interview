@@ -2,244 +2,137 @@ const fs = require('node:fs');
 const path = require('node:path');
 const assert = require('node:assert/strict');
 const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
-const root = path.resolve(__dirname, '..');
-const data = JSON.parse(fs.readFileSync(path.join(root, 'data/portfolio.json'), 'utf8'));
-const base = process.env.BASE_URL || 'http://127.0.0.1:4193/';
-const output = process.env.QA_OUTPUT || '/tmp/qxw-pages-qa';
+const data = require('../data/portfolio.json');
+const base = process.env.BASE_URL || 'http://127.0.0.1:4211/';
+const output = process.env.QA_OUTPUT || '/tmp/qxw-three-dimensions-qa';
 fs.mkdirSync(output, { recursive: true });
-const definitions = Object.entries(data.pages);
-const routeUrl = id => new URL(`index.html${data.pages[id].route}`, base).href;
-
-async function checkPage(page, id) {
-  const definition = data.pages[id];
+const ids = Object.keys(data.pages);
+const route = id => new URL(`index.html${data.pages[id].route}`, base).href;
+async function check(page, id) {
   await page.locator(`main > #${id}`).waitFor();
   assert.equal(await page.locator('body').getAttribute('data-page'), id);
-  assert.equal(await page.locator('main > .section').count(), 1);
+  assert.equal(await page.locator('nav [aria-current]').getAttribute('data-page-link'), id);
   assert.equal(await page.locator('main h1').count(), 1);
-  assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
-  assert((await page.title()).startsWith(definition.title));
-  for (const [key] of definitions) if (key !== id) assert.equal(await page.locator(`main > #${key}`).count(), 0);
-  assert.equal(await page.locator('.role-transfer, .role-mapping, #role-mapping-list').count(), 0);
-  assert.equal(await page.locator('.fit-index, .creator-hero, .work-marquee, .project-grid, .project-card, .filters, #work-template').count(), 0);
+  assert((await page.title()).startsWith(data.pages[id].title));
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-  const ids = await page.locator('[id]').evaluateAll(els => els.map(el => el.id));
-  assert.equal(ids.length, new Set(ids).size);
-  assert(await page.locator('nav a').evaluateAll(els => els.every(el => {
-    const rect = el.getBoundingClientRect(); return rect.width > 0 && rect.left >= 0 && rect.right <= innerWidth + 1;
-  })));
+  assert(await page.locator('nav a').evaluateAll(items => items.every(item => { const r = item.getBoundingClientRect(); return r.left >= 0 && r.right <= innerWidth + 1; })));
+  const identifiers = await page.locator('[id]').evaluateAll(items => items.map(item => item.id));
+  assert.equal(identifiers.length, new Set(identifiers).size);
+  assert.equal(await page.locator('.experience-tabs, .practice-point, .case-stage, .growth-operation-loop, .decision-timeline, .role-mapping').count(), 0);
   const copy = await page.locator('main').textContent();
-  for (const forbidden of ['可迁移能力', '目标岗位能力', '非实时官方 JD', '来源', '口径', '原文', '待补', '独立审计']) assert(!copy.includes(forbidden), forbidden);
+  for (const phrase of ['简单有为', 'UWANT', '郝家豁', '千川', '来源', '口径', '待补', '稳定水位', '保证打正', '贡献了65%', '企业付费转化提升', 'Agent配置上线']) assert(!copy.includes(phrase), phrase);
 }
 
 (async () => {
-  assert.equal(definitions.length, 5);
-  assert(!Object.hasOwn(data.extensions, 'roleMappings'));
-  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', headless: true, args: ['--no-sandbox'] });
+  assert.deepEqual(data.campaignReview, require('../data/campaign-review.json'));
+  assert.deepEqual(data.presentation.dimensions.map(item => item.title), ['用户增长思维', '团队管理执行', '个人AIGC创作能力']);
+  assert(data.presentation.dimensions.every(item => item.points.length === 3));
+  assert.equal((153 / 238 * 100).toFixed(1), '64.3');
+  assert.equal(data.presentation.productionCost.durationSeconds, 15);
+  assert.deepEqual(data.presentation.productionCost.segments.map(item => item.tokens), [495, 135]);
+  assert(!fs.existsSync('interview-growth-answers.md'));
+  const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   try {
-    const context = await browser.newContext({ viewport: { width: 1440, height: 900 }, reducedMotion: 'reduce' });
-    const page = await context.newPage(); const errors = []; const failed = []; const documents = [];
-    page.on('request', request => { if (request.isNavigationRequest() && request.resourceType() === 'document') documents.push(request.url()); });
-    page.on('pageerror', error => errors.push(error.message));
-    page.on('response', response => { if (response.status() >= 400) failed.push(response.url()); });
-    await page.addInitScript(() => Object.defineProperty(navigator, 'clipboard', { value: { writeText: async text => { window.copiedEmail = text; } } }));
+    const context = await browser.newContext({ reducedMotion: 'reduce' });
+    const page = await context.newPage(); const errors = [], failures = [], documents = [], evidence = new Set();
+    page.on('pageerror', error => errors.push(error.message)); page.on('response', response => { if (response.status() >= 400) failures.push(response.url()); });
+    page.on('request', request => { if (request.isNavigationRequest()) documents.push(request.url()); });
     for (const [width, height] of [[1920,1080], [1440,900], [768,1024], [390,844], [320,568]]) {
       await page.setViewportSize({ width, height });
-      for (const [id, definition] of definitions) {
-        await page.goto(routeUrl(id), { waitUntil: 'networkidle' });
-        await checkPage(page, id);
-        assert.deepEqual(await page.locator('nav a').evaluateAll(els => els.map(el => el.getAttribute('href'))), definitions.map(([, value]) => value.route));
-        if (id === 'experience') {
-          assert.equal(await page.locator('[data-experience-tab]').count(), 6);
-          assert.equal(await page.locator('.experience-panel:visible').count(), 0);
-          assert.equal(await page.locator('.job-okr details[open]').count(), 0);
-          // Inspect every retained record separately from the default collapsed UI.
-          await page.evaluate(() => { document.querySelectorAll('[data-experience-panel]').forEach(el => el.hidden = false); document.querySelectorAll('main details').forEach(el => el.open = true); });
+      for (const id of ids) {
+        await page.goto(route(id), { waitUntil: 'networkidle' }); await check(page, id);
+        for (const href of await page.locator('main a[href^="https:"]').evaluateAll(items => items.map(item => item.href))) evidence.add(href);
+        if (id === 'capabilities') {
+          assert.equal(await page.locator('.capability-case').count(), 3);
+          assert.equal(await page.locator('.portrait-history article').count(), 1);
+          assert(await page.locator('#about-title').isVisible());
+        }
+        if (['experience', 'methods', 'insights'].includes(id)) {
+          const dimension = data.presentation.dimensions.find(item => item.page === id);
+          assert.equal(await page.locator('.dimension-point').count(), 3);
+          assert.equal(await page.locator('.dimension-thesis').textContent(), dimension.thesis);
+          assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), dimension.points.map(item => item.evidence));
+          assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), dimension.metrics.map(item => item.value));
+          assert((await page.locator('main').innerText()).length < 1200, 'Default dimension view must stay concise');
+        }
+        if (id === 'methods') {
+          assert.equal(await page.locator('.okr-row').count(), 3); assert.equal(await page.locator('.okr-results li').count(), 8);
+          assert.equal(await page.locator('main details[open]').count(), 0);
+          await page.locator('#production-cost-control > summary').click();
+          assert.deepEqual(await page.locator('.cost-segment strong').allTextContents(), ['495 token', '约135 token']);
+          assert.deepEqual(await page.locator('.cost-policy tbody tr td:first-of-type').allTextContents(), ['Seedance 2.5', 'Seedance 2.0', '禁用2.5']);
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-          assert.equal(await page.locator('.review-table').count(), 1);
-          assert.equal(await page.locator('.review-table tbody tr').count(), 4);
+          await page.locator('#production-cost-control > summary').click();
+        }
+        if (id === 'insights') assert.equal(await page.locator('#featured-evidence a, .account-links a').count(), 9);
+        if (id === 'skills') {
+          assert(await page.locator('#business-review').evaluate(el => el.open));
+          assert.equal(await page.locator('.case-perspective').count(), 4); assert.equal(await page.locator('.case-perspective[open]').count(), 0);
+          assert.deepEqual(await page.locator('.case-results .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
+          assert.equal(await page.locator('.review-table tbody tr').count(), 4); assert.equal(await page.locator('.badcase-item').count(), 3);
           for (const [row, index] of [0, 1, 2, 4].entries()) {
             const point = data.campaignReview.points[index];
-            assert.deepEqual(await page.locator('.review-table tbody tr').nth(row).locator('th, td').allTextContents(), [point.name, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`]);
+            assert.deepEqual(await page.locator('.review-table tbody tr').nth(row).locator('th,td').allTextContents(), [point.name, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`]);
           }
-          assert.equal(await page.locator('.review-chart').count(), 1);
-          assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
-          assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
-          for (const results of data.presentation.okrResults) {
-            for (const result of results) assert((await page.locator('.job-okr').innerText()).includes(result.slice(result.indexOf('：') + 1)));
+          for (const item of data.presentation.casePerspectives) {
+            await page.locator(`#${item.id} > summary`).click();
+            assert((await page.locator(`#${item.id}`).innerText()).includes(item.action));
+            await page.locator(`#${item.id} > summary`).click();
           }
-          assert.deepEqual(await page.locator('#employer-0 > .practice-point').evaluateAll(elements => elements.map(element => element.id)), data.presentation.practiceOrder.map(index => `competence-0-${index}`));
-          assert.equal(await page.locator('.practice-deliverable').count(), 5);
-          for (const fragment of ['TOP13', 'P0–P3', '830万VV', '691万VV', '团队→小组→个人']) assert((await page.locator('#employer-0').innerText()).includes(fragment), fragment);
-          assert.equal(await page.locator('.project-visual:visible').count(), 5);
-          assert.equal(await page.locator('.weekly-comparison .comparison-row').count(), 2);
-          assert.equal(await page.locator('.practice-point:visible').count(), 5);
-          assert.equal(await page.locator('.practice-case').count(), 5);
-          assert.equal(await page.locator('.badcase-item').count(), 3);
-          assert.equal(await page.locator('.badcase-comparison > div').count(), 6);
-          assert(await page.locator('.practice-point .practice-goal').evaluateAll(elements => elements.every(element => element.textContent.startsWith('目的：'))));
-          assert(await page.locator('.practice-case').evaluateAll(elements => elements.every(element => element.querySelector('h5') && element.querySelector('.proof-action') && element.querySelector('.proof-result'))));
-          for (const text of ['375万VV / 2人拉新', '59万VV / 17人拉新', '289万VV / 3人拉新', '252万VV / 67人拉新']) assert((await page.locator('.badcase-list').innerText()).includes(text));
-          assert.equal(await page.locator('.case-stage').count(), 6);
-          assert.equal(await page.locator('.review-actions > div').count(), 3);
-          assert(await page.locator('#business-review').evaluate(element => element.closest('.job').id === 'employer-0'));
-          assert.equal(await page.locator('.job').count(), 1);
-          assert.equal(await page.locator('#employer-1').count(), 0);
-          const links = new Set(await page.locator('main a[href^="https://"]').evaluateAll(els => els.map(el => el.href)));
-          data.source.links.forEach(link => assert(links.has(link.url), link.title));
-          assert(await page.locator('main img').evaluateAll(els => els.every(el => el.complete && el.naturalWidth > 0)));
-          assert(await page.locator('.project-visual img').evaluateAll(images => images.every(image => {
-            const canvas = document.createElement('canvas'); canvas.width = 60; canvas.height = 40;
-            const context = canvas.getContext('2d'); context.drawImage(image, 0, 0, 60, 40);
-            const pixels = context.getImageData(0, 0, 60, 40).data; let dark = 0;
-            for (let index = 0; index < pixels.length; index += 4) if ((pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3 < 110) dark++;
-            return dark / (60 * 40) > .65;
-          })), 'Every evidence graphic must use a dark presentation');
-          await page.evaluate(() => { document.querySelectorAll('[data-experience-panel]').forEach(el => el.hidden = true); document.querySelectorAll('main details').forEach(el => el.open = false); });
         }
-        if (id === 'capabilities') {
-          assert(await page.locator('.about-copy').isVisible());
-          assert.equal(await page.locator('.resume-trigger, .resume-close, .resume-sheet').count(), 0);
-          assert.equal(await page.locator('.capability-entry, .capability-jump, .capability-halo').count(), 0);
-          assert.equal(await page.locator('.capability-case').count(), 5);
-          assert.equal(await page.locator('.capability-purpose').count(), 5);
-          assert.equal(await page.locator('.capability-proof').count(), 5);
-          assert.equal(await page.locator('.portrait-history article').count(), 1);
-        }
-        if (id === 'methods') assert.equal(await page.locator('.method-case .proof-purpose, .method-case .proof-result').count(), 8);
-        assert.equal(await page.locator('.portrait-room').count(), 0);
-        assert.equal(await page.locator('#studio-backdrop img').count(), 1);
-        assert.equal(await page.locator('#main').evaluate(element => getComputedStyle(element).backgroundColor), 'rgba(0, 0, 0, 0)');
-        assert.equal(await page.locator('#studio-backdrop img').evaluate(element => getComputedStyle(element).filter), 'blur(9px) saturate(0.75) brightness(0.68)');
-        if ([1440,390].includes(width)) await page.screenshot({ path: path.join(output, `${id}-${width}.png`) });
+        if ([1440,390,320].includes(width)) await page.screenshot({ path: `${output}/${id}-${width}.png`, fullPage: id !== 'capabilities' });
       }
-      console.log(`PASS five secondary views at ${width}x${height}`);
+      console.log(`PASS three dimensions + real case at ${width}x${height}`);
     }
-    await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto(new URL('index.html', base).href);
-    const documentCount = documents.length;
-    await page.evaluate(() => { window.routeSession = 'same-portfolio'; window.sharedHeader = document.querySelector('.header'); });
-    for (const [id, definition] of definitions.slice(1)) {
-      await page.locator(`nav [data-page-link="${id}"]`).click();
-      await page.waitForURL(routeUrl(id));
-      await checkPage(page, id);
-      assert.equal(await page.evaluate(() => scrollY), 0);
-      assert(await page.evaluate(() => window.routeSession === 'same-portfolio' && window.sharedHeader === document.querySelector('.header')));
+    data.source.links.forEach(link => assert(evidence.has(link.url), link.title));
+    await page.goto(route('capabilities')); const documentCount = documents.length;
+    await page.evaluate(() => { window.sharedHeader = document.querySelector('.header'); });
+    for (const id of ids.slice(1)) { await page.locator(`nav [data-page-link="${id}"]`).click(); await check(page, id); assert(await page.evaluate(() => window.sharedHeader === document.querySelector('.header'))); }
+    assert.equal(documents.length, documentCount); assert.equal(context.pages().length, 1);
+    await page.goBack(); await check(page, 'insights'); await page.goForward(); await check(page, 'skills'); await page.reload(); await check(page, 'skills');
+    for (const [hash, expected, target] of [
+      ['#/experience/competence-0-0', 'methods', 'production-workflow'], ['#/experience/competence-0-4', 'insights', ''],
+      ['#/experience/growth-goal', 'experience', ''], ['#/experience/case-stage-3', 'skills', 'case-growth'],
+      ['#/experience/case-stage-4', 'skills', 'case-team'], ['#/experience/pitfall-review', 'skills', 'pitfall-review'],
+      ['#/experience/production-cost-control', 'methods', 'production-cost-control'], ['#competence-0-2', 'experience', '']
+    ]) {
+      await page.goto(new URL(`index.html${hash}`, base).href); await check(page, expected);
+      if (target) { assert(await page.locator(`#${target}`).isVisible()); assert(await page.locator(`#${target}`).evaluate(el => el.tagName !== 'DETAILS' || el.open)); }
     }
-    assert.equal(documents.length, documentCount, 'Top navigation must not load another HTML document');
-    assert.equal(context.pages().length, 1, 'Navigation must stay in the same tab');
-    await page.goBack(); await checkPage(page, 'insights');
-    await page.goForward(); await checkPage(page, 'skills');
-    for (const [id] of definitions) { await page.goto(routeUrl(id)); await page.reload({ waitUntil: 'networkidle' }); await checkPage(page, id); }
-    await page.goto(new URL('index.html', base).href);
-    assert.equal(await page.locator('main h1').textContent(), data.profile.name);
-    assert(await page.locator('.portrait-image').evaluate(el => el.complete && el.naturalWidth > 0));
-    assert(await page.locator('#main').evaluate(el => el.firstElementChild.classList.contains('portrait-intro') && el.children[1].id === 'capabilities'));
-    await page.goto(routeUrl('methods'));
-    for (let index = 0; index < data.extensions.methodApplications.length; index++) {
-      const target = data.extensions.methodApplications[index].href;
-      await page.locator('.method-application').nth(index).click();
-      await page.waitForURL(`**/index.html#/experience/${target.slice(1)}`);
-      await page.locator(target).waitFor({ state: 'visible' });
-      assert(await page.locator(target).isVisible());
-      assert(await page.locator(target).evaluate(el => el.tagName !== 'DETAILS' || el.open));
-      await page.waitForFunction(selector => { const y = document.querySelector(selector).getBoundingClientRect().y, tabs = document.querySelector('.experience-tabs').getBoundingClientRect(); return y >= tabs.bottom - 1 && y < innerHeight - 60; }, target);
-      await page.goBack(); await checkPage(page, 'methods');
-    }
-    await page.goto(new URL('index.html#methods', base).href); await page.waitForURL('**/index.html#/methods'); await checkPage(page, 'methods');
-    await page.goto(new URL('index.html#competence-0-2', base).href); await page.waitForURL('**/index.html#/experience/competence-0-2');
-    assert(await page.locator('#competence-0-2').isVisible());
-    await page.goto(routeUrl('skills'));
+    await page.goto(route('skills')); await page.locator('[data-enlarge="growth"]').click();
+    await page.locator('[aria-label="图像缩放"]').fill('300');
+    assert(await page.locator('.visual-dialog-scroll').evaluate(el => el.scrollWidth > el.clientWidth)); await page.keyboard.press('Escape');
+    const opened = await page.locator('main details').evaluateAll(items => items.map(item => item.open));
+    await page.evaluate(() => { window.print = () => { window.printComplete = [...document.querySelectorAll('main details')].every(el => el.open); dispatchEvent(new Event('afterprint')); }; });
+    await page.locator('#print-journey').click(); assert(await page.evaluate(() => window.printComplete));
+    assert.deepEqual(await page.locator('main details').evaluateAll(items => items.map(item => item.open)), opened);
+    await page.locator('#contact-action').click(); assert.equal(await page.locator('#project-detail a[href^="mailto:"]').getAttribute('href'), `mailto:${data.profile.email}`); await page.keyboard.press('Escape');
     await page.locator('#edit-profile').click();
     await page.locator('[data-media-key="team"]').setInputFiles({ name: 'invalid.svg', mimeType: 'image/svg+xml', buffer: Buffer.from('<svg/>') });
     assert(await page.locator('[data-media-key="team"]').evaluate(el => el.previousElementSibling.textContent.includes('请选择')));
-    await page.locator('[name="name"]').fill('跨页验证'); await page.locator('[name="project-title-0"]').fill('增长复盘验证');
-    await page.locator('[data-media-key="portrait"]').setInputFiles(path.join(root, 'assets/concept-1.png'));
-    await page.waitForFunction(() => document.querySelector('[data-media-key="portrait"]').previousElementSibling.textContent.includes('已选择'));
-    await page.locator('[data-media-key="production"]').setInputFiles(path.join(root, 'assets/qxw-production.png'));
+    await page.locator('[name="name"]').fill('跨页验证'); await page.locator('[name="project-title-0"]').fill('案例编辑验证');
+    await page.locator('[data-media-key="production"]').setInputFiles(path.resolve('assets/qxw-production.png'));
     await page.waitForFunction(() => document.querySelector('[data-media-key="production"]').previousElementSibling.textContent.includes('已选择'));
-    await page.locator('#profile-form button[type="submit"]').click();
-    await page.locator('nav [data-page-link="capabilities"]').click();
-    await page.locator('.portrait-image').waitFor({ state: 'attached' });
-    assert.equal(await page.locator('.portrait-kind').textContent(), 'PORTRAIT');
-    assert(await page.locator('.portrait-image').getAttribute('src').then(src => src.startsWith('data:image/png')));
-    await page.locator('nav [data-page-link="experience"]').click(); await page.waitForURL('**/index.html#/experience');
-    assert.equal(await page.locator('.header [data-bind="name"]').textContent(), '跨页验证');
-    assert.equal(await page.locator('.tip-project-title').textContent(), '增长复盘验证');
-    await page.reload({ waitUntil: 'networkidle' }); assert.equal(await page.locator('.tip-project-title').textContent(), '增长复盘验证');
-    assert.equal(await page.locator('.practice-point:visible').count(), 0);
-    await page.locator('[data-experience-tab="business-review"]').click();
-    assert.equal(await page.locator('#business-review').evaluate(el => el.open), true);
-    await page.locator('#business-review > summary').click();
-    assert.equal(await page.locator('#business-review').evaluate(el => el.open), false);
-    await page.locator('#business-review > summary').click();
-    assert(await page.locator('.case-stage').last().isVisible());
-    assert(await page.locator('.case-workflow img').evaluate(el => el.complete && el.naturalWidth > 0));
-    assert(await page.locator('.practice-point [data-enlarge="production"] img').getAttribute('src').then(src => src.startsWith('data:image/png')));
-    await page.locator('[data-experience-tab="competence-0-1"]').click();
-    await page.locator('.practice-point [data-enlarge="growth"]').click();
-    assert(await page.locator('#project-dialog').evaluate(el => el.open));
-    assert(await page.locator('.expanded-visual').evaluate(el => el.complete && el.naturalWidth > 0));
-    assert.equal(await page.locator('#project-dialog').evaluate(element => getComputedStyle(element).backgroundColor), 'rgb(23, 27, 28)');
-    await page.locator('[aria-label="图像缩放"]').fill('200');
-    assert.equal(await page.locator('.expanded-visual').evaluate(el => el.style.width), '200%');
-    assert(await page.locator('.visual-dialog-scroll').evaluate(el => el.scrollWidth > el.clientWidth));
-    assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    await page.keyboard.press('Escape');
-    const states = await page.locator('main details').evaluateAll(els => els.map(el => el.open));
-    await page.evaluate(() => { window.print = () => { window.printExpanded = [...document.querySelectorAll('main details')].every(el => el.open); window.dispatchEvent(new Event('afterprint')); }; });
-    await page.locator('#print-journey').click(); assert(await page.evaluate(() => window.printExpanded));
-    assert.deepEqual(await page.locator('main details').evaluateAll(els => els.map(el => el.open)), states);
-    await page.locator('#contact-action').click(); assert.equal(await page.locator('#project-detail a[href^="mailto:"]').getAttribute('href'), `mailto:${data.profile.email}`); await page.keyboard.press('Escape');
-    await page.locator('#copy-email').click(); assert.equal(await page.evaluate(() => window.copiedEmail), data.profile.email);
-    await page.goto(routeUrl('methods'));
-    await page.locator('#edit-profile').click(); const exported = page.waitForEvent('download'); await page.locator('#export-site').click();
-    const offlineFile = path.join(output, 'offline.html'); await (await exported).saveAs(offlineFile);
-    const offlineHtml = fs.readFileSync(offlineFile, 'utf8');
-    const offlineContext = await browser.newContext({ offline: true, viewport: { width: 390, height: 844 }, reducedMotion: 'reduce' });
-    await offlineContext.route('https://portfolio.test/offline.html', route => route.fulfill({ contentType: 'text/html', body: offlineHtml }));
-    const offline = await offlineContext.newPage(); offline.on('pageerror', error => errors.push(error.message));
-    offline.on('requestfailed', request => failed.push(request.url()));
-    await offline.goto('https://portfolio.test/offline.html'); await checkPage(offline, 'methods');
-    for (const [id] of definitions) {
-      await offline.locator(`nav [data-page-link="${id}"]`).click(); await checkPage(offline, id);
-      assert.equal(await offline.evaluate(() => scrollY), 0);
-      await offline.waitForFunction(() => [...document.querySelectorAll('main img')].every(el => el.complete && el.naturalWidth > 0 && el.src.startsWith('data:')));
-      if (id === 'capabilities') assert.equal(await offline.locator('.portrait-kind').textContent(), 'PORTRAIT');
-      await offline.reload(); await checkPage(offline, id);
+    await page.locator('#profile-form button[type="submit"]').click(); await page.reload();
+    assert.equal(await page.locator('.tip-project-title').textContent(), '案例编辑验证');
+    await page.locator('nav [data-page-link="methods"]').click(); assert.equal(await page.locator('.header [data-bind="name"]').textContent(), '跨页验证');
+    assert((await page.locator('[data-enlarge="production"] img').getAttribute('src')).startsWith('data:image/png'));
+    await page.locator('#edit-profile').click(); const download = page.waitForEvent('download'); await page.locator('#export-site').click();
+    const file = `${output}/offline.html`; await (await download).saveAs(file); const html = fs.readFileSync(file, 'utf8');
+    for (const javaScriptEnabled of [true, false]) {
+      const offlineContext = await browser.newContext({ offline: true, javaScriptEnabled, reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
+      await offlineContext.route('https://portfolio.test/offline.html', request => request.fulfill({ contentType: 'text/html; charset=utf-8', body: html }));
+      const offline = await offlineContext.newPage(); offline.on('pageerror', error => errors.push(error.message));
+      const failed = []; offline.on('requestfailed', request => failed.push(request.url()));
+      await offline.goto('https://portfolio.test/offline.html'); assert(await offline.locator('#methods').isVisible());
+      if (javaScriptEnabled) for (const id of ids) { await offline.locator(`nav [data-page-link="${id}"]`).click(); await check(offline, id); }
+      else assert(await offline.locator('.cost-policy').isVisible());
+      assert.deepEqual(failed, []); await offlineContext.close();
     }
-    await offline.goBack(); await checkPage(offline, 'insights'); await offline.goForward(); await checkPage(offline, 'skills');
-    await offline.locator('nav [data-page-link="methods"]').click(); await offline.locator('.method-application').nth(1).click();
-    await offline.locator('#growth-goal').waitFor(); assert(await offline.locator('#growth-strategy').evaluate(el => el.open));
-    assert.deepEqual(await offline.locator('.goal-formula dd').allTextContents(), ['10', '30', '300']);
-    await offline.locator('#growth-strategy > .case-anchor').click();
-    await offline.locator('#business-review').waitFor(); assert(await offline.locator('#business-review').evaluate(el => el.open));
-    assert.equal(await offline.locator('.tip-project-title').textContent(), '增长复盘验证');
-    await offline.locator('#edit-profile').click(); const again = offline.waitForEvent('download'); await offline.locator('#export-site').click();
-    const repeatedFile = path.join(output, 'offline-again.html'); await (await again).saveAs(repeatedFile);
-    const repeated = await offlineContext.newPage(); await repeated.setContent(fs.readFileSync(repeatedFile, 'utf8'), { waitUntil: 'load' });
-    await checkPage(repeated, 'experience'); assert.equal(await repeated.locator('.case-stage').count(), 6);
-    await repeated.locator('nav [data-page-link="methods"]').click(); await checkPage(repeated, 'methods'); assert.equal(await repeated.locator('.method-item').count(), 4);
-    const cleanContext = await browser.newContext(); const clean = await cleanContext.newPage(); await clean.goto(new URL('index.html', base).href, { waitUntil: 'networkidle' });
-    await clean.locator('#edit-profile').click(); const preview = clean.waitForEvent('download'); await clean.locator('#export-site').click();
-    await (await preview).saveAs(process.env.PREVIEW_PATH || path.join(output, 'portfolio-preview.html'));
-    await clean.keyboard.press('Escape');
-    await clean.locator('nav [data-page-link="experience"]').click();
-    await clean.locator('[data-experience-tab="competence-0-0"]').click();
-    const captureStyle = '.header, .toast, .skip { visibility: hidden !important; }';
-    await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
-    await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
-    await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-desktop.png'), style: captureStyle });
-    await clean.locator('[data-experience-tab="business-review"]').click();
-    await clean.locator('.case-stage').evaluateAll(elements => elements.forEach(element => element.open = true));
-    await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-desktop.png'), style: captureStyle });
-    await clean.setViewportSize({ width: 390, height: 844 });
-    await clean.locator('[data-experience-tab="competence-0-0"]').click();
-    await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
-    await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
-    await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-mobile.png'), style: captureStyle });
-    await clean.locator('[data-experience-tab="business-review"]').click();
-    await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-mobile.png'), style: captureStyle });
-    assert.deepEqual(errors, []); assert.deepEqual(failed, []);
-    console.log('PASS Dongchedi-only five practices, collapsed OKRs and six exclusive panels, content/data inventory, image upload/persistence/enlargement, six-stage case, routes, original links, edit/contact/print, offline navigation/re-export and default preview.');
+    const clean = await browser.newContext({ reducedMotion: 'reduce' }); const preview = await clean.newPage(); await preview.goto(route('capabilities'));
+    await preview.locator('#edit-profile').click(); const final = preview.waitForEvent('download'); await preview.locator('#export-site').click();
+    await (await final).saveAs(process.env.PREVIEW_PATH || `${output}/portfolio-final.html`); await clean.close();
+    assert.deepEqual(errors, []); assert.deepEqual(failures, []);
+    console.log('PASS 25 view/size combinations, concise three-dimension contract, unchanged campaign/math, 12 evidence links, legacy deep links, same-document history, disclosures/print restoration, editing/uploads, viewer, offline and default export.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

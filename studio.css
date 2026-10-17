@@ -190,6 +190,30 @@ body #main { background: transparent; }
 .growth-diagnostics p { font-size: 13px; color: #c1cdc4; line-height: 1.9; margin: 0 0 10px; }
 .growth-diagnostics .diagnostic-evidence { color: #b4ddc5; }
 .case-stage > .case-anchor { display: table; margin: 14px 0; }
+.dimension-thesis { font-size: 20px; font-weight: 500; color: #e4eee7; line-height: 1.8; max-width: 800px; margin: 0 0 34px; }
+.dimension-point { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr); gap: 30px; padding: 24px 0; border-top: 1px solid var(--line); }
+.dimension-point h2 { font-size: 16px; font-weight: 500; line-height: 1.8; margin: 0; }
+.dimension-point p { font-size: 14px; color: #d0dbd4; line-height: 1.9; margin: 0 0 10px; }
+.dimension-point .dimension-evidence { color: #a9d3bb; font-size: 12px; margin: 0; }
+.dimension-metrics.metric-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 32px 0 24px; gap: 24px; }
+.dimension-metrics dd { font-size: 27px; font-weight: 500; line-height: 1.5; }
+.dimension-metrics dt { font-size: 11px; line-height: 1.8; }
+.dimension-link { display: inline-flex; margin: 16px 0 24px; }
+.dimension-tools { color: #aebfb4; font-size: 12px; line-height: 1.9; margin: 14px 0; }
+#dimension-content > .project-visual { max-width: 850px; }
+#dimension-content > .work-decision { max-width: 950px; }
+.case-perspective { border-top: 1px solid var(--line); scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 24px); }
+.case-perspective > summary { justify-content: space-between; gap: 20px; padding: 22px 0; }
+.case-perspective > summary h4 { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.8; }
+.case-perspective > summary::after, .case-perspective[open] > summary::after { content: none; }
+.case-perspective > summary .lucide { width: 17px; height: 17px; flex: 0 0 17px; }
+.case-perspective[open] > summary .lucide { transform: rotate(180deg); }
+.case-results > h4 { margin: 28px 0 18px; font-size: 16px; font-weight: 500; }
+.case-results, #featured-evidence { scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 24px); }
+.authored-work > h2 { font-size: 19px; font-weight: 500; margin: 28px 0 20px; }
+.section-top:has(> #print-journey) { display: flex; align-items: flex-start; gap: 16px; }
+.section-top:has(> #print-journey) > div { min-width: 0; }
+#print-journey { flex: 0 0 32px; margin-top: 36px; }
 .visual-dialog-scroll { background: #171b1c; }
 #project-dialog:has(.expanded-visual) { background: #171b1c; color: #edf3ef; color-scheme: dark; border-color: #687c72; border-radius: 8px; }
 #project-dialog:has(.expanded-visual) > .dialog-close { color: #edf3ef; background: #303a36; }
@@ -224,6 +248,14 @@ body #main { background: transparent; }
   .goal-progress-row { grid-template-columns: 88px minmax(10px, 1fr) 48px; gap: 8px; }
   .growth-operation-loop { grid-template-columns: minmax(0, 1fr); }
   .growth-diagnostics > div { grid-template-columns: minmax(0, 1fr); gap: 12px; }
+  .dimension-thesis { font-size: 18px; margin-bottom: 26px; }
+  .dimension-point { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 0; }
+  .dimension-point h2 { font-size: 15px; }
+  .dimension-point p { font-size: 13px; }
+  .dimension-metrics.metric-list { gap: 12px; }
+  .dimension-metrics dd { font-size: 22px; }
+  .dimension-metrics dt { font-size: 10px; }
+  .section-top:has(> #print-journey) h1 { font-size: 26px; }
   .badcase-comparison { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .badcase-comparison dd { font-size: 16px; }
 }
@@ -243,6 +275,7 @@ body #main { background: transparent; }
   .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose, .practice-competency, .practice-thinking dt, .practice-thinking dd, .case-reasoning dt, .case-reasoning dd { color: #444; }
   .strategy-section p, .strategy-section > h5, .strategy-table th, .strategy-table td, .strategy-table caption, .goal-formula dt, .goal-formula dd, .goal-progress figcaption, .user-growth-path li, .growth-operation-loop h5, .growth-diagnostics dt, .growth-diagnostics p, .growth-diagnostics .diagnostic-evidence { color: #444; }
   .strategy-section .channel-snapshot { color: #444 !important; }
+  .dimension-thesis, .dimension-point h2, .dimension-point p, .dimension-point .dimension-evidence, .dimension-tools, .case-perspective > summary h4 { color: #444; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }
   .portrait-history h3, .portrait-history h4, .portrait-history p, .portrait-history .portrait-achievement, .portrait-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
   .method-item .method-flow, .case-deliverables, .insight-item .insight-decision, .insight-item .insight-next, .tech-application p { color: #444; }

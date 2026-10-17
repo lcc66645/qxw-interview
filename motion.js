@@ -3,7 +3,7 @@
   function mount(root) {
     const disposePortrait = window.PortfolioPortrait?.mount(root.querySelector('.portrait-intro')) || (() => {});
     const media = matchMedia('(prefers-reduced-motion: reduce)');
-    const reveals = [...root.querySelectorAll('.about-copy, .capability-item, .practice-point, .method-item, .insight-item, .tech-group, .job-heading')];
+    const reveals = [...root.querySelectorAll('.about-copy, .capability-item, .dimension-point')];
     root.classList.add('motion-enabled');
     const observer = new IntersectionObserver(entries => entries.forEach(entry => {
       if (entry.isIntersecting) { entry.target.classList.add('is-visible'); observer.unobserve(entry.target); }

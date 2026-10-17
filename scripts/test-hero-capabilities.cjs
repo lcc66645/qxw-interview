@@ -82,7 +82,7 @@ async function regions(page, compare = false) {
       await page.goto(`${base}#/capabilities/capabilities`);
       await page.waitForURL('**#/capabilities/capabilities');
       await page.waitForFunction(() => document.querySelector('#capabilities').getBoundingClientRect().top < 200);
-      assert.equal(await page.locator('.capability-case').count(), 5);
+      assert.equal(await page.locator('.capability-case').count(), 3);
       await page.locator('.capability-item').first().waitFor();
       await page.goto(base);
     }

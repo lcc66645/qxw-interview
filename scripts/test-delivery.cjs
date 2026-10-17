@@ -38,7 +38,7 @@ async function assertReadable(page) {
   try {
     browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox', '--enable-unsafe-swiftshader'] });
     const context = await browser.newContext({ reducedMotion: 'reduce' });
-    const unexpected = [], errors = [];
+    const unexpected = [], errors = [], evidence = new Set();
     await context.route('**/*', route => {
       if (route.request().url() === url) return route.continue();
       unexpected.push(route.request().url()); return route.abort();
@@ -52,29 +52,25 @@ async function assertReadable(page) {
         await page.locator(`nav [data-page-link="${id}"]`).click(); await page.locator(`main > #${id}`).waitFor();
         await assertReadable(page);
         assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
-        if (id === 'experience') {
-          assert.equal(await page.locator('.practice-point').count(), 5);
+        for (const href of await page.locator('main a[href^="https:"]').evaluateAll(items => items.map(item => item.href))) evidence.add(href);
+        if (['experience', 'methods', 'insights'].includes(id)) assert.equal(await page.locator('.dimension-point').count(), 3);
+        if (id === 'methods') {
           assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
           assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
-          assert.equal(await page.locator('.practice-deliverable').count(), 5);
-          assert.equal(await page.locator('.practice-case').count(), 5);
+        }
+        if (id === 'skills') {
           assert.equal(await page.locator('.badcase-item').count(), 3);
-          assert.equal(await page.locator('#employer-0 #business-review').count(), 1);
-          assert.equal(await page.locator('#employer-1').count(), 0);
-          assert.equal(await page.locator('.experience-panel:visible').count(), 0);
-          assert.equal(await page.locator('.project-visual').count(), 5);
-          assert.equal(await page.locator('.case-stage').count(), 6);
-          assert.deepEqual(await page.locator('.case-stage[data-stage="5"] .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
-          const links = new Set(await page.locator('main a[href^="https://"]').evaluateAll(elements => elements.map(element => element.href)));
-          data.source.links.forEach(link => assert(links.has(link.url)));
+          assert.equal(await page.locator('#business-review').count(), 1);
+          assert.equal(await page.locator('.case-perspective').count(), 4);
+          assert.deepEqual(await page.locator('.case-results .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
         }
         if (width === 390) await page.screenshot({ path: path.join(output, `${id}-mobile.png`) });
       }
       console.log(`PASS extracted delivery: five views at ${width}x${height}`);
     }
-    await page.locator('nav [data-page-link="experience"]').click(); await page.locator('#experience').waitFor();
-    await page.locator('[data-experience-tab="competence-0-1"]').click();
-    await page.locator('.practice-point [data-enlarge="growth"]').click();
+    data.source.links.forEach(link => assert(evidence.has(link.url)));
+    await page.locator('nav [data-page-link="skills"]').click(); await page.locator('#skills').waitFor();
+    await page.locator('[data-enlarge="growth"]').click();
     await page.locator('[aria-label="图像缩放"]').fill('300');
     assert(await page.locator('.visual-dialog-scroll').evaluate(element => element.scrollWidth > element.clientWidth));
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
@@ -91,7 +87,7 @@ async function assertReadable(page) {
       const offline = await browser.newContext({ offline: true, javaScriptEnabled, reducedMotion: 'reduce', viewport: { width: 390, height: 844 } });
       await offline.route('https://portfolio.test/re-export.html', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: second }));
       const copy = await offline.newPage(); copy.on('pageerror', error => errors.push(error.message));
-      await copy.goto('https://portfolio.test/re-export.html'); await copy.locator('#experience').waitFor();
+      await copy.goto('https://portfolio.test/re-export.html'); await copy.locator('#skills').waitFor();
       await assertReadable(copy);
       assert.equal(await copy.locator('.header [data-bind="name"]').textContent(), '离线导出验证');
       assert.equal(await copy.locator('.review-table tbody tr').count(), 4);

@@ -1,6 +1,49 @@
 {
   "version": 2,
   "presentation": {
+    "dimensions": [
+      {
+        "key": "growth", "page": "experience", "title": "用户增长思维",
+        "thesis": "从业务结果倒推内容，不用播放量代替用户增长。",
+        "points": [
+          { "title": "按用户任务确定增长目标", "action": "把选车、算账、找二手车的需求对应到小懂功能，拉新与老用户唤醒分开评价。", "evidence": "智能找二手车：9人拉新、803人拉活，不能因低拉新而否定其回访价值。" },
+          { "title": "用数据决定投入优先级", "action": "比较9个卖点的VV与增长贡献，再下钻作品和脚本，优先验证需求明确的方向。", "evidence": "复盘119条视频：两大主力卖点占32.2%的VV，贡献153人拉新、占64.3%。" },
+          { "title": "把功能卖点转成使用动机", "action": "拆解TOP13和3条反例，要求工具参与角色解题，而不是剧情结束后硬报功能。", "evidence": "交付3套脚本模板、卖点优先级与审核检查项。" }
+        ],
+        "metrics": [{ "value": "119条", "label": "项目复盘样本" }, { "value": "9个", "label": "业务卖点对照" }, { "value": "3套", "label": "脚本模板交付" }],
+        "proof": "119条视频复盘 · 9卖点分析 · 3套模板",
+        "caseLabel": "查看AI小懂增长案例", "caseAnchor": "case-growth"
+      },
+      {
+        "key": "team", "page": "methods", "title": "团队管理执行",
+        "thesis": "把个人有效经验，变成团队能执行、能验收、能复用的标准。",
+        "points": [
+          { "title": "目标与责任拆到人", "action": "将团队目标分解到小组和个人，配套组长带教、任务检查及日周复盘。", "evidence": "团队10→20人+，组长3→5人；管理70号布局、62个活跃账号。" },
+          { "title": "探索与复制分工协作", "action": "创意组验证方向，二创组复用模板；明确贡献人、维护人和结果回收责任。", "evidence": "沉淀3套模板及人物、车型、场景资产，供矩阵协作复用。" },
+          { "title": "质量、产能与成本一起管理", "action": "执行9步交付、六维质检、P0–P3分级；超精品与常规内容分级选模型，不一刀切升配。", "evidence": "模型规范组内全员确认并写入管理汇报；团队AIGC覆盖近100%、人均日更4条。" }
+        ],
+        "metrics": [{ "value": "20人+", "label": "团队规模" }, { "value": "5人", "label": "组长培养" }, { "value": "62个", "label": "活跃账号协作" }],
+        "proof": "20人+团队 · 5名组长 · 62个活跃账号",
+        "caseLabel": "查看案例中的团队交付", "caseAnchor": "case-team"
+      },
+      {
+        "key": "creation", "page": "insights", "title": "个人AIGC创作能力",
+        "thesis": "能独立把创意做成成片，也能定位生成失败的具体原因。",
+        "points": [
+          { "title": "从选题到成片独立完成", "action": "亲自完成脚本、分镜、生成与剪辑，独立运营4个定位不同的AIGC账号。", "evidence": "本人日均4条成片；代表内容单条1000万+播放、单条涨粉3000+。" },
+          { "title": "按镜头任务选择工具", "action": "结合人物一致性、车型还原和运镜要求使用Seedance、即梦等工具，管理Prompt和素材资产。", "evidence": "把人物重复、车型不一致、驾驶座人物消失等问题转成资产约束和负面提示词。" },
+          { "title": "把个人验证交回团队复用", "action": "在情感叙事、汽车垂类、模板复刻和动画×汽车中试方向，提炼可复制结构与失败样本。", "evidence": "4个账号及5条代表作品可直接查看；创作经验用于模板与带教。" }
+        ],
+        "metrics": [{ "value": "4个", "label": "独立运营账号" }, { "value": "1000万+", "label": "代表内容单条播放" }, { "value": "3000+", "label": "代表内容单条涨粉" }],
+        "proof": "4个实操账号 · 单条1000万+ · 单条涨粉3000+",
+        "caseLabel": "查看个人代表作品", "casePage": "insights", "caseAnchor": "featured-evidence"
+      }
+    ],
+    "casePerspectives": [
+      { "id": "case-growth", "title": "用户增长：从播放排序转向需求匹配", "decision": "精准估价830万VV、32人拉新；帮选车+优惠691万VV、89人拉新。差异值得下钻到用户任务，而非继续按播放扩量。", "action": "我比较9个卖点，逐句拆解TOP13与3条反例，提炼工具参与解题的检查项。", "output": "交付卖点优先级和3套模板；两大主力卖点贡献153人拉新（64.3%）。" },
+      { "id": "case-team", "title": "团队执行：让复盘结论进入生产", "decision": "分析只有变成脚本要求、交接标准和维护责任，才具备复用价值。", "action": "我将结论整理为模板与检查项，衔接创意组验证、二创组复用；配套资产、质检和分级模型规范。", "output": "完成模板、审核要求与管理规范；成本改善以实际消耗验证，不用制度上线替代降本业绩。" },
+      { "id": "case-creation", "title": "创作判断：功能必须参与角色解题", "decision": "贷款算账样本252万VV、67人拉新；C63估价旁白375万VV、2人拉新。工具是否承接未解决任务，是我诊断脚本的关键。", "action": "我标记角色难题、工具动作和决策结果，将分析结论用于改稿检查；日常4个自营账号的作品另列展示。", "output": "形成具体脚本检查项与下一轮验证假设；分析样本不计为个人原创作品，也不作为同条件实验。" }
+    ],
     "capabilityCases": [
       { "purpose": "承接真人IP团队向AIGC转型，同时约束生成消耗和交付质量。", "title": "9步交付流程与模型分级管理", "action": "我实测生成消耗并核对画质，按超精品、常规剧情、数字人及零件内容限制模型使用；配套资产库、六维质检和P0–P3风险处置。", "result": "模型分级规范经组内全员确认、写入9月管理汇报；团队人均日更4条", "href": "production-cost-control" },
       { "purpose": "把业务目标拆到用户任务、内容单元与分发策略，再用增长结果校准。", "title": "从自养号增长目标到119条视频复盘", "action": "我将拉新作为主目标、拉活单独评价；按人群×卖点×脚本×渠道拆解表现，识别可优先验证和复制的方向。", "result": "两个主力卖点占32.2%的VV、贡献64.3%的拉新；交付卖点优先级与3套模板", "href": "growth-strategy" },
@@ -1339,27 +1382,27 @@
       "route": "#/capabilities"
     },
     "experience": {
-      "title": "工作经历",
-      "mobileTitle": "工作经历",
-      "html": "<section class=\"section\" id=\"experience\" aria-labelledby=\"experience-title\">\n      <div class=\"section-top\"><div><p class=\"section-kicker\">02 / EXPERIENCE</p><h1 id=\"experience-title\">工作经历</h1></div><button class=\"text-button\" id=\"print-journey\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\" viewBox=\"0 0 24 24\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\" class=\"lucide lucide-printer\" aria-hidden=\"true\"><path d=\"M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2\"></path><path d=\"M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6\"></path><rect x=\"6\" y=\"14\" width=\"12\" height=\"8\" rx=\"1\"></rect></svg>打印工作经历</button></div>\n      <div id=\"experience-list\"></div>\n    </section>",
+      "title": "用户增长思维",
+      "mobileTitle": "用户增长",
+      "html": "<section class=\"section\" id=\"experience\" aria-labelledby=\"experience-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">01 / GROWTH</p><h1 id=\"experience-title\">用户增长思维</h1></div></div><div id=\"dimension-content\"></div></section>",
       "route": "#/experience"
     },
     "methods": {
-      "title": "方法论沉淀",
-      "mobileTitle": "方法论",
-      "html": "<section class=\"section\" id=\"methods\" aria-labelledby=\"methods-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">03 / METHODOLOGY</p><h1 id=\"methods-title\">方法论沉淀</h1></div></div><div class=\"method-grid\" id=\"method-grid\"></div></section>",
+      "title": "团队管理执行",
+      "mobileTitle": "团队管理",
+      "html": "<section class=\"section\" id=\"methods\" aria-labelledby=\"methods-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">02 / EXECUTION</p><h1 id=\"methods-title\">团队管理执行</h1></div></div><div id=\"dimension-content\"></div></section>",
       "route": "#/methods"
     },
     "insights": {
-      "title": "AIGC 用户增长的判断",
-      "mobileTitle": "增长判断",
-      "html": "<section class=\"section\" id=\"insights\" aria-labelledby=\"insights-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">04 / PERSPECTIVES</p><h1 id=\"insights-title\">AIGC 用户增长的判断</h1></div></div><div class=\"insight-list\" id=\"insight-list\"></div></section>",
+      "title": "个人AIGC创作能力",
+      "mobileTitle": "AIGC创作",
+      "html": "<section class=\"section\" id=\"insights\" aria-labelledby=\"insights-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">03 / CREATION</p><h1 id=\"insights-title\">个人AIGC创作能力</h1></div></div><div id=\"dimension-content\"></div></section>",
       "route": "#/insights"
     },
     "skills": {
-      "title": "技术栈",
-      "mobileTitle": "技术栈",
-      "html": "<section class=\"section\" id=\"skills\" aria-labelledby=\"skills-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">05 / TECH STACK</p><h1 id=\"skills-title\">技术栈</h1></div></div><div class=\"skills-list\" id=\"skills-list\"></div></section>",
+      "title": "真实案例",
+      "mobileTitle": "真实案例",
+      "html": "<section class=\"section\" id=\"skills\" aria-labelledby=\"skills-title\"><div class=\"section-top\"><div><p class=\"section-kicker\">04 / EVIDENCE</p><h1 id=\"skills-title\">真实案例</h1></div></div><div id=\"dimension-content\"></div></section>",
       "route": "#/skills"
     }
   },
