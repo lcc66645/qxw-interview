@@ -54,9 +54,25 @@ async function assertReadable(page) {
         assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
         for (const href of await page.locator('main a[href^="https:"]').evaluateAll(items => items.map(item => item.href))) evidence.add(href);
         if (['experience', 'methods', 'insights'].includes(id)) assert.equal(await page.locator('.dimension-point').count(), 3);
+        if (id === 'experience') {
+          assert.deepEqual(await page.locator('.share-row strong').allTextContents(), ['32.2%', '64.3%', '46.5%', '19.3%']);
+          await page.locator('#selling-point-data > summary').click();
+          assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
+          await page.locator('#selling-point-data > summary').click();
+        }
         if (id === 'methods') {
+          assert.equal(await page.locator('#dimension-content').evaluate(el => el.firstElementChild.id), 'team-okr');
           assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
           assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
+          assert.equal(await page.locator('.management-table tbody tr').count(), 8);
+        }
+        if (id === 'insights') {
+          assert.equal(await page.locator('.creation-stage').count(), 9);
+          await page.locator('.creation-step-link').last().click();
+          await page.waitForFunction(() => document.querySelector('#creation-step-9')?.open);
+          assert(await page.locator('#creation-step-9').evaluate(el => el.open));
+          assert((await page.locator('#creation-step-9').innerText()).includes('Excel'));
+          await page.locator('nav [data-page-link="insights"]').click();
         }
         if (id === 'skills') {
           assert.equal(await page.locator('.badcase-item').count(), 3);

@@ -86,7 +86,10 @@ async function pixels(page, compare = false) {
       await page.locator(`nav [data-page-link="${id}"]`).click(); await page.locator(`#${id}`).waitFor();
       assert(await page.locator('#studio-backdrop img').evaluate(el => el.complete && el.naturalWidth > 0 && getComputedStyle(el).filter.includes('blur')));
       assert.equal(await page.locator('main canvas, main .portrait-image').count(), 0);
+      const reveal = page.locator('main [data-reveal]').first();
+      if (await reveal.count()) await reveal.scrollIntoViewIfNeeded();
       await page.waitForFunction(() => { const item = document.querySelector('main [data-reveal]'); return !item || getComputedStyle(item).opacity === '1'; });
+      await page.evaluate(() => scrollTo({ top: 0, behavior: 'instant' }));
       await page.screenshot({ path: path.join(output, `${id}-mobile.png`) });
     }
     await page.locator('#edit-profile').click();

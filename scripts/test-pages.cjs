@@ -53,18 +53,64 @@ async function check(page, id) {
           assert.equal(await page.locator('.dimension-thesis').textContent(), dimension.thesis);
           assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), dimension.points.map(item => item.evidence));
           assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), dimension.metrics.map(item => item.value));
-          assert((await page.locator('main').innerText()).length < 1200, 'Default dimension view must stay concise');
+          assert((await page.locator('.dimension-points').innerText()).length < 650, 'Capability summaries stay concise alongside visual evidence');
+          assert((await page.locator('main').innerText()).length < 1800, 'Default visual board must remain scannable');
+        }
+        if (id === 'experience') {
+          assert.equal(await page.locator('.growth-krs > div').count(), 3);
+          assert.equal(await page.locator('.growth-krs dd').first().textContent(), '300人 / 人 / 月');
+          assert((await page.locator('.growth-krs p').first().textContent()).includes('规划'));
+          assert.deepEqual(await page.locator('.campaign-metrics dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
+          const groups = [[0, 1], [2, 5, 6]];
+          for (const [groupIndex, indices] of groups.entries()) {
+            const points = indices.map(i => data.campaignReview.points[i]);
+            const values = [points.reduce((n,p) => n + p.vv, 0) / data.campaignReview.overview.vv * 100, points.reduce((n,p) => n + p.acquisitions, 0) / data.campaignReview.overview.acquisitions * 100];
+            const group = page.locator('.share-group').nth(groupIndex);
+            assert.deepEqual(await group.locator('strong').allTextContents(), values.map(v => `${v.toFixed(1)}%`));
+            assert(await group.locator('.share-track').evaluateAll((tracks, values) => tracks.every((track, i) => Math.abs(track.firstElementChild.getBoundingClientRect().width / track.getBoundingClientRect().width * 100 - values[i]) < .15), values));
+          }
+          assert.equal(await page.locator('.focus-table tbody tr').count(), 3);
+          await page.locator('#selling-point-data > summary').click();
+          assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
+          for (const [i, point] of data.campaignReview.points.entries()) assert.deepEqual(await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents(), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
+          assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+          await page.locator('#selling-point-data > summary').click();
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.okr-row').count(), 3); assert.equal(await page.locator('.okr-results li').count(), 8);
+          assert.equal(await page.locator('#dimension-content').evaluate(el => el.firstElementChild.id), 'team-okr');
+          assert.equal(await page.locator('#collaboration-map .evidence-flow li').count(), 4);
           assert.equal(await page.locator('main details[open]').count(), 0);
+          for (let i = 0; i < 3; i++) {
+            const row = page.locator('.okr-row').nth(i); await row.locator('summary').click();
+            assert.deepEqual(await row.locator('.management-table tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent))), data.presentation.evidenceBoards.team[i].management);
+            assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+            await row.locator('summary').click();
+          }
           await page.locator('#production-cost-control > summary').click();
           assert.deepEqual(await page.locator('.cost-segment strong').allTextContents(), ['495 token', '约135 token']);
           assert.deepEqual(await page.locator('.cost-policy tbody tr td:first-of-type').allTextContents(), ['Seedance 2.5', 'Seedance 2.0', '禁用2.5']);
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
           await page.locator('#production-cost-control > summary').click();
         }
-        if (id === 'insights') assert.equal(await page.locator('#featured-evidence a, .account-links a').count(), 9);
+        if (id === 'insights') {
+          assert.equal(await page.locator('#featured-evidence a, .account-links a').count(), 9);
+          assert.equal(await page.locator('.creation-step-link').count(), 9);
+          assert.equal(await page.locator('.creation-stage').count(), 9);
+          assert.equal(await page.locator('.creation-stage[open]').count(), 1);
+          assert.equal(await page.locator('.creation-failure-table tbody tr').count(), 3);
+          for (const [i, stage] of data.presentation.evidenceBoards.creation.stages.entries()) {
+            const detail = page.locator('.creation-stage').nth(i); if (i) await detail.locator('summary').click();
+            assert.deepEqual(await detail.locator('dd').allTextContents(), [stage.tools, stage.action, stage.output, stage.check, stage.example]);
+            await detail.locator('summary').click();
+          }
+          await page.locator('.creation-step-link').nth(4).click();
+          await page.waitForFunction(() => document.querySelector('#creation-step-5')?.open);
+          assert.equal(await page.locator('#creation-step-5').evaluate(el => el.open), true);
+          assert(page.url().endsWith('#/insights/creation-step-5'));
+          await page.reload(); assert(await page.locator('#creation-step-5').evaluate(el => el.open));
+          await page.goto(route('insights')); await check(page, id);
+        }
         if (id === 'skills') {
           assert(await page.locator('#business-review').evaluate(el => el.open));
           assert.equal(await page.locator('.case-perspective').count(), 4); assert.equal(await page.locator('.case-perspective[open]').count(), 0);
@@ -80,7 +126,11 @@ async function check(page, id) {
             await page.locator(`#${item.id} > summary`).click();
           }
         }
-        if ([1440,390,320].includes(width)) await page.screenshot({ path: `${output}/${id}-${width}.png`, fullPage: id !== 'capabilities' });
+        if ([1440,390,320].includes(width)) {
+          await page.mouse.move(0, 0); await page.evaluate(() => { document.activeElement?.blur(); scrollTo({ top: 0, behavior: 'instant' }); });
+          await page.waitForFunction(() => scrollY === 0);
+          await page.screenshot({ path: `${output}/${id}-${width}.png`, fullPage: id !== 'capabilities' });
+        }
       }
       console.log(`PASS three dimensions + real case at ${width}x${height}`);
     }
@@ -133,6 +183,6 @@ async function check(page, id) {
     await preview.locator('#edit-profile').click(); const final = preview.waitForEvent('download'); await preview.locator('#export-site').click();
     await (await final).saveAs(process.env.PREVIEW_PATH || `${output}/portfolio-final.html`); await clean.close();
     assert.deepEqual(errors, []); assert.deepEqual(failures, []);
-    console.log('PASS 25 view/size combinations, concise three-dimension contract, unchanged campaign/math, 12 evidence links, legacy deep links, same-document history, disclosures/print restoration, editing/uploads, viewer, offline and default export.');
+    console.log('PASS 25 view/size combinations, growth goals and source-derived share bars/9-row table, OKR-first management/8 mappings, 9 production-analysis steps and reload links, unchanged campaign, 12 evidence links, legacy routes, editing/uploads, print, viewer and offline export.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
