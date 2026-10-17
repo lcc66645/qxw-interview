@@ -27,6 +27,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.locator('main > #capabilities').count(), 1);
       assert(await page.locator('#about-title').isVisible());
       const body = await page.locator('body').innerText();
+      for (const removed of ['简单有为', 'UWANT', '友望', '郝家豁', '千川', '线索成本', 'CTR 5%']) assert(!body.includes(removed), removed);
       assert(body.includes('关于我') && body.includes('AIGC 用户增长运营 TL'));
       assert(!body.includes('打开简历'));
       for (const code of ['const initial =', 'function renderPage', '<!doctype html>', 'window.portfolioData', 'data:image/png;base64,', 'uniform sampler2D']) assert(!body.includes(code), `Code leaked into body: ${code}`);

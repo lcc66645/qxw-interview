@@ -9,6 +9,8 @@ fs.mkdirSync(output, { recursive: true });
 
 (async () => {
   assert.deepEqual(data.campaignReview, campaign, 'Editing copy must not rewrite the campaign evidence');
+  assert.equal(data.source.jobs.length, 1);
+  for (const removed of ['简单有为', 'UWANT', '友望', '郝家豁', '千川', '线索成本', 'CTR 5%']) assert(!JSON.stringify(data).includes(removed), removed);
   const main = campaign.points.slice(0, 2);
   assert.equal(main.reduce((sum, point) => sum + point.acquisitions, 0), 153);
   assert.equal((153 / campaign.overview.acquisitions * 100).toFixed(1), '64.3');
@@ -22,7 +24,9 @@ fs.mkdirSync(output, { recursive: true });
       await page.setViewportSize({ width, height });
       for (const id of Object.keys(data.pages)) {
         await page.goto(`${base}#/${id}`, { waitUntil: 'networkidle' });
+        if (id === 'experience') await page.evaluate(() => { document.querySelectorAll('[data-experience-panel]').forEach(el => el.hidden = false); document.querySelectorAll('main details').forEach(el => el.open = true); });
         const content = await page.locator('main').innerText();
+        for (const removed of ['简单有为', 'UWANT', '友望', '郝家豁', '千川', '线索成本', 'CTR 5%']) assert(!content.includes(removed), `${id}: ${removed}`);
         for (const forbidden of ['3秒完播', 'ROI 1:3.5', '最高800万', '目标达成率70%', '爆款率最高70%', '调整前', '调整后', '复盘前', '复盘后', '资深专家', '阿里巴巴', '字节跳动', '腾讯', '网易']) assert(!content.includes(forbidden), `${id}: ${forbidden}`);
         assert.equal(await page.locator('.capability-entry, .capability-jump, .capability-halo').count(), 0);
         assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
@@ -33,15 +37,17 @@ fs.mkdirSync(output, { recursive: true });
           assert((await page.locator('.case-stage[data-stage="5"]').innerText()).includes('活动整体表现与个人交付'));
           assert.equal(await page.locator('.badcase-comparison dt').filter({ hasText: '卖点汇总' }).count(), 2);
           assert.deepEqual(await page.locator('.comparison-row > span:first-child').allTextContents(), ['前一周', '后一周']);
-          assert((await page.locator('#employer-1').innerText()).includes('CTR 5%+'));
-          assert((await page.locator('#employer-1').innerText()).includes('线索成本较接手前下降30%'));
+          assert.equal(await page.locator('.job').count(), 1);
+          assert.equal(await page.locator('.practice-point').count(), 5);
+          assert.equal(await page.locator('#employer-1').count(), 0);
+          assert.equal(await page.locator('.case-stage-capability').count(), 6);
         }
         if (id === 'insights') {
           assert.equal(await page.locator('.insight-decision').count(), 4);
           assert.equal(await page.locator('.insight-next').count(), 4);
           assert.equal(await page.locator('.insight-item .case-anchor').count(), 4);
         }
-        if (id === 'skills') assert.equal(await page.locator('.tech-application').count(), 4);
+        if (id === 'skills') assert.equal(await page.locator('.tech-application').count(), 3);
         if (width === 1440 || width === 390) await page.screenshot({ path: `${output}/${id}-${width}.png` });
       }
     }
@@ -64,6 +70,6 @@ fs.mkdirSync(output, { recursive: true });
     await page.evaluate(() => localStorage.setItem('qxw-portfolio-v2', JSON.stringify({ profile: { intro: '我自己的简介修改' } })));
     await page.goto(base); assert.equal(await page.locator('.profile-description').textContent(), '我自己的简介修改');
     assert.deepEqual(errors, []);
-    console.log('PASS unchanged campaign evidence, independent share/growth calculations, professional copy guards across 20 combinations, eight KRs, personal deliverables, aggregate/sample distinction, four evidence-backed judgments/tool applications, deep links and non-destructive saved-copy migration.');
+    console.log('PASS Dongchedi-only shared data and 20 view/size combinations, unchanged campaign evidence, independent calculations, eight KRs, five practices, six competency-based case stages, personal deliverables, four judgments, three tool applications, deep links and saved-copy migration.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

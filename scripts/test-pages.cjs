@@ -49,7 +49,11 @@ async function checkPage(page, id) {
         await checkPage(page, id);
         assert.deepEqual(await page.locator('nav a').evaluateAll(els => els.map(el => el.getAttribute('href'))), definitions.map(([, value]) => value.route));
         if (id === 'experience') {
-          await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = true));
+          assert.equal(await page.locator('[data-experience-tab]').count(), 6);
+          assert.equal(await page.locator('.experience-panel:visible').count(), 0);
+          assert.equal(await page.locator('.job-okr details[open]').count(), 0);
+          // Inspect every retained record separately from the default collapsed UI.
+          await page.evaluate(() => { document.querySelectorAll('[data-experience-panel]').forEach(el => el.hidden = false); document.querySelectorAll('main details').forEach(el => el.open = true); });
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
           assert.equal(await page.locator('.review-table').count(), 1);
           assert.equal(await page.locator('.review-table tbody tr').count(), 4);
@@ -68,8 +72,8 @@ async function checkPage(page, id) {
           for (const fragment of ['TOP13', 'P0–P3', '830万VV', '691万VV', '团队→小组→个人']) assert((await page.locator('#employer-0').innerText()).includes(fragment), fragment);
           assert.equal(await page.locator('.project-visual:visible').count(), 5);
           assert.equal(await page.locator('.weekly-comparison .comparison-row').count(), 2);
-          assert.equal(await page.locator('.practice-point:visible').count(), 7);
-          assert.equal(await page.locator('.practice-case').count(), 7);
+          assert.equal(await page.locator('.practice-point:visible').count(), 5);
+          assert.equal(await page.locator('.practice-case').count(), 5);
           assert.equal(await page.locator('.badcase-item').count(), 3);
           assert.equal(await page.locator('.badcase-comparison > div').count(), 6);
           assert(await page.locator('.practice-point .practice-goal').evaluateAll(elements => elements.every(element => element.textContent.startsWith('目的：'))));
@@ -77,8 +81,9 @@ async function checkPage(page, id) {
           for (const text of ['375万VV / 2人拉新', '59万VV / 17人拉新', '289万VV / 3人拉新', '252万VV / 67人拉新']) assert((await page.locator('.badcase-list').innerText()).includes(text));
           assert.equal(await page.locator('.case-stage').count(), 6);
           assert.equal(await page.locator('.review-actions > div').count(), 3);
-          assert(await page.locator('#business-review').evaluate(element => element.closest('.job').id === 'employer-0' && !!(element.compareDocumentPosition(document.querySelector('#employer-1')) & Node.DOCUMENT_POSITION_FOLLOWING)));
-          assert.equal(await page.locator('#employer-1 #business-review').count(), 0);
+          assert(await page.locator('#business-review').evaluate(element => element.closest('.job').id === 'employer-0'));
+          assert.equal(await page.locator('.job').count(), 1);
+          assert.equal(await page.locator('#employer-1').count(), 0);
           const links = new Set(await page.locator('main a[href^="https://"]').evaluateAll(els => els.map(el => el.href)));
           data.source.links.forEach(link => assert(links.has(link.url), link.title));
           assert(await page.locator('main img').evaluateAll(els => els.every(el => el.complete && el.naturalWidth > 0)));
@@ -89,7 +94,7 @@ async function checkPage(page, id) {
             for (let index = 0; index < pixels.length; index += 4) if ((pixels[index] + pixels[index + 1] + pixels[index + 2]) / 3 < 110) dark++;
             return dark / (60 * 40) > .65;
           })), 'Every evidence graphic must use a dark presentation');
-          await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = el.id === 'business-review'));
+          await page.evaluate(() => { document.querySelectorAll('[data-experience-panel]').forEach(el => el.hidden = true); document.querySelectorAll('main details').forEach(el => el.open = false); });
         }
         if (id === 'capabilities') {
           assert(await page.locator('.about-copy').isVisible());
@@ -98,7 +103,7 @@ async function checkPage(page, id) {
           assert.equal(await page.locator('.capability-case').count(), 5);
           assert.equal(await page.locator('.capability-purpose').count(), 5);
           assert.equal(await page.locator('.capability-proof').count(), 5);
-          assert.equal(await page.locator('.portrait-history article').count(), 2);
+          assert.equal(await page.locator('.portrait-history article').count(), 1);
         }
         if (id === 'methods') assert.equal(await page.locator('.method-case .proof-purpose, .method-case .proof-result').count(), 8);
         assert.equal(await page.locator('.portrait-room').count(), 0);
@@ -137,7 +142,7 @@ async function checkPage(page, id) {
       await page.locator(target).waitFor({ state: 'visible' });
       assert(await page.locator(target).isVisible());
       assert(await page.locator(target).evaluate(el => el.tagName !== 'DETAILS' || el.open));
-      await page.waitForFunction(selector => { const y = document.querySelector(selector).getBoundingClientRect().y; return y >= 70 && y < 180; }, target);
+      await page.waitForFunction(selector => { const y = document.querySelector(selector).getBoundingClientRect().y, tabs = document.querySelector('.experience-tabs').getBoundingClientRect(); return y >= tabs.bottom - 1 && y < innerHeight - 60; }, target);
       await page.goBack(); await checkPage(page, 'methods');
     }
     await page.goto(new URL('index.html#methods', base).href); await page.waitForURL('**/index.html#/methods'); await checkPage(page, 'methods');
@@ -161,7 +166,8 @@ async function checkPage(page, id) {
     assert.equal(await page.locator('.header [data-bind="name"]').textContent(), '跨页验证');
     assert.equal(await page.locator('.tip-project-title').textContent(), '增长复盘验证');
     await page.reload({ waitUntil: 'networkidle' }); assert.equal(await page.locator('.tip-project-title').textContent(), '增长复盘验证');
-    assert.equal(await page.locator('.practice-point:visible').count(), 7);
+    assert.equal(await page.locator('.practice-point:visible').count(), 0);
+    await page.locator('[data-experience-tab="business-review"]').click();
     assert.equal(await page.locator('#business-review').evaluate(el => el.open), true);
     await page.locator('#business-review > summary').click();
     assert.equal(await page.locator('#business-review').evaluate(el => el.open), false);
@@ -169,6 +175,7 @@ async function checkPage(page, id) {
     assert(await page.locator('.case-stage').last().isVisible());
     assert(await page.locator('.case-workflow img').evaluate(el => el.complete && el.naturalWidth > 0));
     assert(await page.locator('.practice-point [data-enlarge="production"] img').getAttribute('src').then(src => src.startsWith('data:image/png')));
+    await page.locator('[data-experience-tab="competence-0-1"]').click();
     await page.locator('.practice-point [data-enlarge="growth"]').click();
     assert(await page.locator('#project-dialog').evaluate(el => el.open));
     assert(await page.locator('.expanded-visual').evaluate(el => el.complete && el.naturalWidth > 0));
@@ -214,18 +221,22 @@ async function checkPage(page, id) {
     await (await preview).saveAs(process.env.PREVIEW_PATH || path.join(output, 'portfolio-preview.html'));
     await clean.keyboard.press('Escape');
     await clean.locator('nav [data-page-link="experience"]').click();
-    await clean.locator('#business-review').waitFor();
+    await clean.locator('[data-experience-tab="competence-0-0"]').click();
     const captureStyle = '.header, .toast, .skip { visibility: hidden !important; }';
     await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
     await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
     await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-desktop.png'), style: captureStyle });
+    await clean.locator('[data-experience-tab="business-review"]').click();
+    await clean.locator('.case-stage').evaluateAll(elements => elements.forEach(element => element.open = true));
     await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-desktop.png'), style: captureStyle });
     await clean.setViewportSize({ width: 390, height: 844 });
+    await clean.locator('[data-experience-tab="competence-0-0"]').click();
     await clean.locator('#competence-0-0').scrollIntoViewIfNeeded();
     await clean.waitForFunction(() => getComputedStyle(document.querySelector('#competence-0-0')).opacity === '1');
     await clean.locator('#competence-0-0').screenshot({ path: path.join(output, 'production-dark-mobile.png'), style: captureStyle });
+    await clean.locator('[data-experience-tab="business-review"]').click();
     await clean.locator('#business-review').screenshot({ path: path.join(output, 'case-fullflow-mobile.png'), style: captureStyle });
     assert.deepEqual(errors, []); assert.deepEqual(failed, []);
-    console.log('PASS portrait-before-About, visible project visuals/data table, image upload/persistence/enlargement, seven work points, six-stage case, same-document routes, original links, edit/contact/print, offline navigation/re-export, and default preview.');
+    console.log('PASS Dongchedi-only five practices, collapsed OKRs and six exclusive panels, content/data inventory, image upload/persistence/enlargement, six-stage case, routes, original links, edit/contact/print, offline navigation/re-export and default preview.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

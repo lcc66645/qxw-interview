@@ -11,6 +11,7 @@ fs.mkdirSync(output, { recursive: true });
 const forbidden = ['const initial =', 'function renderPage', '<!doctype html>', 'window.portfolioData', 'data:image/png;base64,', 'uniform sampler2D', '\uFFFD'];
 async function assertReadable(page) {
   const visible = await page.locator('body').innerText();
+  for (const removed of ['简单有为', 'UWANT', '友望', '郝家豁', '千川', '线索成本', 'CTR 5%']) assert(!visible.includes(removed), removed);
   for (const code of forbidden) assert(!visible.includes(code), `Unexpected visible code/encoding: ${code}`);
   assert.equal(await page.evaluate(() => document.characterSet), 'UTF-8');
   assert.equal(await page.locator('main h1').count(), 1);
@@ -52,14 +53,15 @@ async function assertReadable(page) {
         await assertReadable(page);
         assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
         if (id === 'experience') {
-          assert.equal(await page.locator('.practice-point').count(), 7);
+          assert.equal(await page.locator('.practice-point').count(), 5);
           assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
           assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
           assert.equal(await page.locator('.practice-deliverable').count(), 5);
-          assert.equal(await page.locator('.practice-case').count(), 7);
+          assert.equal(await page.locator('.practice-case').count(), 5);
           assert.equal(await page.locator('.badcase-item').count(), 3);
           assert.equal(await page.locator('#employer-0 #business-review').count(), 1);
-          assert.equal(await page.locator('#employer-1 #business-review').count(), 0);
+          assert.equal(await page.locator('#employer-1').count(), 0);
+          assert.equal(await page.locator('.experience-panel:visible').count(), 0);
           assert.equal(await page.locator('.project-visual').count(), 5);
           assert.equal(await page.locator('.case-stage').count(), 6);
           assert.deepEqual(await page.locator('.case-stage[data-stage="5"] .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
@@ -71,6 +73,7 @@ async function assertReadable(page) {
       console.log(`PASS extracted delivery: five views at ${width}x${height}`);
     }
     await page.locator('nav [data-page-link="experience"]').click(); await page.locator('#experience').waitFor();
+    await page.locator('[data-experience-tab="competence-0-1"]').click();
     await page.locator('.practice-point [data-enlarge="growth"]').click();
     await page.locator('[aria-label="图像缩放"]').fill('300');
     assert(await page.locator('.visual-dialog-scroll').evaluate(element => element.scrollWidth > element.clientWidth));
