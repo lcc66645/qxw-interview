@@ -125,6 +125,35 @@ body #main { background: transparent; }
 .case-stage > summary h4 { margin: 0; font-size: 15px; font-weight: 500; line-height: 1.8; }
 .case-stage-number { font-size: 11px; color: #a1c6b3; }
 .case-stage > .case-stage-capability { font-size: 11px; color: #a9cbb9; margin: 0 0 12px; }
+.work-decision { grid-column: 2; min-width: 0; width: 100%; margin-top: 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 100px); }
+.work-decision > summary { display: flex; align-items: center; justify-content: space-between; gap: 18px; padding: 22px 0; font-size: 15px; font-weight: 500; }
+.work-decision > summary::after, .work-decision[open] > summary::after { content: none; }
+.work-decision > summary .lucide { width: 18px; height: 18px; flex: 0 0 18px; }
+.work-decision[open] > summary .lucide { transform: rotate(180deg); }
+.work-decision p, .budget-steps { color: #ccd5d0; font-size: 13px; line-height: 1.9; }
+.work-decision .decision-purpose { color: #a9cbb9; }
+.work-decision .decision-result { margin: 24px 0; color: #b9e2cc; }
+.cost-comparison { margin: 24px 0; }
+.cost-comparison figcaption, .cost-policy caption { text-align: left; color: #e8eee9; font-size: 13px; margin-bottom: 16px; line-height: 1.8; }
+.cost-segment { display: grid; grid-template-columns: 48px minmax(12px, 1fr) 100px; align-items: center; gap: 14px; margin: 16px 0; font-size: 12px; }
+.cost-segment strong { font-size: 12px; text-align: right; font-variant-numeric: tabular-nums; }
+.cost-track { height: 8px; background: #e3ede710; }
+.cost-track > span { display: block; height: 100%; background: #a9d5c0; }
+.cost-segment:last-child .cost-track > span { background: #d3b69b; }
+.cost-policy { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 26px 0; font-size: 12px; line-height: 1.8; }
+.cost-policy th, .cost-policy td { text-align: left; vertical-align: top; padding: 14px 10px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.cost-policy th { font-weight: 500; color: #dbe6df; }
+.cost-policy td { color: #c2cec7; }
+.cost-policy thead th:nth-child(1) { width: 30%; }
+.cost-policy thead th:nth-child(2) { width: 25%; }
+.decision-timeline { list-style: none; margin: 24px 0; padding: 0; }
+.decision-timeline li { display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.decision-date { color: #b8dac8; font-size: 11px; line-height: 1.9; }
+.work-decision h5 { font-size: 13px; margin: 0 0 8px; line-height: 1.8; font-weight: 500; }
+.decision-timeline p { margin: 0; }
+.budget-steps { margin: 16px 0 24px; }
+.budget-steps dt { margin-top: 18px; color: #e0e8e2; font-weight: 500; }
+.budget-steps dd { margin: 6px 0 0; }
 .visual-dialog-scroll { background: #171b1c; }
 #project-dialog:has(.expanded-visual) { background: #171b1c; color: #edf3ef; color-scheme: dark; border-color: #687c72; border-radius: 8px; }
 #project-dialog:has(.expanded-visual) > .dialog-close { color: #edf3ef; background: #303a36; }
@@ -146,6 +175,10 @@ body #main { background: transparent; }
   .practice-heading { grid-row: auto; }
   .practice-deliverable { grid-column: 1; }
   .practice-case { grid-column: 1; }
+  .work-decision { grid-column: 1; }
+  .cost-policy th, .cost-policy td { padding: 12px 5px; }
+  .cost-segment { grid-template-columns: 44px minmax(12px, 1fr) 96px; gap: 8px; }
+  .decision-timeline li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .badcase-comparison { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .badcase-comparison dd { font-size: 16px; }
 }
@@ -162,6 +195,7 @@ body #main { background: transparent; }
   html, body, body:not([data-page="capabilities"]) #main, .paper-band, .method-item, .tech-group, footer { background: #fff; }
   .paper-band, .paper-band h2, .capability-number, .capability-item h3, .capability-item p, .practice-support, .practice-action, .case-stage > p, .job-intro, .project-visual figcaption { color: #444; }
   .okr-row { break-inside: avoid; }
+  .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .decision-date, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose { color: #444; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }
   .portrait-history h3, .portrait-history h4, .portrait-history p, .portrait-history .portrait-achievement, .portrait-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
   .method-item .method-flow, .case-deliverables, .insight-item .insight-decision, .insight-item .insight-next, .tech-application p { color: #444; }

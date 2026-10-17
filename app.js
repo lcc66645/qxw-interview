@@ -175,6 +175,8 @@
     if (support.deliverable) text(parent, 'p', `我交付：${support.deliverable}`, 'practice-deliverable');
     if (example) renderCaseProof(parent, example, 'practice-case', false);
     if (support.visual) evidenceFigure(parent, support.visual, support.caption);
+    if (support.visual === 'production') renderProductionCost(parent);
+    if (support.visual === 'team') renderMatrixBudget(parent);
     if (support.visual === 'growth') {
       const comparison = document.createElement('div'); comparison.className = 'weekly-comparison';
       text(comparison, 'h5', '矩阵周拉新 · 相邻两周');
@@ -185,6 +187,45 @@
       });
       text(comparison, 'p', '环比 +198.6%', 'comparison-result'); parent.append(comparison);
     }
+  }
+  function workDisclosure(parent, id, title) {
+    const detail = document.createElement('details'); detail.id = id; detail.className = 'work-decision';
+    const summary = document.createElement('summary'); text(summary, 'span', title); summary.append(iconElement('arrow-down'));
+    detail.append(summary); parent.append(detail); return detail;
+  }
+  function renderProductionCost(parent) {
+    const cost = initial.presentation.productionCost;
+    const detail = workDisclosure(parent, 'production-cost-control', cost.title);
+    text(detail, 'p', `目的：${cost.purpose}`, 'decision-purpose'); text(detail, 'p', cost.context);
+    const comparison = document.createElement('figure'); comparison.className = 'cost-comparison';
+    text(comparison, 'figcaption', `${cost.model} · 每次生成${cost.durationSeconds}秒片段`);
+    cost.segments.forEach(segment => {
+      const row = document.createElement('div'); row.className = 'cost-segment';
+      text(row, 'span', segment.resolution);
+      const track = document.createElement('span'); track.className = 'cost-track'; track.setAttribute('aria-hidden', 'true');
+      const bar = document.createElement('span'); bar.style.width = `${segment.tokens / Math.max(...cost.segments.map(item => item.tokens)) * 100}%`; track.append(bar); row.append(track);
+      text(row, 'strong', `${segment.approximate ? '约' : ''}${segment.tokens} token`); comparison.append(row);
+    }); detail.append(comparison);
+    const table = document.createElement('table'); table.className = 'cost-policy';
+    text(table, 'caption', '按内容等级约束模型使用');
+    const head = table.createTHead().insertRow(); ['内容类型', '模型', '使用判断'].forEach(label => { const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = label; head.append(cell); });
+    const body = table.createTBody(); cost.rules.forEach(rule => { const row = body.insertRow();
+      const label = document.createElement('th'); label.scope = 'row'; label.textContent = rule.content; row.append(label);
+      text(row, 'td', rule.model); text(row, 'td', rule.decision);
+    }); detail.append(table); text(detail, 'p', cost.action); text(detail, 'p', `交付结果：${cost.result}`, 'decision-result');
+  }
+  function renderMatrixBudget(parent) {
+    const budget = initial.presentation.matrixBudget;
+    const detail = workDisclosure(parent, 'matrix-budget-control', budget.title);
+    text(detail, 'p', `目的：${budget.purpose}`, 'decision-purpose');
+    const timeline = document.createElement('ol'); timeline.className = 'decision-timeline';
+    budget.timeline.forEach(item => {
+      const row = document.createElement('li'); text(row, 'span', item.date, 'decision-date');
+      const copy = document.createElement('div'); text(copy, 'h5', item.title); text(copy, 'p', item.action); row.append(copy); timeline.append(row);
+    }); detail.append(timeline); text(detail, 'h5', '预算与激励推进');
+    const steps = document.createElement('dl'); steps.className = 'budget-steps';
+    budget.budgetSteps.forEach(step => { text(steps, 'dt', step.title); text(steps, 'dd', step.action); }); detail.append(steps);
+    text(detail, 'p', budget.result, 'decision-result');
   }
   function renderCaseProof(parent, example, className, showPurpose = true) {
     const section = document.createElement('section'); section.className = className;
@@ -304,7 +345,7 @@
       ['业务目标与增长分析', '业务问题是识别内容对拉新和老用户唤醒的不同贡献。我回收119条视频的VV、拉新与拉活，按9个卖点比较表现，再从选车、查优惠、贷款计算和二手车搜索等需求下钻。交付是卖点表现对照与待优先分析的内容清单。', '增长分析与业务判断'],
       ['内容策略与脚本诊断', '我逐句拆解TOP13脚本与3条反例，标记“角色任务—剧情冲突—工具动作—决策结果”。贷款算账与借车讲车分别承接购车信息决策和语音讲车需求；我据此提炼3套模板及功能、场景匹配的审核检查项。', '内容策略与一线创作判断'],
       ['生产交付与团队协作', '我将分析结论整理为模板、脚本检查项与下一轮改稿建议，衔接创意组验证和二创组复用。日常懂车帝AIGC矩阵由我推进9步流程、人物/车型资产和六维验收，明确生成、剪辑、审核的交付要求；这部分体现生产负责与方法复用，不将星图投放视频全部算作个人制作。', 'AIGC交付与质量管理'],
-      ['矩阵经营与资源优先级', '我识别出选车优惠、语音讲车两大卖点合计153人拉新，智能找二手车贡献803人拉活。下一轮建议分别设置拉新与拉活任务，优先验证决策需求明确的脚本；高播放低拉新方向先回查受众、达人与功能匹配，不直接按VV扩大复制。', '矩阵经营与策略输出']
+      ['矩阵经营与资源优先级', '我识别出选车优惠、语音讲车两大卖点合计153人拉新，智能找二手车贡献803人拉活。9月起要求低拉新效果账号转星图；10月8日结合活动拉新表现申请更多CPM激励，10月10日推进小懂扩量与生产额度配置。后续将二手车卖点收敛到智能找车、精准估价，并要求周报呈现人群、卖点、内容方法及模板复用。', '矩阵经营与预算协同']
     ];
     stages.forEach(([title, description, capability], index) => {
       const section = caseStage(index + 1, title, capability); text(section, 'p', description);
@@ -316,6 +357,10 @@
       }
       if (index === 2) {
         evidenceFigure(section, 'production', '团队日常AIGC生产流程 · 承接脚本、资产与方法复用', 'case-workflow');
+        const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
+      }
+      if (index === 3) {
+        const link = text(section, 'a', '查看渠道转向、预算申请与结算检查', 'case-anchor'); link.href = pageHref('experience', 'matrix-budget-control'); link.append(iconElement('arrow-up-right'));
       }
       parent.append(section);
     });
