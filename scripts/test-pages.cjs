@@ -92,13 +92,13 @@ async function checkPage(page, id) {
           await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = el.id === 'business-review'));
         }
         if (id === 'capabilities') {
-          assert(await page.locator('.creator-about').isHidden());
-          assert.equal(await page.locator('.resume-trigger').getAttribute('aria-expanded'), 'false');
-          assert.equal((await page.locator('.resume-trigger-label').textContent()).trim(), '打开简历');
+          assert(await page.locator('.about-copy').isVisible());
+          assert.equal(await page.locator('.resume-trigger, .resume-close, .resume-sheet').count(), 0);
+          assert.equal(await page.locator('.capability-jump').getAttribute('href'), '#/capabilities/capabilities');
           assert.equal(await page.locator('.capability-case').count(), 5);
           assert.equal(await page.locator('.capability-purpose').count(), 5);
           assert.equal(await page.locator('.capability-proof').count(), 5);
-          assert.equal(await page.locator('.resume-history article').count(), 2);
+          assert.equal(await page.locator('.portrait-history article').count(), 2);
         }
         if (id === 'methods') assert.equal(await page.locator('.method-case .proof-purpose, .method-case .proof-result').count(), 8);
         assert.equal(await page.locator('.portrait-room').count(), 0);
@@ -128,7 +128,7 @@ async function checkPage(page, id) {
     await page.goto(new URL('index.html', base).href);
     assert.equal(await page.locator('main h1').textContent(), data.profile.name);
     assert(await page.locator('.portrait-image').evaluate(el => el.complete && el.naturalWidth > 0));
-    assert(await page.locator('#main').evaluate(el => el.firstElementChild.classList.contains('portrait-intro') && el.children[1].classList.contains('creator-about')));
+    assert(await page.locator('#main').evaluate(el => el.firstElementChild.classList.contains('portrait-intro') && el.children[1].id === 'capabilities'));
     await page.goto(routeUrl('methods'));
     for (let index = 0; index < data.extensions.methodApplications.length; index++) {
       const target = data.extensions.methodApplications[index].href;

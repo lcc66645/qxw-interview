@@ -36,14 +36,14 @@ async function pixels(page, compare = false) {
     await page.waitForFunction(() => document.querySelector('.portrait-stage')?.dataset.status === 'webgl');
     const first = await pixels(page); assert(first.opaque > 500 && first.transparent > 500 && first.soft > 100 && first.lit > 300, JSON.stringify(first));
     await page.waitForTimeout(700);
-    const breathing = await pixels(page, true); assert(breathing.changed > 40, 'Breath/hair must change rendered pixels');
-    const bounds = await page.locator('.portrait-intro').boundingBox();
-    await page.mouse.move(bounds.x + bounds.width * .88, bounds.y + bounds.height * .42); await page.waitForTimeout(600);
-    const parallax = await pixels(page, true); assert(parallax.changed > 100, 'Pointer parallax must change rendered pixels');
+    const wind = await pixels(page, true); assert(wind.changed > 40, 'Local hair wind must change rendered pixels');
     await page.locator('[data-toggle-portrait]').click();
     const paused = await page.locator('.portrait-stage').getAttribute('data-frames');
     await page.waitForTimeout(300); assert.equal(await page.locator('.portrait-stage').getAttribute('data-frames'), paused);
-    await pixels(page); await page.waitForTimeout(250); assert.equal((await pixels(page, true)).changed, 0);
+    await pixels(page);
+    const bounds = await page.locator('.portrait-art').boundingBox();
+    await page.mouse.move(bounds.x + bounds.width * .88, bounds.y + bounds.height * .42);
+    await page.waitForTimeout(250); assert.equal((await pixels(page, true)).changed, 0, 'Pointer must not transform the portrait');
     await page.locator('[data-toggle-portrait]').click();
     await page.waitForFunction(value => Number(document.querySelector('.portrait-stage').dataset.frames) > Number(value), paused);
     for (const [width, height] of [[1920,1080], [1440,900], [768,1024], [390,844], [320,568]]) {
@@ -114,6 +114,6 @@ async function pixels(page, compare = false) {
     assert(await fallback.locator('.portrait-image').isVisible());
     assert(await fallback.locator('.portrait-image').evaluate(el => el.complete && el.naturalWidth > 0));
     assert.deepEqual(errors, []);
-    console.log('PASS nonblank/soft-alpha WebGL pixels at five sizes, breath/hair motion, parallax, pause/reduced-motion/offscreen stop, scene disposal, blurred backgrounds, animated offline export, and WebGL fallback.');
+    console.log('PASS nonblank/soft-alpha WebGL pixels at five sizes, hair motion, no pointer transform, pause/reduced-motion/offscreen stop, scene disposal, blurred backgrounds, animated offline export, and WebGL fallback.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

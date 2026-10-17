@@ -92,7 +92,7 @@
     $('#copy-email').replaceChildren(document.createTextNode(data.profile.email), iconElement('copy'));
     const portrait = $('.portrait-image');
     if (portrait) {
-      portrait.closest('section').dataset.hasBook = String(!data.media.portrait);
+      portrait.closest('section').dataset.avatar = data.media.portrait ? 'custom' : 'studio';
       portrait.src = data.media.portrait || initial.design.heroImage;
       portrait.alt = data.media.portrait ? `${data.profile.name}的个人肖像` : '工作室中戴眼镜的AIGC创作者，伸手递出作品画册';
       $('.portrait-kind').textContent = data.media.portrait ? 'PORTRAIT' : 'AIGC AVATAR';
@@ -100,37 +100,43 @@
     }
   }
   function renderPortrait() {
-    const section = document.createElement('section'); section.className = 'portrait-intro'; section.setAttribute('aria-label', '个人形象');
+    const section = document.createElement('section'); section.className = 'portrait-intro'; section.id = 'home'; section.setAttribute('aria-label', '关于我');
+    const art = document.createElement('div'); art.className = 'portrait-art'; section.append(art);
     const image = document.createElement('img'); image.className = 'portrait-image'; image.width = 1672; image.height = 941; image.fetchPriority = 'high';
-    section.append(image);
-    const stage = document.createElement('div'); stage.className = 'portrait-stage'; stage.dataset.status = 'loading'; stage.setAttribute('aria-hidden', 'true'); section.append(stage);
+    art.append(image);
+    const stage = document.createElement('div'); stage.className = 'portrait-stage'; stage.dataset.status = 'loading'; stage.setAttribute('aria-hidden', 'true'); art.append(stage);
     const copy = document.createElement('div'); copy.className = 'portrait-copy';
     text(copy, 'p', 'CONTENT / GROWTH / AIGC', 'section-kicker');
     const title = text(copy, 'h1', data.profile.name); title.dataset.bind = 'name';
     section.append(copy);
-    text(section, 'span', '', 'portrait-kind');
-    const trigger = document.createElement('button'); trigger.type = 'button'; trigger.className = 'resume-trigger';
-    trigger.title = '打开简历'; trigger.setAttribute('aria-label', '打开简历'); trigger.setAttribute('aria-controls', 'home'); trigger.setAttribute('aria-expanded', 'false');
-    const label = text(trigger, 'span', '打开简历', 'resume-trigger-label'); label.append(iconElement('arrow-up-right')); section.append(trigger);
+    text(art, 'span', '', 'portrait-kind');
     const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'icon-button portrait-pause'; toggle.dataset.togglePortrait = '';
-    toggle.setAttribute('aria-label', '暂停人物动态'); toggle.title = '暂停人物动态'; toggle.setAttribute('aria-pressed', 'false'); toggle.append(iconElement('pause')); section.append(toggle);
+    toggle.setAttribute('aria-label', '暂停人物动态'); toggle.title = '暂停人物动态'; toggle.setAttribute('aria-pressed', 'false'); toggle.append(iconElement('pause')); art.append(toggle);
     $('#main').prepend(section);
-    const about = $('#about-title'); const heading = document.createElement('h2');
-    heading.id = about.id; heading.className = about.className; heading.textContent = about.textContent; about.replaceWith(heading);
-    const close = document.createElement('button'); close.type = 'button'; close.className = 'icon-button resume-close';
-    close.title = '关闭简历'; close.setAttribute('aria-label', '关闭简历'); close.append(iconElement('x')); $('.creator-about').prepend(close);
-    const history = document.createElement('div'); history.className = 'resume-history';
-    text(history, 'h3', '工作经历');
+    const about = $('.about-copy');
+    about.querySelector('.section-kicker').remove(); about.querySelector('.about-name').remove();
+    const heading = document.createElement('h2'); heading.id = 'about-title'; heading.textContent = '关于我';
+    about.querySelector('#about-title').replaceWith(heading); copy.append(about);
+    const bio = document.createElement('aside'); bio.className = 'portrait-bio'; bio.setAttribute('aria-label', '经历与成果');
+    const history = document.createElement('div'); history.className = 'portrait-history';
+    text(history, 'h3', '经历与成果');
     source.jobs.forEach((job, index) => {
       const item = document.createElement('article');
-      text(item, 'p', job.period, 'resume-period');
+      text(item, 'p', job.period, 'portrait-period');
       text(item, 'h4', index === 0 ? '懂车帝' : '简单有为 · UWANT友望');
       text(item, 'p', job.role);
-      text(item, 'p', index === 0 ? '70号内容矩阵 · 20人团队 · 周拉新71→212' : '“郝家豁”粉丝50万+ · 千川素材ROI 1:3.5', 'resume-achievement');
+      text(item, 'p', index === 0 ? '70号内容矩阵 · 20人团队 · 周拉新71→212' : '“郝家豁”粉丝50万+ · 千川素材ROI 1:3.5', 'portrait-achievement');
       history.append(item);
     });
-    const contact = text(history, 'a', data.profile.email, 'resume-email'); contact.href = `mailto:${data.profile.email}`; contact.dataset.bind = 'email';
-    $('.about-inner').append(history);
+    const contact = text(history, 'a', data.profile.email, 'portrait-email'); contact.href = `mailto:${data.profile.email}`; contact.dataset.bind = 'email';
+    bio.append(history, $('.hero-metrics')); section.append(bio); $('.creator-about').remove();
+    const entry = document.createElement('div'); entry.className = 'capability-entry';
+    const jump = text(entry, 'a', '能力概述', 'capability-jump'); jump.href = pageHref('capabilities', 'capabilities'); jump.append(iconElement('arrow-down'));
+    const halo = document.createElement('span'); halo.className = 'capability-halo'; halo.setAttribute('aria-hidden', 'true');
+    for (let index = 0; index < 32; index++) {
+      const particle = document.createElement('i'); particle.style.setProperty('--particle', index); halo.append(particle);
+    }
+    jump.append(halo); section.append(entry);
   }
   function visualPath(key) {
     return data.media[key] || ({ production: initial.images[1], growth: initial.reviewCharts[0], team: initial.images[2] })[key];
@@ -387,17 +393,12 @@
     if (!anchor) return;
     const target = document.getElementById(anchor);
     if (!target) return;
-    if (anchor === 'home' && target.hidden) $('.resume-trigger')?.click();
     let parent = target;
     while (parent) {
       if (parent.tagName === 'DETAILS') parent.open = true;
       parent = parent.parentElement;
     }
-    requestAnimationFrame(() => {
-      const end = $('.portrait-intro')?.dataset.resumeEndScroll;
-      if (anchor === 'home' && end) window.scrollTo({ top: Number(end) + 1, behavior: 'instant' });
-      else target.scrollIntoView({ block: 'start', behavior: 'instant' });
-    });
+    requestAnimationFrame(() => target.scrollIntoView({ block: 'start', behavior: 'instant' }));
   }
   function renderPage(id, anchor = '') {
     disposeMotion();
@@ -620,13 +621,6 @@
       main.classList.remove('motion-enabled');
       main.querySelectorAll('canvas').forEach(canvas => canvas.remove());
       main.querySelectorAll('.scene-ready').forEach(element => element.classList.remove('scene-ready'));
-      main.querySelectorAll('.resume-sheet').forEach(element => {
-        element.classList.remove('resume-sheet', 'resume-in-flight'); element.style.removeProperty('transform'); element.style.removeProperty('--resume-progress');
-      });
-      main.querySelector('.portrait-intro')?.style.removeProperty('--scene-opacity');
-      main.querySelector('.portrait-intro')?.classList.remove('resume-unfolding');
-      const resume = main.querySelector('.creator-about');
-      if (resume) { resume.hidden = false; resume.removeAttribute('inert'); }
       const embeddedImages = new Map([
         ...initial.images.map((path, index) => [path, images[index]]),
         ...initial.reviewCharts.map((path, index) => [path, reviewCharts[index]]),
