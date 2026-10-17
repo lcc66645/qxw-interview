@@ -192,7 +192,7 @@ body #main { background: transparent; }
 .case-stage > .case-anchor { display: table; margin: 14px 0; }
 .dimension-thesis { font-size: 20px; font-weight: 500; color: #e4eee7; line-height: 1.8; max-width: 800px; margin: 0 0 34px; }
 .dimension-point { display: grid; grid-template-columns: minmax(180px, 1fr) minmax(0, 3fr); gap: 30px; padding: 24px 0; border-top: 1px solid var(--line); }
-.dimension-point h2 { font-size: 16px; font-weight: 500; line-height: 1.8; margin: 0; }
+.dimension-point h2, .dimension-point h3 { font-size: 16px; font-weight: 500; line-height: 1.8; margin: 0; }
 .dimension-point p { font-size: 14px; color: #d0dbd4; line-height: 1.9; margin: 0 0 10px; }
 .dimension-point .dimension-evidence { color: #a9d3bb; font-size: 12px; margin: 0; }
 .dimension-metrics.metric-list { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 32px 0 24px; gap: 24px; }
@@ -244,13 +244,61 @@ body #main { background: transparent; }
   .policy-content-types { grid-template-columns: minmax(0, 1fr); }
   .prompt-download { display: flex; margin-left: 0; }
 }
-.growth-krs { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 32px; margin: 26px 0 0; }
+.growth-krs { display: grid; grid-template-columns: minmax(0, 1fr); gap: 0 32px; margin: 26px 0 0; }
 .growth-krs > div { border-top: 2px solid #a9d7be; padding: 16px 0 0; min-width: 0; }
 .growth-krs > div:first-child { border-color: #e6d48f; }
 .growth-krs dt { color: #c0d2c7; font-size: 12px; }
 .growth-krs dd { font-size: 24px; font-weight: 600; line-height: 1.6; color: #d9f0e1; margin: 10px 0; }
 .growth-krs > div:first-child dd { color: #f2dfa1; }
 .growth-krs p { font-size: 12px; line-height: 1.9; color: #c3cfc7; margin: 0; }
+.page-outline { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px; margin: 22px 0 42px; padding: 18px 0; border-block: 1px solid var(--line); }
+.page-outline a { display: flex; align-items: flex-start; gap: 14px; min-width: 0; padding: 4px 0; color: #edf4ef; text-decoration: none; }
+.page-outline a:hover strong { color: #b5e4cb; }
+.outline-number { font-size: 13px; color: #e8d69e; font-variant-numeric: tabular-nums; }
+.page-outline strong { display: block; font-size: 15px; font-weight: 500; }
+.page-outline small { display: block; margin-top: 8px; color: #b2c2b9; font-size: 12px; line-height: 1.8; }
+#growth-budget, #team-review, #team-execution { margin-top: 48px; padding-top: 30px; border-top: 1px solid var(--line); }
+.analysis-demo { border-block: 1px solid #a7c6b441; padding: 18px 0 8px; margin: 24px 0; }
+.demo-label { margin: 0 0 16px; color: #e7d49a; font-size: 12px; }
+.analysis-controls { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 22px; }
+.analysis-controls label { color: #d3e0d7; font-size: 13px; }
+.analysis-controls select { background: #202a25; color: #eef3ef; border: 1px solid #72897b; border-radius: 4px; font: inherit; font-size: 13px; padding: 8px 30px 8px 10px; }
+.analysis-controls .board-note { margin: 0 0 0 auto; }
+.analysis-steps { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; border-bottom: 1px solid var(--line); margin-bottom: 24px; }
+.analysis-steps button { border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: #bbcbbf; font: inherit; font-size: 14px; min-height: 54px; padding: 12px 8px; cursor: pointer; }
+.analysis-steps button[aria-selected="true"] { border-color: #b8e6cf; background: #9bcdb715; color: #d9f7e6; }
+.analysis-steps button:focus-visible, .page-outline a:focus-visible, .analysis-controls select:focus-visible { outline: 2px solid #b8e6cf; outline-offset: 3px; }
+.demo-metrics.metric-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 22px; margin: 24px 0; padding: 0; }
+.demo-metrics dt { color: #bccbc2; font-size: 12px; }
+.demo-metrics dd { font-size: 26px; line-height: 1.6; margin-top: 8px; }
+.analysis-reading { color: #d2dfd6; font-size: 13px; line-height: 1.9; margin: 18px 0; }
+#analysis-panel { min-height: 500px; }
+.analysis-charts { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 36px; }
+.demo-bars { min-width: 0; margin: 20px 0 28px; }
+.demo-bars figcaption { color: #c5d7cb; font-size: 13px; margin-bottom: 20px; line-height: 1.7; }
+.demo-bar-row { display: grid; grid-template-columns: 64px minmax(0, 1fr) 76px; align-items: center; gap: 12px; margin: 14px 0; font-size: 12px; }
+.demo-bar-row strong { text-align: right; color: #ddede3; font-weight: 500; font-variant-numeric: tabular-nums; }
+.demo-bar-track { height: 12px; background: #b6d3c018; border-left: 1px solid #adc5b8; }
+.demo-bar-track > span { display: block; height: 100%; background: #9bcdb7; }
+.analysis-charts .demo-bars:nth-child(2) .demo-bar-track > span { background: #d8c17d; }
+@media (max-width: 760px) {
+  .page-outline { grid-template-columns: minmax(0, 1fr); gap: 14px; margin-bottom: 30px; }
+  .page-outline a { gap: 16px; }
+  .page-outline small { margin-top: 3px; }
+  .analysis-steps { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .analysis-steps button { font-size: 13px; }
+  .demo-metrics.metric-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+  .demo-metrics dd { font-size: 24px; }
+  .analysis-charts { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .analysis-controls .board-note { flex-basis: 100%; margin-left: 0; }
+  .demo-bar-row { grid-template-columns: 52px minmax(0, 1fr) 68px; gap: 8px; }
+}
+@media print {
+  .page-outline, .analysis-controls, .analysis-steps { display: none; }
+  .demo-label, .analysis-reading, .demo-bars figcaption, .demo-bar-row strong, .demo-metrics dt, .demo-metrics dd { color: #333; }
+  .demo-bar-track { background: #eee; }
+  .demo-bar-track > span { background: #547a68; print-color-adjust: exact; }
+}
 .campaign-metrics.metric-list { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 24px; margin: 24px 0 32px; padding: 20px 0; border-block: 1px solid var(--line); }
 .campaign-metrics dt { font-size: 12px; color: #bfcdc4; }
 .campaign-metrics dd { font-size: 29px; line-height: 1.6; color: #eff4ef; }
@@ -319,7 +367,7 @@ body #main { background: transparent; }
 .creation-stage > .board-return { margin: 0 22px 22px; }
 .stage-content dt { color: #d8cfa7; font-size: 12px; line-height: 1.9; }
 .stage-content dd { color: #cfdbd1; font-size: 13px; line-height: 1.9; margin: 0; }
-.evidence-board, .creation-stage { scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 24px); }
+.evidence-board, .creation-stage, #creation-abilities { scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 24px); }
 @media (max-width: 900px) {
   .growth-krs { gap: 22px; }
   .growth-krs dd { font-size: 21px; }
@@ -408,7 +456,7 @@ body #main { background: transparent; }
   .growth-diagnostics > div { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .dimension-thesis { font-size: 18px; margin-bottom: 26px; }
   .dimension-point { grid-template-columns: minmax(0, 1fr); gap: 10px; padding: 22px 0; }
-  .dimension-point h2 { font-size: 15px; }
+  .dimension-point h2, .dimension-point h3 { font-size: 15px; }
   .dimension-point p { font-size: 13px; }
   .dimension-metrics.metric-list { gap: 12px; }
   .dimension-metrics dd { font-size: 22px; }
@@ -433,7 +481,7 @@ body #main { background: transparent; }
   .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose, .practice-competency, .practice-thinking dt, .practice-thinking dd, .case-reasoning dt, .case-reasoning dd { color: #444; }
   .strategy-section p, .strategy-section > h5, .strategy-table th, .strategy-table td, .strategy-table caption, .goal-formula dt, .goal-formula dd, .goal-progress figcaption, .user-growth-path li, .growth-operation-loop h5, .growth-diagnostics dt, .growth-diagnostics p, .growth-diagnostics .diagnostic-evidence { color: #444; }
   .strategy-section .channel-snapshot { color: #444 !important; }
-  .dimension-thesis, .dimension-point h2, .dimension-point p, .dimension-point .dimension-evidence, .dimension-tools, .case-perspective > summary h4 { color: #444; }
+  .dimension-thesis, .dimension-point h2, .dimension-point h3, .dimension-point p, .dimension-point .dimension-evidence, .dimension-tools, .case-perspective > summary h4 { color: #444; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }
   .portrait-history h3, .portrait-history h4, .portrait-history p, .portrait-history .portrait-achievement, .portrait-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
   .method-item .method-flow, .case-deliverables, .insight-item .insight-decision, .insight-item .insight-next, .tech-application p { color: #444; }

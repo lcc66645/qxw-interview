@@ -53,16 +53,21 @@ async function assertReadable(page) {
         await assertReadable(page);
         assert.equal(await page.locator('nav [aria-current="page"]').getAttribute('data-page-link'), id);
         for (const href of await page.locator('main a[href^="https:"]').evaluateAll(items => items.map(item => item.href))) evidence.add(href);
-        if (['experience', 'methods', 'insights'].includes(id)) assert.equal(await page.locator('.dimension-point').count(), 3);
+        if (['experience', 'methods', 'insights'].includes(id)) assert.equal(await page.locator('.dimension-point').count(), id === 'insights' ? 3 : 0);
         if (id !== 'skills') {
           const copy = await page.locator('main').textContent();
           for (const phrase of ['小懂', '119条', 'TOP13', '3,690万', '64.3%']) assert(!copy.includes(phrase));
         }
         if (id === 'methods') {
-          assert.equal(await page.locator('#dimension-content').evaluate(el => el.firstElementChild.id), 'team-okr');
-          assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
-          assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
-          assert.equal(await page.locator('.management-table tbody tr').count(), 8);
+          assert.equal(await page.locator('.okr-row, #production-cost-control').count(), 0);
+          assert.equal(await page.locator('.page-outline a').count(), 3);
+          assert.equal(await page.locator('.management-table tbody tr').count(), 4);
+          assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 3);
+          await page.locator('#analysis-tab-3').click();
+          assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(), 2);
+          await page.locator('#demo-group').selectOption('小组B');
+          assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(), 1);
+          assert.deepEqual(await page.locator('.demo-metrics dd').allTextContents(), ['4条', '70.0万', '34人', '48.6人']);
         }
         if (id === 'insights') {
           assert.equal(await page.locator('.creation-stage[open]').count(), 0);

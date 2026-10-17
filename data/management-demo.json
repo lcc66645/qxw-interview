@@ -1,0 +1,155 @@
+{
+  "label": "匿名演示数据 · 非个人业绩",
+  "period": "演示周 · D1–D4",
+  "rows": [
+    {
+      "day": "D1",
+      "group": "小组A",
+      "member": "成员01",
+      "work": "作品001",
+      "type": "效果型",
+      "method": "问题解题",
+      "vv": 180000,
+      "newUsers": 8,
+      "followers": 160
+    },
+    {
+      "day": "D1",
+      "group": "小组A",
+      "member": "成员02",
+      "work": "作品002",
+      "type": "品宣型",
+      "method": "情绪叙事",
+      "vv": 600000,
+      "newUsers": 2,
+      "followers": 540
+    },
+    {
+      "day": "D1",
+      "group": "小组B",
+      "member": "成员03",
+      "work": "作品003",
+      "type": "效果型",
+      "method": "场景演示",
+      "vv": 120000,
+      "newUsers": 6,
+      "followers": 110
+    },
+    {
+      "day": "D2",
+      "group": "小组A",
+      "member": "成员01",
+      "work": "作品004",
+      "type": "效果型",
+      "method": "问题解题",
+      "vv": 240000,
+      "newUsers": 12,
+      "followers": 220
+    },
+    {
+      "day": "D2",
+      "group": "小组A",
+      "member": "成员02",
+      "work": "作品005",
+      "type": "品宣型",
+      "method": "情绪叙事",
+      "vv": 720000,
+      "newUsers": 3,
+      "followers": 680
+    },
+    {
+      "day": "D2",
+      "group": "小组B",
+      "member": "成员03",
+      "work": "作品006",
+      "type": "效果型",
+      "method": "场景演示",
+      "vv": 160000,
+      "newUsers": 7,
+      "followers": 150
+    },
+    {
+      "day": "D3",
+      "group": "小组A",
+      "member": "成员01",
+      "work": "作品007",
+      "type": "效果型",
+      "method": "问题解题",
+      "vv": 210000,
+      "newUsers": 11,
+      "followers": 190
+    },
+    {
+      "day": "D3",
+      "group": "小组A",
+      "member": "成员02",
+      "work": "作品008",
+      "type": "品宣型",
+      "method": "情绪叙事",
+      "vv": 650000,
+      "newUsers": 2,
+      "followers": 590
+    },
+    {
+      "day": "D3",
+      "group": "小组B",
+      "member": "成员03",
+      "work": "作品009",
+      "type": "效果型",
+      "method": "场景演示",
+      "vv": 190000,
+      "newUsers": 9,
+      "followers": 170
+    },
+    {
+      "day": "D4",
+      "group": "小组A",
+      "member": "成员01",
+      "work": "作品010",
+      "type": "效果型",
+      "method": "问题解题",
+      "vv": 270000,
+      "newUsers": 14,
+      "followers": 250
+    },
+    {
+      "day": "D4",
+      "group": "小组A",
+      "member": "成员02",
+      "work": "作品011",
+      "type": "品宣型",
+      "method": "情绪叙事",
+      "vv": 800000,
+      "newUsers": 3,
+      "followers": 740
+    },
+    {
+      "day": "D4",
+      "group": "小组B",
+      "member": "成员03",
+      "work": "作品012",
+      "type": "效果型",
+      "method": "场景演示",
+      "vv": 230000,
+      "newUsers": 12,
+      "followers": 210
+    }
+  ],
+  "production": [
+    {
+      "member": "成员01",
+      "group": "小组A",
+      "produced": 5
+    },
+    {
+      "member": "成员02",
+      "group": "小组A",
+      "produced": 5
+    },
+    {
+      "member": "成员03",
+      "group": "小组B",
+      "produced": 5
+    }
+  ]
+}

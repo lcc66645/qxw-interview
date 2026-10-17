@@ -7,14 +7,16 @@
 五个二级视图共用一个入口、导航和工作室背景：
 
 - `#/capabilities`：关于我、立体人物和三个核心能力摘要。
-- `#/experience`：新增规划、个人职责、80/20内容任务、人群判断和日常增长承接链路，不提前展开具体项目。
-- `#/methods`：三组OKR置顶，摘要直接展示阶段成果；展开查看8条KR对应的管理动作与交付。质量、成本和预算证据另行收起。
+- `#/experience`：目标判断→增长策略→预算控制三段；只保留一个新增规划，80/20排期、相邻周成果和模型成本分级各有位置，不提前展开具体项目。
+- `#/methods`：数据分析→内容×业务复盘→团队执行三段，不再重复OKR。匿名演示工作台按采集、透视、诊断、行动切换，表图共用一个小组筛选；实际团队规模与示例数据分开展示。
 - `#/insights`：三项个人能力→单套点击展开工作流→5条纵向作品链接。账号链接放在矩阵能力内，工具概述放在工作流内，《小老板》详细案例/附件在第一条作品下默认收起。
-- `#/skills`：AI小懂内容只在此页展开。保留项目数据、三个能力视角和3条反例；卖点份额图/9卖点效率表放在增长视角，活动预算/结算放在团队视角。
+- `#/skills`：AI小懂内容只在此页展开。保留项目数据、三个能力视角和3条反例；卖点份额图/9卖点效率表与活动预算/结算都放在增长视角。
 
 历史路由键保留，顶部名称已更新。旧工作分点、成本、案例深链接自动定位到对应新视图。没有独立问答稿、时间线、岗位迁移或虚构雇主经历。
 
-`presentation.dimensions`是三个维度的展示内容，每维一句核心判断、三项动作与数据证据。JD截图仅指导内容优先级；不补写B端付费、SaaS续费、Agent配置上线或产品/算法迭代业绩。基础SQL不写成高级SQL。
+`presentation.dimensions`保留首页三个维度摘要和个人三点。增长/团队详细页直接按三个编号板块展开，不再追加一套能力文案。JD截图仅指导内容优先级；不补写B端付费、SaaS续费、Agent配置上线或产品/算法迭代业绩。基础SQL不写成高级SQL。
+
+`data/management-demo.json`为用户要求的匿名合成演示，构建时并入共享数据与离线HTML。没有转录真实截图的姓名、账号、UID或作品ID。12条记录驱动明细、成员透视、日度VV/小组拉新、任务诊断及行动表；效率按总拉新/总VV计算。演示不是个人成绩，不与119条活动数据合并。`test-management-analysis.cjs`验证数字一致、表图联动、匿名字段、条宽、键盘和响应式布局。
 
 `presentation.evidenceBoards`定义新增可视化结构。份额图、9卖点表直接从`campaignReview`计算，不另存一套指标；两组份额使用同一0–100%长度标尺。300人/人/月只作为规划，分析样本数量和模板数量分为过程与交付，不冒充增长KR。九个工作流节点自身为native details，默认全部收起，点击原位展开而非在下方重复列标题；点击更新当前阶段URL，刷新可恢复，打印/无脚本首屏展示完整内容。没有收到真实后台/分镜截图，不生成假截图。补充材料要求见`materials-needed.md`。
 
@@ -32,7 +34,7 @@
 
 本机验证：`python -m http.server 4212 --bind 127.0.0.1`。浏览器脚本可设置`BASE_URL`、`PLAYWRIGHT_MODULE`与`CHROMIUM_PATH`。
 
-1. `node scripts/test-pages.cjs`：25种视图/尺寸组合、目标/交付分离、份额图计算及实际条宽、9卖点表、OKR前置与8条管理映射、九步内容和刷新跳转、12个链接、编辑上传、打印、查看器及离线交互。用`PREVIEW_PATH=downloads/portfolio-final.html`生成默认交付文件。
+1. `node scripts/test-pages.cjs`：25种视图/尺寸组合、目标/预算分工、份额图及条宽、9卖点表、匿名分析及管理表、九步内容和刷新跳转、12个链接、编辑上传、打印、查看器及离线交互。用`PREVIEW_PATH=downloads/portfolio-final.html`生成默认交付文件；另运行`test-management-analysis.cjs`验证联动分析的精确计算。
 2. `node scripts/test-creator-motion.cjs`、`test-hero-capabilities.cjs`、`test-studio-scene.cjs`：动态、生命周期、人物像素与响应式取景。
 3. `HTML_PATH=downloads/portfolio-final.html node scripts/test-standalone.cjs`：UTF-8、无正文代码、无脚本首屏、离线导航、人物动画；生成ZIP。
 4. `node scripts/build-download-manifest.cjs`；随后用同一`HTML_PATH`执行`test-delivery.cjs`，检查实际ZIP、25种组合与二次导出；`test-public-downloads.cjs`检查同源下载字节。

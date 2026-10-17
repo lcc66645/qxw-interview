@@ -165,7 +165,7 @@
       $('#capability-grid').append(article);
     });
   }
-  function renderDimension(index, { before, afterIntro, showMetrics = true, showCaseLink = true } = {}) {
+  function renderDimension(index, { before, afterIntro, showMetrics = true, showCaseLink = true, showPoints = true } = {}) {
     const dimension = initial.presentation.dimensions[index];
     const parent = $('#dimension-content'); parent.dataset.dimension = dimension.key;
     if (before) before(parent);
@@ -173,11 +173,12 @@
     if (index === 2 && showMetrics) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
     if (afterIntro) afterIntro(parent);
     const list = document.createElement('div'); list.className = 'dimension-points';
-    dimension.points.forEach(point => {
+    if (showPoints && index === 2) text(list, 'h2', '01 / 个人成果', 'board-title');
+    if (showPoints) dimension.points.forEach((point, pointIndex) => {
       const item = document.createElement('section'); item.className = 'dimension-point';
-      text(item, 'h2', point.title); const copy = document.createElement('div');
+      text(item, 'h3', `${pointIndex + 1}. ${point.title}`); const copy = document.createElement('div');
       text(copy, 'p', point.action); text(copy, 'p', point.evidence, 'dimension-evidence'); item.append(copy); list.append(item);
-    }); parent.append(list);
+    }); if (showPoints) parent.append(list);
     if (index !== 2 && showMetrics) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
     if (showCaseLink) {
       const link = text(parent, 'a', dimension.caseLabel, 'case-anchor dimension-link');
@@ -341,8 +342,7 @@
     }); parent.append(section);
   }
   function renderExperience() {
-    const parent = renderDimension(0, { afterIntro: renderGrowthBoard });
-    text(parent, 'p', '分析工具：Excel数据透视、SUMIFS / RANK.EQ、看板；SQL用于基础查询。', 'dimension-tools');
+    renderDimension(0, { afterIntro: renderGrowthBoard, showPoints: false, showMetrics: false });
   }
   function selectExperiencePanel(key) {
     $$('[data-experience-panel]').forEach(panel => {
@@ -398,10 +398,12 @@
       [['我的判断', decision], ['我的动作', action], ['交付与验证', output]].forEach(([label, value]) => {
         text(reasoning, 'dt', label); text(reasoning, 'dd', value);
       }); section.append(reasoning);
-      if (id === 'case-growth') renderCampaignEvidence(section);
+      if (id === 'case-growth') {
+        renderCampaignEvidence(section);
+        renderMatrixBudget(section);
+      }
       if (id === 'case-team') {
         const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
-        renderMatrixBudget(section);
       }
       parent.append(section);
     });
@@ -455,24 +457,42 @@
     }); parent.append(group);
   }
   function renderTechStack() {
-    renderProjectCase($('#dimension-content')); renderReviewTips();
+    const parent = $('#dimension-content');
+    pageOutline(parent, [['case-results', '项目结果', '项目成绩与个人交付分开'], ['case-growth', '能力拆解', '增长判断 / 团队推进 / 创作验证'], ['pitfall-review', '反例分析', '差异 → 判断 → 下一轮动作']]);
+    renderProjectCase(parent); renderReviewTips();
   }
   function renderMethods() {
-    const parent = renderDimension(1, { before: parent => renderOKR(parent, source.jobs[0]), afterIntro: parent => {
-      const section = boardSection(parent, 'collaboration-map', '管理分工 / 谁验证，谁复制，谁回收');
-      flowMap(section, initial.presentation.evidenceBoards.collaboration);
-      text(section, 'p', '结果回到人群、卖点和脚本；模板由维护人更新，再进入下一轮生产。', 'board-return');
-    } });
-    const workflow = workDisclosure(parent, 'production-workflow', '交付标准与内容资产');
+    const parent = renderDimension(1, { showPoints: false, showMetrics: false, showCaseLink: false });
+    pageOutline(parent, [['team-analysis', '数据分析', '采集 → 汇总 → 诊断 → 行动'], ['team-review', '内容×业务复盘', '问题 → 假设 → 内容修改 → 验证'], ['team-execution', '团队管理', '分工 → 验收 → 复用 → 反馈']]);
+    renderTeamAnalysis(parent);
+    const review = boardSection(parent, 'team-review', '02 / 内容×业务复盘');
+    text(review, 'p', '我把数据差异翻译成脚本修改要求，而不是用播放排名替代内容判断。', 'board-objective');
+    flowMap(review, [['定位差异', '分开看传播、拉新与回访'], ['回看片段', '核对人群、卖点与功能动作'], ['形成假设', '每轮明确要改什么、为什么'], ['回收验证', '有效结构入库，反例写入检查项']]);
+    boardTable(review, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
+      ['有播放、少新增', '先查使用动机与任务承接，不直接否定题材', '把功能放进角色难题；核对组件与发布条件', '同类内容分别比较VV与每百万VV拉新'],
+      ['拉活强、拉新弱', '区分唤醒与获新，不用同一排名评价', '单列回访任务，调整新增任务选题', '分别回收拉新、拉活，避免混加'],
+      ['同模板表现分化', '下钻人群、开头与功能动作，区分内容差异与分发影响', '保留有效结构，优先修改一个关键变量', '记录改动与同期表现，判断能否复用']
+    ], 'review-action-table');
+    const caseLink = text(review, 'a', '查看真实项目中的诊断与取舍', 'case-anchor'); caseLink.href = pageHref('skills', 'case-growth'); caseLink.append(iconElement('arrow-up-right'));
+    const execution = boardSection(parent, 'team-execution', '03 / 团队管理与交付');
+    text(execution, 'p', '我把复盘结论落实到任务、验收标准与维护责任，跟进至下一轮验证。', 'board-objective');
+    metrics(execution, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
+    boardTable(execution, '管理动作与可检查交付', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
+      ['目标对齐', '按内容任务拆到小组与个人；双周与业务校准', '负责人定方向，组长承接排期', '排期表 / 每条内容的任务'],
+      ['交付检查', '统一9步流程、六维质检和P0–P3分级', '组长检查，创作者修正', '验收清单 / 退回原因 / 修复记录'],
+      ['验证与复制', '创意组验证，二创组复用；指定模板维护人', '贡献人说明适用场景，维护人更新', '模板版本 / 人物车型资产 / 反例'],
+      ['复盘跟进', '日报看波动，周报看人群×卖点×方法', '组长回收，负责人决定继续或调整', '行动项 / 责任角色 / 验证时间']
+    ], 'management-table');
+    const workflow = workDisclosure(execution, 'production-workflow', '交付标准与协作示意');
     evidenceFigure(workflow, 'production', '9步交付与六维质检');
     evidenceFigure(workflow, 'team', '团队分工与矩阵协作');
-    renderProductionCost(parent);
   }
   function renderInsights() {
-    const parent = renderDimension(2, { showMetrics: false, showCaseLink: false });
+    const parent = renderDimension(2, { showMetrics: false, showCaseLink: false, afterIntro: parent => pageOutline(parent, [['creation-abilities', '个人成果', '矩阵运营 / 传播获客 / 持续增长'], ['creation-workflow', '创作工作流', '选题到复盘，逐点展开'], ['featured-evidence', '代表作品', '成片链接与制作拆解']]) });
+    parent.querySelector('.dimension-points').id = 'creation-abilities';
     renderCreationBoard(parent);
     const works = document.createElement('section'); works.className = 'authored-work';
-    text(works, 'h2', '个人代表作品');
+    text(works, 'h2', '03 / 个人代表作品');
     const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
     works.append(evidence); parent.append(works); renderEvidence();
   }
@@ -513,12 +533,95 @@
       list.append(item);
     }); parent.append(list);
   }
+  function pageOutline(parent, items) {
+    const nav = document.createElement('nav'); nav.className = 'page-outline'; nav.setAttribute('aria-label', '本页结构');
+    items.forEach(([id, title, note], index) => {
+      const link = document.createElement('a'); link.href = pageHref(currentPage, id);
+      text(link, 'span', String(index + 1).padStart(2, '0'), 'outline-number');
+      const copy = document.createElement('span'); text(copy, 'strong', title); text(copy, 'small', note); link.append(copy); nav.append(link);
+    }); parent.append(nav);
+  }
+  function renderTeamAnalysis(parent) {
+    const section = boardSection(parent, 'team-analysis', '01 / 数据分析：从作品明细到管理决策');
+    text(section, 'p', '我搭建作品级回收表，按账号、小组、平台和内容类型汇总；先定位差异，再下钻脚本与分发条件。', 'board-objective');
+    text(section, 'p', 'Excel数据透视 / SUMIFS / RANK.EQ · 日报监测、周报诊断、双周业务复盘', 'board-note');
+    const demo = document.createElement('div'); demo.id = 'analysis-demo'; demo.className = 'analysis-demo';
+    text(demo, 'p', initial.presentation.managementDemo.label, 'demo-label');
+    const controls = document.createElement('div'); controls.className = 'analysis-controls';
+    const filterLabel = text(controls, 'label', '小组筛选'); filterLabel.htmlFor = 'demo-group';
+    const select = document.createElement('select'); select.id = 'demo-group';
+    ['全部小组', '小组A', '小组B'].forEach((name, index) => { const option = text(select, 'option', name); option.value = index ? name : ''; });
+    controls.append(select); text(controls, 'span', initial.presentation.managementDemo.period, 'board-note'); demo.append(controls);
+    const tablist = document.createElement('div'); tablist.className = 'analysis-steps'; tablist.setAttribute('role', 'tablist'); tablist.setAttribute('aria-label', '数据分析流程');
+    const labels = ['采集校验', '透视汇总', '交叉诊断', '行动验证'];
+    const panel = document.createElement('div'); panel.id = 'analysis-panel'; panel.setAttribute('role', 'tabpanel'); panel.tabIndex = 0;
+    let stage = 1;
+    const buttons = labels.map((label, index) => {
+      const button = text(tablist, 'button', `${String(index + 1).padStart(2, '0')} / ${label}`); button.type = 'button';
+      button.id = `analysis-tab-${index + 1}`; button.setAttribute('role', 'tab'); button.setAttribute('aria-controls', panel.id);
+      button.addEventListener('click', () => { stage = index; update(); });
+      button.addEventListener('keydown', event => {
+        const next = event.key === 'ArrowRight' ? (index + 1) % 4 : event.key === 'ArrowLeft' ? (index + 3) % 4 : event.key === 'Home' ? 0 : event.key === 'End' ? 3 : null;
+        if (next === null) return; event.preventDefault(); stage = next; update(); buttons[next].focus();
+      }); return button;
+    });
+    const sum = rows => rows.reduce((total, row) => ({ vv: total.vv + row.vv, newUsers: total.newUsers + row.newUsers, followers: total.followers + row.followers, published: total.published + 1 }), {vv:0,newUsers:0,followers:0,published:0});
+    const perMillion = total => total.vv ? (total.newUsers / total.vv * 1000000).toFixed(1) : '—';
+    const wan = value => `${(value / 10000).toFixed(1)}万`;
+    const aggregate = (rows, key) => [...new Set(rows.map(row => row[key]))].map(name => ({name, ...sum(rows.filter(row => row[key] === name))}));
+    function bars(parent, caption, rows, valueKey, format) {
+      const figure = document.createElement('figure'); figure.className = 'demo-bars'; text(figure, 'figcaption', caption);
+      const max = Math.max(...rows.map(row => row[valueKey]), 1);
+      rows.forEach(row => {
+        const item = document.createElement('div'); item.className = 'demo-bar-row'; text(item, 'span', row.name);
+        const track = document.createElement('span'); track.className = 'demo-bar-track'; track.setAttribute('aria-hidden', 'true');
+        const mark = document.createElement('span'); mark.style.width = `${row[valueKey] / max * 100}%`; track.append(mark); item.append(track);
+        text(item, 'strong', format(row[valueKey])); figure.append(item);
+      }); parent.append(figure);
+    }
+    function update() {
+      buttons.forEach((button, index) => { button.setAttribute('aria-selected', String(index === stage)); button.tabIndex = index === stage ? 0 : -1; });
+      panel.setAttribute('aria-labelledby', buttons[stage].id); panel.replaceChildren();
+      const rows = initial.presentation.managementDemo.rows.filter(row => !select.value || row.group === select.value);
+      const total = sum(rows);
+      metrics(panel, [{label:'演示作品',value:`${rows.length}条`}, {label:'演示VV',value:wan(total.vv)}, {label:'演示拉新',value:`${total.newUsers}人`}, {label:'每百万VV拉新',value:`${perMillion(total)}人`}]).classList.add('demo-metrics');
+      const instructions = [
+        '采集：以作品为最小单元，校验作品ID、日期、发布与归因窗口；空值和未回收不填成0。',
+        '汇总：先按成员与小组聚合，再看发布、涨粉和新增；效率由合计拉新÷合计VV计算，不平均每条比率。',
+        '诊断：区分品宣与效果任务；同时比较业务量、效率和样本，不因小样本高比率就直接放量。',
+        '行动：明确内容改动、责任角色、复查时间和指标；回收后决定继续验证、复制或停止。'
+      ];
+      text(panel, 'p', instructions[stage], 'analysis-reading');
+      if (stage === 0) {
+        boardTable(panel, '作品级回收明细 · 演示', ['日期','作品','成员 / 小组','内容任务 / 方法','VV','拉新','每百万VV拉新'], rows.map(row => [row.day,row.work,`${row.member} / ${row.group}`,`${row.type} / ${row.method}`,wan(row.vv),`${row.newUsers}人`,`${perMillion(row)}人`]), 'demo-detail-table');
+      } else if (stage === 1) {
+        boardTable(panel, '成员维度透视 · 演示 · 生产数关联同周期生产台账', ['成员','小组','发布 / 生产','VV','涨粉','拉新','每百万VV拉新'], aggregate(rows,'member').map(row => [row.name,rows.find(item => item.member === row.name).group,`${row.published} / ${initial.presentation.managementDemo.production.find(item => item.member === row.name).produced}`,wan(row.vv),row.followers,`${row.newUsers}人`,`${perMillion(row)}人`]), 'demo-pivot-table');
+        const charts = document.createElement('div'); charts.className = 'analysis-charts';
+        bars(charts, '日度VV · 演示 · 零基线', aggregate(rows,'day'), 'vv', wan);
+        bars(charts, '小组拉新 · 演示 · 零基线', aggregate(rows,'group'), 'newUsers', value => `${value}人`); panel.append(charts);
+      } else if (stage === 2) {
+        boardTable(panel, '任务分层诊断 · 演示', ['任务','作品数','VV','拉新','每百万VV拉新','评价重点'], aggregate(rows,'type').map(row => [row.name,row.published,wan(row.vv),`${row.newUsers}人`,`${perMillion(row)}人`,row.name === '效果型' ? '新增与功能使用动机' : '传播、认知与回访']), 'demo-diagnosis-table');
+        const members = aggregate(rows,'member');
+        bars(panel, '成员拉新效率 · 演示 · 人 / 百万VV · 零基线', members.map(row => ({name:row.name,efficiency:Number(perMillion(row))})), 'efficiency', value => `${value.toFixed(1)}人`);
+        text(panel, 'p', '判断：不能把品宣内容的曝光优势视为获新优势；效果内容先验证功能动机与任务承接，再考虑复制。', 'board-return');
+      } else {
+        boardTable(panel, '诊断 → 行动 → 验证 · 演示', ['发现 / 假设','下一步动作','责任角色','复查指标'], [
+          ['如播放与获新排序不一致', '拆开品宣与效果看板，回查功能动作', '分析 / 内容负责人', '同任务拉新量、每百万VV拉新'],
+          ['如出现可复制的效果结构', '保留解题路径，替换场景与开头验证', '创意组 / 二创组', '多条作品表现、样本稳定性'],
+          ['生产数与发布数存在差异', '逐条核对待审、退回、排期，不直接判为浪费', '组长 / 审核', '差异原因与待办关闭情况'],
+          ['需判断是否值得继续放量', '补齐实际消耗及同期可比样本后再决策', '运营 / 业务协同', '总消耗、归因新增、质量风险']
+        ], 'demo-actions-table');
+      }
+    }
+    select.addEventListener('change', update); demo.append(tablist, panel); section.append(demo); update();
+  }
   function renderGrowthBoard(parent) {
     const board = initial.presentation.evidenceBoards.growth;
-    const goals = boardSection(parent, 'growth-goal', 'OKR / 把新增目标拆成有效内容');
+    pageOutline(parent, [['growth-goal', '目标判断', '以拉新为主，不把VV当增长'], ['growth-channels', '增长策略', '人群 × 内容 × 分发承接'], ['growth-budget', '预算控制', '测试 → 验证 → 放量']]);
+    const goals = boardSection(parent, 'growth-goal', '01 / 增长目标与指标取舍');
     text(goals, 'p', board.objective, 'board-objective'); text(goals, 'p', board.ownership, 'board-note');
     const list = document.createElement('dl'); list.className = 'growth-krs';
-    board.keyResults.forEach(([label, value, action]) => {
+    board.keyResults.slice(0, 1).forEach(([label, value, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); text(row, 'dd', value); text(row, 'p', action); list.append(row);
     }); goals.append(list);
     const policy = board.operatingPolicy;
@@ -534,12 +637,28 @@
     text(priorities, 'p', `排期要求：${policy.execution}`, 'board-note'); goals.append(priorities);
     const types = document.createElement('dl'); types.className = 'policy-content-types';
     policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); priorities.append(types);
-    const path = boardSection(parent, 'growth-channels', '增长链路 / 触达如何接上产品使用');
+    const path = boardSection(parent, 'growth-channels', '02 / 增长策略与验证');
     flowMap(path, board.path);
     const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
     board.decisions.forEach(([label, title, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
     }); path.append(decisions);
+    const comparison = document.createElement('figure'); comparison.className = 'weekly-comparison';
+    text(comparison, 'figcaption', '矩阵阶段表现 · 相邻两周拉新 · 人 · 零基线');
+    [[71, '前一周'], [212, '后一周']].forEach(([value, label]) => {
+      const row = document.createElement('div'); row.className = 'comparison-row'; text(row, 'span', label);
+      const track = document.createElement('span'); track.className = 'comparison-track';
+      const mark = document.createElement('span'); mark.style.width = `${value / 212 * 100}%`; track.append(mark); row.append(track); text(row, 'strong', `${value}人`); comparison.append(row);
+    }); text(comparison, 'p', '环比 +198.6% · 矩阵相邻两周表现', 'board-note'); path.append(comparison);
+    const budget = boardSection(parent, 'growth-budget', '03 / 预算与生产成本控制');
+    text(budget, 'p', '按新增效率分配测试与放量资源，按镜头要求控制生成与返工消耗。', 'board-objective');
+    boardTable(budget, '预算决策与成本约束', ['环节','我的动作','决策依据','交付'], [
+      ['测试前', '前置对齐任务预算、组件与发布条件', '内容能否归因、是否具备承接条件', '任务检查表 / 预算需求'],
+      ['测试后', '回收新增与内容表现，用有效样本争取资源', '拉新量、每百万VV拉新与实际消耗分开看', '放量建议 / 下一轮验证项'],
+      ['生产中', '按内容等级分配模型，先定位返工原因', '画质、表演要求与生成消耗', '模型规范 / 返工检查项'],
+      ['放量时', '复用已验证结构，检查质量和转化是否衰减', '不以积分额度代替实际支出', '模板与发布记录 / 复盘结论']
+    ], 'budget-decision-table');
+    renderProductionCost(budget);
   }
   function renderCampaignEvidence(parent) {
     const board = initial.presentation.evidenceBoards.growth;
@@ -595,7 +714,7 @@
   }
   function renderCreationBoard(parent) {
     const board = initial.presentation.evidenceBoards.creation;
-    const section = boardSection(parent, 'creation-workflow', '个人工作流 / 从用户问题到成片，再回到数据');
+    const section = boardSection(parent, 'creation-workflow', '02 / 个人工作流：从用户问题到成片，再回到数据');
     const tools = text(section, 'p', '工具概述：内部画布Auto Agent组织制作，ChatGPT生成图片，Seedance 2.5 / 2.0生成视频；Excel回收分析，Prompt与素材库支持复用。', 'board-note'); tools.id = 'creation-tools';
     const steps = document.createElement('div'); steps.className = 'creation-map';
     board.stages.forEach((stage, index) => {
@@ -622,12 +741,15 @@
       'case-stage-4': ['skills', 'case-team'], 'case-stage-5': ['skills', 'case-results'], 'case-stage-6': ['skills', 'pitfall-review']
     };
     if (aliases[anchor]) return aliases[anchor];
-    if (['production-cost-control', 'production-workflow', 'team-okr'].includes(anchor)) return ['methods', anchor];
+    if (anchor === 'production-cost-control') return ['experience', anchor];
+    if (anchor === 'production-workflow') return ['methods', anchor];
+    if (anchor === 'team-okr' || anchor === 'okr-1') return ['methods', 'team-analysis'];
+    if (anchor === 'okr-2' || anchor === 'collaboration-map') return ['methods', 'team-execution'];
+    if (anchor === 'okr-3') return ['methods', 'team-review'];
     if (['matrix-budget-control', 'growth-evidence', 'selling-point-data'].includes(anchor)) return ['skills', anchor];
     if (['case-growth', 'case-team', 'case-creation', 'case-results'].includes(anchor)) return ['skills', anchor];
     if (anchor === 'featured-evidence' || anchor === 'creation-tools') return ['insights', anchor];
     if (['creator-xiaolaoban', 'prompt-opening', 'prompt-performance', 'prompt-brand'].includes(anchor)) return ['insights', anchor];
-    if (/^okr-[1-3]$/.test(anchor)) return ['methods', anchor];
     return [id, anchor];
   }
   function pageHref(id, anchor = '') {
@@ -908,6 +1030,14 @@
         panel.setAttribute('aria-label', clone.querySelector(`#${panel.getAttribute('aria-labelledby')}`)?.textContent || '工作实践'); panel.removeAttribute('aria-labelledby');
       });
       main.querySelector('.experience-tabs')?.remove();
+      const analysis = main.querySelector('#analysis-demo');
+      if (analysis) {
+        const panel = analysis.querySelector('[role="tabpanel"]');
+        const context = `${initial.presentation.managementDemo.period} · ${$('#demo-group').value || '全部小组'} · ${analysis.querySelector('[aria-selected="true"]').textContent}`;
+        const note = text(analysis, 'p', context, 'board-note'); analysis.insertBefore(note, panel);
+        panel.removeAttribute('aria-labelledby'); panel.setAttribute('aria-label', context);
+        analysis.querySelectorAll('.analysis-controls, .analysis-steps').forEach(element => element.remove());
+      }
       main.querySelectorAll('details').forEach(detail => { detail.open = true; });
       clone.querySelectorAll('[data-attachment]').forEach(link => {
         const attachment = attachments.find(item => item.id === link.dataset.attachment);

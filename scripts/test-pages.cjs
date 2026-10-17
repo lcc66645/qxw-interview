@@ -78,37 +78,35 @@ async function check(page, id) {
         }
         if (['experience', 'methods', 'insights'].includes(id)) {
           const dimension = data.presentation.dimensions.find(item => item.page === id);
-          assert.equal(await page.locator('.dimension-point').count(), 3);
+          assert.equal(await page.locator('.dimension-point').count(), id === 'insights' ? 3 : 0);
           assert.equal(await page.locator('.dimension-thesis').textContent(), dimension.thesis);
-          assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), dimension.points.map(item => item.evidence));
-          assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), id === 'insights' ? [] : dimension.metrics.map(item => item.value));
-          assert((await page.locator('.dimension-points').innerText()).length < 650, 'Capability summaries stay concise alongside visual evidence');
-          assert((await page.locator('main').innerText()).length < ({ experience: 2200, methods: 1200, insights: 2400 }[id]), 'Default visual boards keep bounded copy; complete prompts remain in disclosures/attachment');
+          assert.deepEqual(await page.locator('.dimension-evidence').allTextContents(), id === 'insights' ? dimension.points.map(item => item.evidence) : []);
+          assert.deepEqual(await page.locator('.dimension-metrics dd').allTextContents(), id === 'methods' ? dimension.metrics.map(item => item.value) : []);
+          assert.equal(await page.locator('.page-outline a').count(), 3);
+          if (id === 'insights') assert((await page.locator('.dimension-points').innerText()).length < 650);
+          assert((await page.locator('main').innerText()).length < ({ experience: 2600, methods: 2800, insights: 2600 }[id]), 'Numbered sections keep bounded copy; detailed prompts remain collapsed');
         }
         if (id === 'experience') {
-          assert.equal(await page.locator('.growth-krs > div').count(), 3);
+          assert.equal(await page.locator('.growth-krs > div').count(), 1);
           assert.equal(await page.locator('.growth-krs dd').first().textContent(), '300人 / 人 / 月');
           assert((await page.locator('.growth-krs p').first().textContent()).includes('规划'));
           assert.deepEqual(await page.locator('.policy-content-types dt').allTextContents(), ['品宣型', '效果型']);
           assert((await page.locator('.policy-labels').innerText()).includes('至少80%'));
           assert((await page.locator('.growth-policy').innerText()).includes('排期要求'));
-        }
-        if (id === 'methods') {
-          assert.equal(await page.locator('.okr-row').count(), 3); assert.equal(await page.locator('.okr-results li').count(), 8);
-          assert.equal(await page.locator('#dimension-content').evaluate(el => el.firstElementChild.id), 'team-okr');
-          assert.equal(await page.locator('#collaboration-map .evidence-flow li').count(), 4);
-          assert.equal(await page.locator('main details[open]').count(), 0);
-          for (let i = 0; i < 3; i++) {
-            const row = page.locator('.okr-row').nth(i); await row.locator('summary').click();
-            assert.deepEqual(await row.locator('.management-table tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent))), data.presentation.evidenceBoards.team[i].management);
-            assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-            await row.locator('summary').click();
-          }
           await page.locator('#production-cost-control > summary').click();
           assert.deepEqual(await page.locator('.cost-segment strong').allTextContents(), ['495 token', '约135 token']);
           assert.deepEqual(await page.locator('.cost-policy tbody tr td:first-of-type').allTextContents(), ['Seedance 2.5', 'Seedance 2.0', '禁用2.5']);
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
           await page.locator('#production-cost-control > summary').click();
+        }
+        if (id === 'methods') {
+          assert.equal(await page.locator('.okr-row, .okr-results, #production-cost-control').count(), 0);
+          assert.equal(await page.locator('#team-review .evidence-flow li').count(), 4);
+          assert.deepEqual(await page.locator('#team-analysis > h2, #team-review > h2, #team-execution > h2').allTextContents(), ['01 / 数据分析：从作品明细到管理决策', '02 / 内容×业务复盘', '03 / 团队管理与交付']);
+          assert.equal(await page.locator('main details[open]').count(), 0);
+          assert.equal(await page.locator('.management-table tbody tr').count(), 4);
+          assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 3);
+          assert((await page.locator('#analysis-demo').innerText()).includes('匿名演示数据'));
         }
         if (id === 'insights') {
           assert.equal(await page.locator('.creation-stage[open], #creator-case-detail[open], .creation-stages, details#creation-tools').count(), 0);
@@ -187,7 +185,8 @@ async function check(page, id) {
       ['#/experience/competence-0-0', 'methods', 'production-workflow'], ['#/experience/competence-0-4', 'insights', ''],
       ['#/experience/growth-goal', 'experience', ''], ['#/experience/case-stage-3', 'skills', 'case-growth'],
       ['#/experience/case-stage-4', 'skills', 'case-team'], ['#/experience/pitfall-review', 'skills', 'pitfall-review'],
-      ['#/experience/production-cost-control', 'methods', 'production-cost-control'], ['#competence-0-2', 'experience', ''],
+      ['#/experience/production-cost-control', 'experience', 'production-cost-control'], ['#competence-0-2', 'experience', ''],
+      ['#/methods/team-okr', 'methods', 'team-analysis'], ['#/methods/okr-2', 'methods', 'team-execution'],
       ['#/experience/matrix-budget-control', 'skills', 'matrix-budget-control'], ['#/experience/growth-evidence', 'skills', 'growth-evidence']
     ]) {
       await page.goto(new URL(`index.html${hash}`, base).href); await check(page, expected);
@@ -220,13 +219,19 @@ async function check(page, id) {
       const failed = []; offline.on('requestfailed', request => failed.push(request.url()));
       await offline.goto('https://portfolio.test/offline.html'); assert(await offline.locator('#methods').isVisible());
       if (javaScriptEnabled) for (const id of ids) { await offline.locator(`nav [data-page-link="${id}"]`).click(); await check(offline, id); }
-      else assert(await offline.locator('.cost-policy').isVisible());
+      else {
+        assert(await offline.locator('.demo-pivot-table').isVisible());
+        assert(await offline.locator('.management-table').isVisible());
+        assert.equal(await offline.locator('.cost-policy').count(), 0);
+        assert.equal(await offline.locator('.analysis-steps, .analysis-controls').count(), 0, 'Static first paint must not show dead tab/filter controls');
+        assert((await offline.locator('#analysis-demo').innerText()).includes('演示周 · D1–D4 · 全部小组'));
+      }
       assert.deepEqual(failed, []); await offlineContext.close();
     }
     const clean = await browser.newContext({ reducedMotion: 'reduce' }); const preview = await clean.newPage(); await preview.goto(route('capabilities'));
     await preview.locator('#edit-profile').click(); const final = preview.waitForEvent('download'); await preview.locator('#export-site').click();
     await (await final).saveAs(process.env.PREVIEW_PATH || `${output}/portfolio-final.html`); await clean.close();
     assert.deepEqual(errors, []); assert.deepEqual(failures, []);
-    console.log('PASS 25 view/size combinations, growth goals and source-derived share bars/9-row table, OKR-first management/8 mappings, 9 production-analysis steps and reload links, unchanged campaign, 12 evidence links, legacy routes, editing/uploads, print, viewer and offline export.');
+    console.log('PASS 25 view/size combinations, one growth goal/budget owner, anonymous analysis workflow and management tables, source-derived share bars/9-row table, 9 creation steps and reload links, unchanged campaign, 12 evidence links, legacy routes, editing/uploads, print, viewer and offline export.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
