@@ -209,6 +209,9 @@ async function checkPage(page, id) {
     }
     await offline.goBack(); await checkPage(offline, 'insights'); await offline.goForward(); await checkPage(offline, 'skills');
     await offline.locator('nav [data-page-link="methods"]').click(); await offline.locator('.method-application').nth(1).click();
+    await offline.locator('#growth-goal').waitFor(); assert(await offline.locator('#growth-strategy').evaluate(el => el.open));
+    assert.deepEqual(await offline.locator('.goal-formula dd').allTextContents(), ['10', '30', '300']);
+    await offline.locator('#growth-strategy > .case-anchor').click();
     await offline.locator('#business-review').waitFor(); assert(await offline.locator('#business-review').evaluate(el => el.open));
     assert.equal(await offline.locator('.tip-project-title').textContent(), '增长复盘验证');
     await offline.locator('#edit-profile').click(); const again = offline.waitForEvent('download'); await offline.locator('#export-site').click();

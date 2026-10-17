@@ -173,6 +173,7 @@
     text(detail, 'p', example ? `目的：${example.purpose}` : support.goal, 'practice-goal');
     const list = document.createElement('ul'); support.steps.forEach(step => text(list, 'li', step)); detail.append(list); parent.append(detail);
     if (support.deliverable) text(parent, 'p', `我交付：${support.deliverable}`, 'practice-deliverable');
+    if (support.visual === 'growth') renderGrowthStrategy(parent);
     if (example) renderCaseProof(parent, example, 'practice-case', false);
     if (support.visual) evidenceFigure(parent, support.visual, support.caption);
     if (support.visual === 'production') renderProductionCost(parent);
@@ -192,6 +193,65 @@
     const detail = document.createElement('details'); detail.id = id; detail.className = 'work-decision';
     const summary = document.createElement('summary'); text(summary, 'span', title); summary.append(iconElement('arrow-down'));
     detail.append(summary); parent.append(detail); return detail;
+  }
+  function strategySection(parent, title, id) {
+    const section = document.createElement('section'); section.className = 'strategy-section';
+    if (id) section.id = id;
+    text(section, 'h5', title); parent.append(section); return section;
+  }
+  function strategyTable(parent, caption, headings, rows) {
+    const table = document.createElement('table'); table.className = 'strategy-table';
+    text(table, 'caption', caption);
+    const header = table.createTHead().insertRow(); headings.forEach(label => { const cell = text(header, 'th', label); cell.scope = 'col'; });
+    const body = table.createTBody(); rows.forEach(values => {
+      const row = body.insertRow(); values.forEach((value, index) => { const cell = text(row, index ? 'td' : 'th', value); if (!index) cell.scope = 'row'; });
+    }); parent.append(table);
+  }
+  function renderGrowthStrategy(parent) {
+    const strategy = initial.presentation.growthStrategy;
+    const detail = workDisclosure(parent, 'growth-strategy', strategy.title);
+    const business = strategySection(detail, '业务定位'); text(business, 'p', strategy.business);
+    const audience = strategySection(detail, '目标人群与需求任务'); text(audience, 'p', strategy.audience);
+    strategyTable(audience, '用户任务与功能匹配', ['人群任务', '决策难题', '内容承接'], strategy.tasks);
+    const positioning = strategySection(detail, '竞争定位与运营选择'); text(positioning, 'p', strategy.positioning);
+    const goal = strategySection(detail, strategy.goal.title, 'growth-goal');
+    const formula = document.createElement('dl'); formula.className = 'goal-formula';
+    [[strategy.goal.hitsPerMonth, '条高拉新作品/月'], [strategy.goal.acquisitionsPerHit, '人拉新/作品'], [strategy.goal.hitsPerMonth * strategy.goal.acquisitionsPerHit, '人拉新/人/月 · 目标']].forEach(([value, label]) => {
+      const term = document.createElement('div'); text(term, 'dt', label); text(term, 'dd', value); formula.append(term);
+    }); goal.append(formula); text(goal, 'p', strategy.goal.description); text(goal, 'p', strategy.goal.metrics);
+    const progress = document.createElement('figure'); progress.className = 'goal-progress';
+    text(progress, 'figcaption', `${strategy.goal.progress.date} · 月目标进度快照`);
+    [['VV目标进度', strategy.goal.progress.vvPercent], ['拉新目标进度', strategy.goal.progress.acquisitionPercent]].forEach(([label, value]) => {
+      const row = document.createElement('div'); row.className = 'goal-progress-row'; text(row, 'span', label);
+      const track = document.createElement('span'); track.className = 'cost-track'; track.setAttribute('aria-hidden', 'true');
+      const bar = document.createElement('span'); bar.style.width = `${value}%`; track.append(bar); row.append(track); text(row, 'strong', `${value}%`); progress.append(row);
+    }); goal.append(progress); text(goal, 'p', strategy.goal.decision, 'decision-result');
+    const channels = strategySection(detail, '平台布局与分发方式', 'growth-channels');
+    const snapshot = strategy.channels;
+    text(channels, 'p', `${snapshot.period}：全平台${snapshot.totalVv / 10000}万、抖音${snapshot.douyinVv / 10000}万；抖音日VV份额${(snapshot.douyinVv / snapshot.totalVv * 100).toFixed(1)}%。`, 'channel-snapshot');
+    strategyTable(channels, '平台职责', ['平台', '运营角色', '执行重点'], snapshot.platforms);
+    text(channels, 'p', snapshot.decision);
+    const link = text(detail, 'a', '查看AI小懂的完整增长拆解', 'case-anchor'); link.href = pageHref('experience', 'case-stage-1'); link.append(iconElement('arrow-up-right'));
+  }
+  function renderGrowthLoop(parent) {
+    const strategy = initial.presentation.growthStrategy;
+    const path = strategySection(parent, '用户路径 / 从观看动机到产品使用');
+    const steps = document.createElement('ol'); steps.className = 'user-growth-path';
+    strategy.userPath.forEach((label, index) => { const item = text(steps, 'li', label); if (index < strategy.userPath.length - 1) item.append(iconElement('arrow-down')); }); path.append(steps);
+    const loop = strategySection(parent, '运营闭环 / 从内容验证到规模复用');
+    const list = document.createElement('ol'); list.className = 'growth-operation-loop';
+    strategy.operationLoop.forEach(([title, description], index) => {
+      const item = document.createElement('li'); text(item, 'span', String(index + 1).padStart(2, '0'), 'loop-number');
+      const copy = document.createElement('div'); text(copy, 'h5', title); text(copy, 'p', description); item.append(copy); list.append(item);
+    }); loop.append(list); text(loop, 'p', '结果回到人群、卖点与脚本；未跑通的方向继续验证，已验证结构才交给矩阵复制。', 'loop-return');
+  }
+  function renderGrowthDiagnostics(parent) {
+    const list = document.createElement('dl'); list.className = 'growth-diagnostics';
+    initial.presentation.growthStrategy.diagnostics.forEach(item => {
+      const row = document.createElement('div'); text(row, 'dt', item.signal);
+      const copy = document.createElement('dd'); text(copy, 'p', item.evidence, 'diagnostic-evidence');
+      text(copy, 'p', `判断：${item.judgment}`); text(copy, 'p', `我的动作：${item.action}`); row.append(copy); list.append(row);
+    }); parent.append(list);
   }
   function renderProductionCost(parent) {
     const cost = initial.presentation.productionCost;
@@ -312,7 +372,7 @@
     const summary = document.createElement('summary');
     text(summary, 'span', 'CASE 01', 'tip-label');
     const title = document.createElement('span'); title.className = 'tip-heading';
-    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '卖点分析、脚本诊断与下一轮策略');
+    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '业务目标、链路诊断与规模复制');
     summary.append(title); details.append(summary);
     const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body';
     details.append(body); parent.append(details);
@@ -341,26 +401,24 @@
   function renderBusinessReview(parent) {
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
     text(parent, 'p', '我的职责：回收119条视频的增长表现，比较9个业务卖点，逐句拆解TOP13脚本及3条反例；交付卖点优先级、3套模板与下一轮达人选题和投放建议。', 'case-responsibility');
-    const stages = [
-      ['业务目标与增长分析', '业务问题是识别内容对拉新和老用户唤醒的不同贡献。我回收119条视频的VV、拉新与拉活，按9个卖点比较表现，再从选车、查优惠、贷款计算和二手车搜索等需求下钻。交付是卖点表现对照与待优先分析的内容清单。', '增长分析与业务判断'],
-      ['内容策略与脚本诊断', '我逐句拆解TOP13脚本与3条反例，标记“角色任务—剧情冲突—工具动作—决策结果”。贷款算账与借车讲车分别承接购车信息决策和语音讲车需求；我据此提炼3套模板及功能、场景匹配的审核检查项。', '内容策略与一线创作判断'],
-      ['生产交付与团队协作', '我将分析结论整理为模板、脚本检查项与下一轮改稿建议，衔接创意组验证和二创组复用。日常懂车帝AIGC矩阵由我推进9步流程、人物/车型资产和六维验收，明确生成、剪辑、审核的交付要求；这部分体现生产负责与方法复用，不将星图投放视频全部算作个人制作。', 'AIGC交付与质量管理'],
-      ['矩阵经营与资源优先级', '我识别出选车优惠、语音讲车两大卖点合计153人拉新，智能找二手车贡献803人拉活。9月起要求低拉新效果账号转星图；10月8日结合活动拉新表现申请更多CPM激励，10月10日推进小懂扩量与生产额度配置。后续将二手车卖点收敛到智能找车、精准估价，并要求周报呈现人群、卖点、内容方法及模板复用。', '矩阵经营与预算协同']
-    ];
-    stages.forEach(([title, description, capability], index) => {
+    const stages = initial.presentation.growthStrategy.caseStages;
+    stages.forEach(({ title, description, capability }, index) => {
       const section = caseStage(index + 1, title, capability); text(section, 'p', description);
-      if (index === 1) {
+      if (index === 0) {
+        const link = text(section, 'a', '查看人群、目标模型与渠道布局', 'case-anchor'); link.href = pageHref('experience', 'growth-strategy'); link.append(iconElement('arrow-up-right'));
+      }
+      if (index === 1) renderGrowthLoop(section);
+      if (index === 2) {
+        renderGrowthDiagnostics(section);
         const examples = document.createElement('div'); examples.className = 'script-examples';
         [['贷款维权', '4S店贷款算账冲突 → 工具介入解题', '252万VV · 67人拉新'], ['借车讲车', '借野马见岳父，不会开手动挡 → AI语音讲车', '266万VV · 35人拉新']].forEach(([title, script, result]) => {
           const item = document.createElement('article'); text(item, 'h5', title); text(item, 'p', script); text(item, 'strong', result); examples.append(item);
         }); section.append(examples);
       }
-      if (index === 2) {
+      if (index === 3) {
         evidenceFigure(section, 'production', '团队日常AIGC生产流程 · 承接脚本、资产与方法复用', 'case-workflow');
         const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
-      }
-      if (index === 3) {
-        const link = text(section, 'a', '查看渠道转向、预算申请与结算检查', 'case-anchor'); link.href = pageHref('experience', 'matrix-budget-control'); link.append(iconElement('arrow-up-right'));
+        const budgetLink = text(section, 'a', '查看渠道转向、预算申请与结算检查', 'case-anchor'); budgetLink.href = pageHref('experience', 'matrix-budget-control'); budgetLink.append(iconElement('arrow-up-right'));
       }
       parent.append(section);
     });

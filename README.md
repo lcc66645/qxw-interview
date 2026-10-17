@@ -48,6 +48,7 @@
 - `data/portfolio.json.presentation`：工作分点的目的、操作、交付物、展示顺序、OKR短标题及深色图表配置，以及方法论成果数据。
 - `presentation.capabilityCases`、`practiceCases`、`methodCases`：分别为五项核心竞争力、懂车帝五条实践、四项方法论提供目的、真实案例、个人动作与成果。`practiceLabels`控制横向入口名称。已删除旧雇主数据及对应工具组，不将其成果转移到懂车帝。
 - `presentation.productionCost`、`matrixBudget`：两个按需展开的管理案例，展示实测片段消耗、三档模型规范、渠道转向、CPM任务准备与追加资源申请；对应深链接为`#/experience/production-cost-control`、`#/experience/matrix-budget-control`。积分额度不作为实际支出，不发布未经兑换关系及账单验证的日成本估算，也不声称已实现成本下降或CPA改善。
+- `presentation.growthStrategy`：业务、人群、规划目标、历史曝光快照及用户路径/运营闭环。`#/experience/growth-strategy`按需展开，目标与渠道分别支持`growth-goal`、`growth-channels`深链接。300人/人/月是目标模型，36.7%是6月底抖音日VV份额，不能分别当作业绩或新增渠道份额。`interview-growth-answers.md`提供13道面试问题的完整配套回答。
 - `assets/qxw-*.png`：按真实项目数据重建的深色流程图、执行分工图与成果图，不是后台截图。使用 `PLAYWRIGHT_MODULE=<Playwright路径> node scripts/build-evidence-visuals.cjs` 重新生成；读取共享内容及活动数据，检查固定画幅内的文字与区块不溢出。
 
 右上角设置按钮打开资料编辑，修改保存在当前浏览器的 `qxw-portfolio-v2` 中，五个二级内容页共享资料。可替换个人肖像及生产、增长、团队三处项目图片，支持PNG、JPG、WebP，单张不超过4MB；容量不足时仍可导出保存。自定义图片随离线文件内嵌。项目文字编辑仅保留当前展示的星图案例。旧版本默认文案会迁移，自定义内容保留。要让所有访客看到同一份更新，需要修改共享数据、重新生成入口，再发布入口、共享脚本与资产。
@@ -86,7 +87,9 @@
 
 ## 验证
 
-成本案例检查：`BASE_URL=http://127.0.0.1:4208/ PLAYWRIGHT_MODULE=<Playwright路径> node scripts/test-production-cost.cjs`，覆盖实测单位、三档规范、预算申请与额度边界、五种尺寸展开/收起、案例链接、离线及禁用脚本可读性。
+增长主线检查：`BASE_URL=http://127.0.0.1:4209/ PLAYWRIGHT_MODULE=<Playwright路径> node scripts/test-growth-strategy.cjs`，覆盖13题、规划目标与历史份额独立计算、六环节新顺序、双链路、五种尺寸、深链接及离线交付。
+
+成本案例检查：`BASE_URL=http://127.0.0.1:4208/ PLAYWRIGHT_MODULE=<Playwright路径> node scripts/test-production-cost.cjs`，覆盖实测单位、三档规范、预算申请与额度边界、五种尺寸展开/收起、案例第4环节链接、离线及禁用脚本可读性。
 
 可选浏览器测试：安装 Playwright 并准备 Chromium 后，先启动静态服务，再执行 `BASE_URL=http://127.0.0.1:4193/ node scripts/test-pages.cjs`。也可用 `PLAYWRIGHT_MODULE` 和 `CHROMIUM_PATH` 指定已有工具路径，`QA_OUTPUT` 指定截图与离线文件目录，`PREVIEW_PATH` 指定独立预览的输出位置。测试覆盖五个视图和五种尺寸、站内切换不加载新文档、不新开标签、案例定位、资料同步、历史导航及离线导出。
 

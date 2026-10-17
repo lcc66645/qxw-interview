@@ -97,7 +97,7 @@ body #main { background: transparent; }
 .job-okr > h4 { padding: 22px 0 14px; margin: 0; font-size: 15px; font-weight: 500; color: #96d8bd; }
 .okr-row { display: block; padding: 0; border-bottom: 1px solid var(--line); }
 .okr-row > summary { display: grid; grid-template-columns: 32px minmax(0, 1fr) 20px; gap: 16px; align-items: center; padding: 20px 0; }
-.okr-row > summary::after, .case-stage > summary::after { content: none; }
+.okr-row > summary::after, .okr-row[open] > summary::after, .case-stage > summary::after, .case-stage[open] > summary::after { content: none; }
 .okr-row > summary .lucide, .case-stage > summary .lucide { width: 17px; height: 17px; transition: transform .2s; }
 .okr-row[open] > summary .lucide, .case-stage[open] > summary .lucide { transform: rotate(180deg); }
 .okr-title { font-size: 15px; font-weight: 500; line-height: 1.8; }
@@ -154,6 +154,42 @@ body #main { background: transparent; }
 .budget-steps { margin: 16px 0 24px; }
 .budget-steps dt { margin-top: 18px; color: #e0e8e2; font-weight: 500; }
 .budget-steps dd { margin: 6px 0 0; }
+.strategy-section { min-width: 0; margin: 24px 0; padding-top: 20px; border-top: 1px solid var(--line); scroll-margin-top: calc(var(--portfolio-header-height, 78px) + 100px); }
+.strategy-section > h5 { color: #e4ede7; margin-bottom: 12px; }
+.strategy-section p { font-size: 13px; line-height: 1.9; color: #c6d2ca; }
+.strategy-table { width: 100%; table-layout: fixed; border-collapse: collapse; margin: 22px 0; font-size: 12px; line-height: 1.8; }
+.strategy-table caption { text-align: left; color: #dfeae2; margin-bottom: 12px; }
+.strategy-table th, .strategy-table td { text-align: left; vertical-align: top; padding: 14px 10px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+.strategy-table th { font-weight: 500; color: #d7e4db; }
+.strategy-table td { color: #bdccc1; }
+.strategy-table thead th:first-child { width: 25%; }
+.strategy-table thead th:nth-child(2) { width: 31%; }
+.goal-formula { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin: 24px 0; }
+.goal-formula > div { display: flex; flex-direction: column-reverse; justify-content: flex-end; gap: 8px; border-left: 1px solid #9bc7ae; padding-left: 14px; min-width: 0; }
+.goal-formula dt { color: #b4c8ba; font-size: 11px; line-height: 1.8; }
+.goal-formula dd { color: #d2eadb; font-size: 28px; font-weight: 500; line-height: 1.4; margin: 0; font-variant-numeric: tabular-nums; }
+.goal-progress { margin: 24px 0; }
+.goal-progress figcaption { font-size: 12px; color: #cadbcf; margin-bottom: 16px; }
+.goal-progress-row { display: grid; grid-template-columns: 94px minmax(10px, 1fr) 52px; gap: 12px; align-items: center; font-size: 12px; margin: 14px 0; }
+.goal-progress-row strong { font-size: 12px; font-weight: 500; text-align: right; }
+.goal-progress-row:last-child .cost-track > span { background: #d0b294; }
+.channel-snapshot { color: #bde4cb !important; }
+.user-growth-path { display: flex; flex-wrap: wrap; gap: 12px 18px; list-style: none; padding: 0; margin: 18px 0; }
+.user-growth-path li { display: flex; align-items: center; gap: 16px; font-size: 13px; color: #c1e0cd; line-height: 1.8; }
+.user-growth-path .lucide { width: 14px; height: 14px; flex: 0 0 14px; color: #99b4a4; transform: rotate(-90deg); }
+.growth-operation-loop { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); list-style: none; gap: 0 24px; padding: 0; margin: 22px 0; }
+.growth-operation-loop li { display: grid; grid-template-columns: 22px minmax(0, 1fr); gap: 12px; border-top: 1px solid var(--line); padding: 18px 0; min-width: 0; }
+.loop-number { font-size: 11px; color: #9bc6ae; line-height: 1.8; }
+.growth-operation-loop h5 { font-size: 13px; font-weight: 500; margin: 0 0 8px; line-height: 1.8; }
+.growth-operation-loop p { margin: 0; font-size: 12px; }
+.strategy-section .loop-return { color: #b5d3c0; border-left: 2px solid #87b69c; padding-left: 12px; }
+.growth-diagnostics { margin: 24px 0; }
+.growth-diagnostics > div { display: grid; grid-template-columns: minmax(100px, 1fr) minmax(0, 3fr); gap: 24px; border-top: 1px solid var(--line); padding: 20px 0; }
+.growth-diagnostics dt { color: #dbe7de; font-size: 13px; line-height: 1.8; }
+.growth-diagnostics dd { margin: 0; }
+.growth-diagnostics p { font-size: 13px; color: #c1cdc4; line-height: 1.9; margin: 0 0 10px; }
+.growth-diagnostics .diagnostic-evidence { color: #b4ddc5; }
+.case-stage > .case-anchor { display: table; margin: 14px 0; }
 .visual-dialog-scroll { background: #171b1c; }
 #project-dialog:has(.expanded-visual) { background: #171b1c; color: #edf3ef; color-scheme: dark; border-color: #687c72; border-radius: 8px; }
 #project-dialog:has(.expanded-visual) > .dialog-close { color: #edf3ef; background: #303a36; }
@@ -179,6 +215,13 @@ body #main { background: transparent; }
   .cost-policy th, .cost-policy td { padding: 12px 5px; }
   .cost-segment { grid-template-columns: 44px minmax(12px, 1fr) 96px; gap: 8px; }
   .decision-timeline li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .strategy-table th, .strategy-table td { padding: 12px 5px; }
+  .goal-formula { gap: 10px; }
+  .goal-formula > div { padding-left: 9px; }
+  .goal-formula dd { font-size: 24px; }
+  .goal-progress-row { grid-template-columns: 88px minmax(10px, 1fr) 48px; gap: 8px; }
+  .growth-operation-loop { grid-template-columns: minmax(0, 1fr); }
+  .growth-diagnostics > div { grid-template-columns: minmax(0, 1fr); gap: 12px; }
   .badcase-comparison { grid-template-columns: minmax(0, 1fr); gap: 16px; }
   .badcase-comparison dd { font-size: 16px; }
 }
@@ -196,6 +239,8 @@ body #main { background: transparent; }
   .paper-band, .paper-band h2, .capability-number, .capability-item h3, .capability-item p, .practice-support, .practice-action, .case-stage > p, .job-intro, .project-visual figcaption { color: #444; }
   .okr-row { break-inside: avoid; }
   .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .decision-date, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose { color: #444; }
+  .strategy-section p, .strategy-section > h5, .strategy-table th, .strategy-table td, .strategy-table caption, .goal-formula dt, .goal-formula dd, .goal-progress figcaption, .user-growth-path li, .growth-operation-loop h5, .growth-diagnostics dt, .growth-diagnostics p, .growth-diagnostics .diagnostic-evidence { color: #444; }
+  .strategy-section .channel-snapshot { color: #444 !important; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }
   .portrait-history h3, .portrait-history h4, .portrait-history p, .portrait-history .portrait-achievement, .portrait-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
   .method-item .method-flow, .case-deliverables, .insight-item .insight-decision, .insight-item .insight-next, .tech-application p { color: #444; }

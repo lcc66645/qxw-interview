@@ -58,9 +58,9 @@ fs.mkdirSync(output, { recursive: true });
       await page.screenshot({ path: `${output}/budget-${width}.png`, fullPage: true });
       for (const forbidden of ['21,850', '21850', '14,850', '成本下降72', 'CPA降低', '已获批', '127条', '17条待补']) assert(!(await page.locator('main').textContent()).includes(forbidden), forbidden);
     }
-    for (const [stage, anchor] of [[3, 'production-cost-control'], [4, 'matrix-budget-control']]) {
+    for (const [stage, anchor] of [[4, 'production-cost-control'], [4, 'matrix-budget-control']]) {
       await page.goto(`${base}#/experience/case-stage-${stage}`);
-      await page.locator(`[data-stage="${stage}"] .case-anchor`).click();
+      await page.locator(`[data-stage="${stage}"] .case-anchor[href$="/${anchor}"]`).click();
       assert.equal(await page.evaluate(() => location.hash), `#/experience/${anchor}`);
       await page.waitForFunction(id => document.getElementById(id)?.open, anchor);
       assert(await page.locator(`#${anchor}`).evaluate(el => el.open));
