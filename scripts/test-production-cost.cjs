@@ -49,7 +49,7 @@ fs.mkdirSync(output, { recursive: true });
       const budget = page.locator('#matrix-budget-control');
       assert(await budget.evaluate(el => el.open));
       assert.equal(await page.locator('.experience-panel:visible').getAttribute('data-experience-panel'), 'competence-0-3');
-      assert.equal(await budget.locator('.decision-timeline li').count(), 4);
+      assert.equal(await budget.locator('.matrix-decisions > div').count(), 4);
       assert.equal(await budget.locator('.budget-steps dt').count(), 4);
       const copy = await budget.innerText();
       for (const fact of ['效果:品宣至少1:2', '申请更多激励', '额度调整至15,000/人', 'CPM 4元/千次', 'T+7', '星图日度追踪']) assert(copy.includes(fact), fact);

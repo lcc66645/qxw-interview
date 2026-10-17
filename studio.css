@@ -110,6 +110,10 @@ body #main { background: transparent; }
 .practice-heading { grid-row: 1 / 6; }
 .practice-heading h4 { line-height: 1.8; }
 .practice-deliverable { grid-column: 2; font-size: 12px; color: #a9ddc6; border-left: 2px solid #6baf91; padding-left: 12px; margin: 14px 0 0; line-height: 1.9; }
+.practice-thinking, .case-reasoning { display: grid; grid-template-columns: 72px minmax(0, 1fr); gap: 14px 18px; margin: 20px 0; font-size: 13px; line-height: 1.9; }
+.practice-thinking dt, .case-reasoning dt { color: #acd2bc; }
+.practice-thinking dd, .case-reasoning dd { margin: 0; color: #d0dcd4; }
+.practice-competency { grid-column: 2; color: #b9d7c5; font-size: 12px; line-height: 1.9; margin: 14px 0 0; }
 .case-stage .case-workflow { max-width: 900px; }
 .experience-tabs { display: flex; position: sticky; top: var(--portfolio-header-height, 78px); z-index: 4; overflow-x: auto; overscroll-behavior-x: contain; scrollbar-width: thin; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #121b1ce8; backdrop-filter: blur(20px); }
 .experience-tabs button { display: flex; flex: 1 0 110px; min-height: 76px; flex-direction: column; justify-content: center; align-items: center; gap: 8px; padding: 12px; border: 0; border-bottom: 2px solid transparent; border-radius: 0; background: transparent; color: #c3ceca; font: inherit; font-size: 13px; cursor: pointer; }
@@ -146,11 +150,7 @@ body #main { background: transparent; }
 .cost-policy td { color: #c2cec7; }
 .cost-policy thead th:nth-child(1) { width: 30%; }
 .cost-policy thead th:nth-child(2) { width: 25%; }
-.decision-timeline { list-style: none; margin: 24px 0; padding: 0; }
-.decision-timeline li { display: grid; grid-template-columns: 86px minmax(0, 1fr); gap: 16px; padding: 16px 0; border-bottom: 1px solid var(--line); }
-.decision-date { color: #b8dac8; font-size: 11px; line-height: 1.9; }
 .work-decision h5 { font-size: 13px; margin: 0 0 8px; line-height: 1.8; font-weight: 500; }
-.decision-timeline p { margin: 0; }
 .budget-steps { margin: 16px 0 24px; }
 .budget-steps dt { margin-top: 18px; color: #e0e8e2; font-weight: 500; }
 .budget-steps dd { margin: 6px 0 0; }
@@ -210,11 +210,13 @@ body #main { background: transparent; }
   .okr-row h5 { font-size: 15px; }
   .practice-heading { grid-row: auto; }
   .practice-deliverable { grid-column: 1; }
+  .practice-competency { grid-column: 1; }
+  .practice-thinking, .case-reasoning { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .practice-thinking dd, .case-reasoning dd { margin-bottom: 12px; }
   .practice-case { grid-column: 1; }
   .work-decision { grid-column: 1; }
   .cost-policy th, .cost-policy td { padding: 12px 5px; }
   .cost-segment { grid-template-columns: 44px minmax(12px, 1fr) 96px; gap: 8px; }
-  .decision-timeline li { grid-template-columns: minmax(0, 1fr); gap: 6px; }
   .strategy-table th, .strategy-table td { padding: 12px 5px; }
   .goal-formula { gap: 10px; }
   .goal-formula > div { padding-left: 9px; }
@@ -238,7 +240,7 @@ body #main { background: transparent; }
   html, body, body:not([data-page="capabilities"]) #main, .paper-band, .method-item, .tech-group, footer { background: #fff; }
   .paper-band, .paper-band h2, .capability-number, .capability-item h3, .capability-item p, .practice-support, .practice-action, .case-stage > p, .job-intro, .project-visual figcaption { color: #444; }
   .okr-row { break-inside: avoid; }
-  .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .decision-date, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose { color: #444; }
+  .work-decision p, .work-decision h5, .cost-policy th, .cost-policy td, .cost-policy caption, .cost-comparison figcaption, .budget-steps dt, .work-decision .decision-result, .work-decision .decision-purpose, .practice-competency, .practice-thinking dt, .practice-thinking dd, .case-reasoning dt, .case-reasoning dd { color: #444; }
   .strategy-section p, .strategy-section > h5, .strategy-table th, .strategy-table td, .strategy-table caption, .goal-formula dt, .goal-formula dd, .goal-progress figcaption, .user-growth-path li, .growth-operation-loop h5, .growth-diagnostics dt, .growth-diagnostics p, .growth-diagnostics .diagnostic-evidence { color: #444; }
   .strategy-section .channel-snapshot { color: #444 !important; }
   .job-okr > h4, .okr-number, .okr-row h5, .okr-results li, .kr-label, .practice-deliverable { color: #444; }

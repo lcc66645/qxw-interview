@@ -15,9 +15,11 @@ fs.mkdirSync(output, { recursive: true });
   assert.equal((112 / 305 * 100).toFixed(1), '36.7');
   assert.equal((strategy.channels.douyinVv / strategy.channels.totalVv * 100).toFixed(1), '36.7');
   assert.equal((campaign.points.slice(0, 2).reduce((sum, row) => sum + row.acquisitions, 0) / campaign.overview.acquisitions * 100).toFixed(1), '64.3');
-  const answers = fs.readFileSync('interview-growth-answers.md', 'utf8');
-  assert.deepEqual([...answers.matchAll(/^## (\d+)\./gm)].map(match => Number(match[1])), Array.from({ length: 13 }, (_, index) => index + 1));
-  for (const term of ['目标，不是个人已完成业绩', '播放份额，不是拉新份额', '规划参数', '汽车资讯', '瑞幸', '3,690万', '64.3%']) assert(answers.includes(term), term);
+  assert(!fs.existsSync('interview-growth-answers.md'), 'Interview questions are an authoring framework, not a separate deliverable');
+  for (const practice of data.presentation.practices) {
+    for (const field of ['judgment', 'tradeoff', 'competency']) assert(practice[field]?.length > 15, field);
+  }
+  assert.equal(data.presentation.matrixBudget.timeline, undefined);
   const browser = await chromium.launch({ executablePath: process.env.CHROMIUM_PATH || '/usr/bin/chromium', args: ['--no-sandbox'] });
   try {
     const page = await browser.newPage({ reducedMotion: 'reduce' });
@@ -27,6 +29,11 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.locator('.experience-panel:visible').count(), 0);
       assert.equal(await page.locator('.okr-row[open], .case-stage[open], .work-decision[open]').count(), 0);
       await page.locator('[data-experience-tab="competence-0-1"]').click();
+      assert.equal(await page.locator('.practice-thinking').count(), 5);
+      assert.equal(await page.locator('.practice-competency').count(), 5);
+      assert.equal(await page.locator('.decision-timeline, .decision-date').count(), 0);
+      assert.equal(await page.locator('.case-reasoning dt').count(), 12);
+      assert.equal(await page.locator('.matrix-decisions > div').count(), 4);
       assert.equal(await page.locator('#growth-strategy').evaluate(el => el.open), false);
       await page.locator('#growth-strategy > summary').click();
       assert.deepEqual(await page.locator('.goal-formula dd').allTextContents(), ['10', '30', '300']);
@@ -48,7 +55,7 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.locator('.experience-panel:visible').count(), 1);
       await page.screenshot({ path: `${output}/loop-${width}.png` });
       await page.goto(`${base}#/experience/case-stage-3`);
-      assert.equal(await page.locator('.growth-diagnostics > div').count(), 3);
+      assert.equal(await page.locator('[data-stage="3"] .growth-diagnostics > div').count(), 3);
       assert.equal(await page.locator('[data-stage="3"] .script-examples article').count(), 2);
       assert.equal(await page.locator('[data-stage="3"] .case-workflow').count(), 0);
       await page.screenshot({ path: `${output}/diagnosis-${width}.png` });
@@ -82,6 +89,6 @@ fs.mkdirSync(output, { recursive: true });
       assert(embedded); assert.deepEqual(JSON.parse(embedded[1]).presentation.growthStrategy, strategy);
     }
     assert.deepEqual(errors, []);
-    console.log('PASS 13 interview answers, target/actual and historical exposure share math, unchanged campaign, six reordered case stages, user path vs operational loop, five responsive sizes, exclusive panels/deep links and readable offline/script-disabled export.');
+    console.log('PASS integrated decision/action/competency narratives with no Q&A document or timeline, target/actual and historical share math, unchanged campaign, six functional case sections, user path vs operational loop, five responsive sizes, deep links and offline/script-disabled export.');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

@@ -171,7 +171,12 @@
     if (!support) return;
     const detail = document.createElement('div'); detail.className = 'practice-support';
     text(detail, 'p', example ? `目的：${example.purpose}` : support.goal, 'practice-goal');
+    const thinking = document.createElement('dl'); thinking.className = 'practice-thinking';
+    [['我的判断', support.judgment], ['策略取舍', support.tradeoff]].forEach(([label, value]) => {
+      text(thinking, 'dt', label); text(thinking, 'dd', value);
+    }); detail.append(thinking);
     const list = document.createElement('ul'); support.steps.forEach(step => text(list, 'li', step)); detail.append(list); parent.append(detail);
+    text(parent, 'p', `能力体现：${support.competency}`, 'practice-competency');
     if (support.deliverable) text(parent, 'p', `我交付：${support.deliverable}`, 'practice-deliverable');
     if (support.visual === 'growth') renderGrowthStrategy(parent);
     if (example) renderCaseProof(parent, example, 'practice-case', false);
@@ -215,6 +220,7 @@
     strategyTable(audience, '用户任务与功能匹配', ['人群任务', '决策难题', '内容承接'], strategy.tasks);
     const positioning = strategySection(detail, '竞争定位与运营选择'); text(positioning, 'p', strategy.positioning);
     const goal = strategySection(detail, strategy.goal.title, 'growth-goal');
+    text(goal, 'p', strategy.goal.rationale);
     const formula = document.createElement('dl'); formula.className = 'goal-formula';
     [[strategy.goal.hitsPerMonth, '条高拉新作品/月'], [strategy.goal.acquisitionsPerHit, '人拉新/作品'], [strategy.goal.hitsPerMonth * strategy.goal.acquisitionsPerHit, '人拉新/人/月 · 目标']].forEach(([value, label]) => {
       const term = document.createElement('div'); text(term, 'dt', label); text(term, 'dd', value); formula.append(term);
@@ -278,11 +284,12 @@
     const budget = initial.presentation.matrixBudget;
     const detail = workDisclosure(parent, 'matrix-budget-control', budget.title);
     text(detail, 'p', `目的：${budget.purpose}`, 'decision-purpose');
-    const timeline = document.createElement('ol'); timeline.className = 'decision-timeline';
-    budget.timeline.forEach(item => {
-      const row = document.createElement('li'); text(row, 'span', item.date, 'decision-date');
-      const copy = document.createElement('div'); text(copy, 'h5', item.title); text(copy, 'p', item.action); row.append(copy); timeline.append(row);
-    }); detail.append(timeline); text(detail, 'h5', '预算与激励推进');
+    const decisions = document.createElement('dl'); decisions.className = 'growth-diagnostics matrix-decisions';
+    budget.decisions.forEach(item => {
+      const row = document.createElement('div'); text(row, 'dt', item.title);
+      const copy = document.createElement('dd'); text(copy, 'p', item.problem, 'diagnostic-evidence');
+      text(copy, 'p', `判断：${item.judgment}`); text(copy, 'p', `我的动作：${item.action}`); row.append(copy); decisions.append(row);
+    }); detail.append(decisions); text(detail, 'h5', '预算与激励的具体管理');
     const steps = document.createElement('dl'); steps.className = 'budget-steps';
     budget.budgetSteps.forEach(step => { text(steps, 'dt', step.title); text(steps, 'dd', step.action); }); detail.append(steps);
     text(detail, 'p', budget.result, 'decision-result');
@@ -402,8 +409,12 @@
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
     text(parent, 'p', '我的职责：回收119条视频的增长表现，比较9个业务卖点，逐句拆解TOP13脚本及3条反例；交付卖点优先级、3套模板与下一轮达人选题和投放建议。', 'case-responsibility');
     const stages = initial.presentation.growthStrategy.caseStages;
-    stages.forEach(({ title, description, capability }, index) => {
-      const section = caseStage(index + 1, title, capability); text(section, 'p', description);
+    stages.forEach(({ title, decision, action, output, capability }, index) => {
+      const section = caseStage(index + 1, title, capability);
+      const reasoning = document.createElement('dl'); reasoning.className = 'case-reasoning';
+      [['我的判断', decision], ['我的动作', action], ['交付与验证', output]].forEach(([label, value]) => {
+        text(reasoning, 'dt', label); text(reasoning, 'dd', value);
+      }); section.append(reasoning);
       if (index === 0) {
         const link = text(section, 'a', '查看人群、目标模型与渠道布局', 'case-anchor'); link.href = pageHref('experience', 'growth-strategy'); link.append(iconElement('arrow-up-right'));
       }
