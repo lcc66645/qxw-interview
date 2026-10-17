@@ -60,8 +60,8 @@ async function checkPage(page, id) {
           assert.equal(await page.locator('.review-chart').count(), 1);
           assert.equal(await page.locator('.job-okr .okr-row').count(), 3);
           assert.equal(await page.locator('.job-okr .okr-results li').count(), 8);
-          for (const item of data.source.jobs[0].okr) {
-            for (const result of item.results) assert((await page.locator('.job-okr').innerText()).includes(result.slice(result.indexOf('：') + 1)));
+          for (const results of data.presentation.okrResults) {
+            for (const result of results) assert((await page.locator('.job-okr').innerText()).includes(result.slice(result.indexOf('：') + 1)));
           }
           assert.deepEqual(await page.locator('#employer-0 > .practice-point').evaluateAll(elements => elements.map(element => element.id)), data.presentation.practiceOrder.map(index => `competence-0-${index}`));
           assert.equal(await page.locator('.practice-deliverable').count(), 5);
@@ -94,7 +94,7 @@ async function checkPage(page, id) {
         if (id === 'capabilities') {
           assert(await page.locator('.about-copy').isVisible());
           assert.equal(await page.locator('.resume-trigger, .resume-close, .resume-sheet').count(), 0);
-          assert.equal(await page.locator('.capability-jump').getAttribute('href'), '#/capabilities/capabilities');
+          assert.equal(await page.locator('.capability-entry, .capability-jump, .capability-halo').count(), 0);
           assert.equal(await page.locator('.capability-case').count(), 5);
           assert.equal(await page.locator('.capability-purpose').count(), 5);
           assert.equal(await page.locator('.capability-proof').count(), 5);

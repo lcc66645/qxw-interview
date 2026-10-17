@@ -16,6 +16,7 @@
   let draftMedia = {};
   const validImage = value => typeof value === 'string' && /^data:image\/(png|jpeg|webp);base64,[A-Za-z0-9+/=]+$/.test(value) && value.length < 5600000;
   const icon = name => initial.icons[name] || '';
+  const isRetired = (value, previous) => (Array.isArray(previous) ? previous : [previous]).includes(value);
   window.portfolioIcons = initial.icons;
   const retiredReviewDescriptions = new Set([
     '119条有效视频、3,690万内容 VV、238人拉新、2,443人拉活。按9个卖点分别比较 VV、拉新效率与老用户唤醒，两个主力卖点合计153人拉新，占64.3%；明细差异单独说明。'
@@ -27,7 +28,7 @@
     mediaKeys.forEach(key => { if (validImage(saved.media?.[key])) data.media[key] = saved.media[key]; });
     for (const key of fields) {
       if (typeof saved.profile?.[key] !== 'string') continue;
-      if (saved.profile[key] === initial.retiredCopy?.profile?.[key]) continue;
+      if (isRetired(saved.profile[key], initial.retiredCopy?.profile?.[key])) continue;
       data.profile[key] = saved.profile[key];
     }
     if (Array.isArray(saved.projects)) {
@@ -35,7 +36,7 @@
         const previous = saved.projects.find(item => item?.id === project.id);
         for (const key of ['title', 'description']) {
           if (typeof previous?.[key] !== 'string') continue;
-          if (previous[key] === initial.retiredCopy?.projects?.[project.id]?.[key]) continue;
+          if (isRetired(previous[key], initial.retiredCopy?.projects?.[project.id]?.[key])) continue;
           if (project.id === 'holiday' && key === 'description' && retiredReviewDescriptions.has(previous[key])) continue;
           project[key] = previous[key];
         }
@@ -125,18 +126,11 @@
       text(item, 'p', job.period, 'portrait-period');
       text(item, 'h4', index === 0 ? '懂车帝' : '简单有为 · UWANT友望');
       text(item, 'p', job.role);
-      text(item, 'p', index === 0 ? '70号内容矩阵 · 20人团队 · 周拉新71→212' : '“郝家豁”粉丝50万+ · 千川素材ROI 1:3.5', 'portrait-achievement');
+      text(item, 'p', index === 0 ? '70号内容矩阵 · 20人团队 · 周拉新71→212' : '“郝家豁”粉丝50万+ · 线索成本下降30%', 'portrait-achievement');
       history.append(item);
     });
     const contact = text(history, 'a', data.profile.email, 'portrait-email'); contact.href = `mailto:${data.profile.email}`; contact.dataset.bind = 'email';
     bio.append(history, $('.hero-metrics')); section.append(bio); $('.creator-about').remove();
-    const entry = document.createElement('div'); entry.className = 'capability-entry';
-    const jump = text(entry, 'a', '能力概述', 'capability-jump'); jump.href = pageHref('capabilities', 'capabilities'); jump.append(iconElement('arrow-down'));
-    const halo = document.createElement('span'); halo.className = 'capability-halo'; halo.setAttribute('aria-hidden', 'true');
-    for (let index = 0; index < 32; index++) {
-      const particle = document.createElement('i'); particle.style.setProperty('--particle', index); halo.append(particle);
-    }
-    jump.append(halo); section.append(entry);
   }
   function visualPath(key) {
     return data.media[key] || ({ production: initial.images[1], growth: initial.reviewCharts[0], team: initial.images[2] })[key];
@@ -170,7 +164,6 @@
   }
   function renderCompetence(parent, competence, support, example) {
     text(parent, 'p', support?.action || competence.summary.action, 'practice-action');
-    text(parent, 'p', competence.summary.outcome, 'result-tag');
     if (!support) return;
     const detail = document.createElement('div'); detail.className = 'practice-support';
     text(detail, 'p', example ? `目的：${example.purpose}` : support.goal, 'practice-goal');
@@ -180,8 +173,8 @@
     if (support.visual) evidenceFigure(parent, support.visual, support.caption);
     if (support.visual === 'growth') {
       const comparison = document.createElement('div'); comparison.className = 'weekly-comparison';
-      text(comparison, 'h5', '周拉新变化');
-      [[71, '调整前'], [212, '调整后']].forEach(([value, label]) => {
+      text(comparison, 'h5', '矩阵周拉新 · 相邻两周');
+      [[71, '前一周'], [212, '后一周']].forEach(([value, label]) => {
         const row = document.createElement('div'); row.className = 'comparison-row';
         text(row, 'span', label); const track = document.createElement('span'); track.className = 'comparison-track';
         const bar = document.createElement('span'); bar.style.width = `${value / 212 * 100}%`; track.append(bar); row.append(track); text(row, 'strong', `${value}人`); comparison.append(row);
@@ -204,7 +197,7 @@
       text(objective, 'span', `O${index + 1}`, 'okr-number');
       text(objective, 'h5', initial.presentation.okrTitles[index]);
       const results = document.createElement('ul'); results.className = 'okr-results';
-      item.results.forEach(result => {
+      initial.presentation.okrResults[index].forEach(result => {
         const split = result.indexOf('：'); const entry = document.createElement('li');
         text(entry, 'span', result.slice(0, split), 'kr-label'); text(entry, 'span', result.slice(split + 1)); results.append(entry);
       }); row.append(objective, results); section.append(row);
@@ -250,7 +243,7 @@
     const summary = document.createElement('summary');
     text(summary, 'span', 'CASE 01', 'tip-label');
     const title = document.createElement('span'); title.className = 'tip-heading';
-    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '从内容策略到用户增长');
+    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '卖点分析、脚本诊断与下一轮策略');
     summary.append(title); details.append(summary);
     const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body';
     details.append(body); parent.append(details);
@@ -271,12 +264,12 @@
   }
   function renderBusinessReview(parent) {
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
-    text(parent, 'p', '我的工作：拆9个业务卖点、回收119条视频的增长表现、逐句分析高拉新脚本；将结果转成下一轮选题、脚本和达人投放建议。', 'case-responsibility');
+    text(parent, 'p', '我的职责：回收119条视频的增长表现，比较9个业务卖点，逐句拆解TOP13脚本及3条反例；交付卖点优先级、3套模板与下一轮达人选题和投放建议。', 'case-responsibility');
     const stages = [
-      ['目标与人群', '我先将选车、查优惠、算贷款归为新用户决策任务，将找二手车归为老用户回访任务。拉新与拉活分开判断，避免用一个播放排名决定所有内容资源。'],
-      ['卖点与脚本', '我对TOP13拉新脚本与3条高播放低转化反例逐句标记：冲突是否仍待解决、工具是否真正完成任务、话术是否具体。贷款算账与借车讲车两类场景，分别让查优惠和语音讲车成为剧情必需的解法。'],
-      ['生产与协作', '我将有效脚本整理为“冲突—工具解题—角色决定”的可复用结构，并补齐人物、车型资产和Prompt。用9步流程衔接创意验证与二创交付，审核同时检查成片质量和功能植入。'],
-      ['数据回收与投放判断', '我按作品归集VV、拉新、拉活，再按卖点对比。帮选车+查优惠与AI语音讲车列为拉新主力；智能找二手车单独承担拉活任务。高播放低拉新内容则回查受众需求和工具出场，输出脚本修改与达人选题建议。']
+      ['业务问题与需求场景', '本次复盘要回答：哪些内容贡献拉新，哪些更适合老用户唤醒。我的分析从选车、查优惠、贷款计算与二手车搜索等任务切入，将VV、拉新和拉活分别比较，再下钻表现差异。'],
+      ['脚本诊断与内容策略', '我逐句标记TOP13脚本与3条反例中的用户任务、剧情冲突、工具介入和行动表达。贷款算账与借车讲车作为分析样本，分别对应购车信息决策与语音讲车需求，提炼功能与场景匹配的检查项。'],
+      ['方法交付与团队协作', '我将本次拆解结果整理为3套模板和脚本检查项，用于后续创作与二创协作；日常AIGC矩阵另通过9步生产流程、人物/车型资产与上线验收承接方法复用。我的交付重点是分析、策略与协作标准。'],
+      ['资源优先级与投放建议', '两个主力卖点贡献153人拉新；智能找二手车贡献803人拉活。我据此建议拉新选题优先验证选车、查优惠和语音讲车，找车类内容单独评价唤醒价值；高播放低拉新方向先回查需求与脚本，不直接追加复制量。']
     ];
     stages.forEach(([title, description], index) => {
       const section = document.createElement('section'); section.className = 'case-stage'; section.dataset.stage = String(index + 1);
@@ -288,16 +281,17 @@
         }); section.append(examples);
       }
       if (index === 2) {
-        evidenceFigure(section, 'production', '9步生产链路 · 选题、脚本、分镜、资产、生成、剪辑、审核、发布、复盘', 'case-workflow');
+        evidenceFigure(section, 'production', '团队日常AIGC生产流程 · 承接脚本、资产与方法复用', 'case-workflow');
       }
       parent.append(section);
     });
     const results = document.createElement('section'); results.className = 'case-stage'; results.dataset.stage = '5';
-    text(results, 'h4', '05 / 项目成果');
+    text(results, 'h4', '05 / 活动整体表现与个人交付');
     metrics(results, [
-      { label: '内容产出', value: '119条' }, { label: '播放', value: '3,690万' },
-      { label: '拉新', value: '238人' }, { label: '拉活', value: '2,443人' }
+      { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
+      { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
     ]);
+    text(results, 'p', '我的交付：9个卖点表现对照、TOP13脚本与3条反例拆解、3套内容模板，以及下一轮选题和投放验证建议。', 'case-deliverables');
     text(results, 'p', '识别两大拉新主力卖点，贡献153人拉新（64.3%）；智能找二手车带来803人拉活。', 'review-highlight');
     const wrap = document.createElement('div'); wrap.className = 'review-table-wrap'; wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', '业务卖点成果对比');
     const table = document.createElement('table'); table.className = 'review-table';
@@ -311,15 +305,15 @@
       [`${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`].forEach(value => text(row, 'td', value)); body.append(row);
     }); table.append(body); wrap.append(table); results.append(wrap);
     evidenceFigure(results, 'growth', '播放表现与拉新贡献 · 中秋国庆星图项目', 'review-chart');
-    text(results, 'p', '两个主力卖点用32.2%的VV带来64.3%的拉新；三个流量型卖点占46.5%的VV，仅贡献19.3%的拉新。我的复盘重点因此从“什么内容火”转向“什么需求会让用户使用工具”。', 'review-highlight');
+    text(results, 'p', '两个主力卖点占32.2%的VV、64.3%的拉新；三个高播放低拉新卖点占46.5%的VV、19.3%的拉新。下一轮优先验证选车优惠和语音讲车的需求匹配与脚本表达。', 'review-highlight');
     parent.append(results);
     const lessons = document.createElement('section'); lessons.className = 'case-stage'; lessons.id = 'pitfall-review'; lessons.dataset.stage = '6';
-    text(lessons, 'h4', '06 / 踩坑与下一轮动作');
-    text(lessons, 'p', '我把复盘结论写成下一轮可执行的筛选项，而不是再列一遍播放排行榜。');
+    text(lessons, 'h4', '06 / 反例诊断与下一轮验证');
+    text(lessons, 'p', '我将复盘差异转化为以下验证方案，分别明确测试变量、业务评价与执行反馈。');
     reviewActions(lessons, [
-      ['播放误判', '精准估价830万VV、32人拉新，低于帮选车+查优惠的89人。下一轮拉新内容先审决策任务是否明确，不以VV高低直接决定复制量。'],
-      ['植入过晚', '剧情问题已经解决后再报功能，用户缺少使用理由。脚本审核改查工具是否参与解题、角色是否因结果作出决定，而不是只查有没有出现“小懂”。'],
-      ['指标混用', '智能找二手车拉新9人、拉活803人；不能因拉新低就淘汰。将其保留在拉活方向，单独评估任务与受众，避免和新用户选车内容混排。']
+      ['验证内容机制', '在相近达人、卖点和分发条件下，单轮优先测试工具介入位置或行动表达，分开记录VV、拉新与拉活，不同时调整多个关键变量。'],
+      ['补齐业务评价', '放量前将获客成本、回流后的功能使用与留存纳入评估；本轮的播放与回流结果不直接代表长期用户价值。'],
+      ['形成执行闭环', '将高播放低拉新样本交回脚本审核，优先验证选车优惠和语音讲车方向；对找二手车保留独立的拉活评价，下一轮复盘再决定复制范围。']
     ]);
     renderBadCases(lessons);
     parent.append(lessons);
@@ -329,11 +323,11 @@
   }
   function renderBadCases(parent) {
     const group = document.createElement('div'); group.className = 'badcase-list';
-    text(group, 'h5', 'Bad Case / 用具体内容校准判断');
+    text(group, 'h5', 'Bad Case / 单条样本与卖点汇总分别分析');
     const examples = [
-      { title: '01 / 工具只重复信息，没解决问题', purpose: '判断用户看完是否仍有一个需要小懂完成的任务。', failed: 'C63估价旁白', failedData: '375万VV / 2人拉新', better: '父亲卖霸道发工资', betterData: '59万VV / 17人拉新', diagnosis: 'C63剧情已经识别车辆，估价旁白只是重复信息；卖霸道发工资则存在当下估价需求。我的拆解重点是工具有没有改变角色的决定，而不是功能出现了几次。', action: '脚本审核逐项标记“未解决任务—工具动作—决策结果”；剧情已解决后硬加功能的稿件重写植入位置。', url: initial.campaignReview.storyComparison[1].url },
-      { title: '02 / 播放高，但不是拉新的优先方向', purpose: '区分内容传播能力与新用户的使用动机。', failed: '小懂精准估价', failedData: '830万VV / 32人拉新', better: 'AI帮选车+查优惠', betterData: '691万VV / 89人拉新', diagnosis: '这一轮估价获得更多VV，拉新却少于帮选车+查优惠。我按卖点比较作品结果，将高VV但低拉新的内容单独回查需求与话术，再判断下一轮是否适合继续承担拉新任务。', action: '下一轮拉新选题优先检查选车、比价、算账任务；不因某卖点VV高，就直接增加复制量。' },
-      { title: '03 / 剧情冲突强，功能仍可能不匹配', purpose: '检查故事中的难题是否真的需要当前植入功能。', failed: '给妈买车，被安排成接孩子的车 / AI约试驾', failedData: '289万VV / 3人拉新', better: '4S店贷款算账维权 / 帮选车+查优惠', betterData: '252万VV / 67人拉新', diagnosis: '接孩子的家庭冲突不自动产生试驾需求；贷款现场算账则直接对应优惠与购车信息。我将“冲突吸引人”和“功能能解题”分开评估。', action: '改稿时先写清功能与角色难题的对应关系；没有对应关系就更换卖点或重写场景，不只补一句下载提示。', url: initial.campaignReview.samples[12].url }
+      { title: '01 / 单条样本：信息展示不等于使用动机', purpose: '分析工具是否承接了角色尚未完成的决策任务。', failed: '单条 / C63估价旁白', failedData: '375万VV / 2人拉新', better: '单条 / 父亲卖霸道发工资', betterData: '59万VV / 17人拉新', diagnosis: '逐句拆解后，我将“功能只重复已有信息”作为C63脚本的待检验问题；卖霸道样本中则存在现场估价需求。两条作品的差异用于形成改稿假设，不视为同条件实验。', action: '逐项标记“未解决任务—工具动作—决策结果”，下一轮优先验证工具参与解题的位置。', url: initial.campaignReview.storyComparison[1].url },
+      { title: '02 / 卖点汇总：传播规模与拉新贡献错位', purpose: '识别值得继续验证的内容方向，而非仅按VV排序。', failed: '卖点汇总 / 小懂精准估价', failedData: '830万VV / 32人拉新', better: '卖点汇总 / AI帮选车+查优惠', betterData: '691万VV / 89人拉新', diagnosis: '这是两个卖点下多条作品的汇总对照，不是单条脚本对照。我据此将选车优惠列为下一轮优先验证方向，再结合达人、作品和投放条件判断是否扩大投入。', action: '先回查卖点对应的人群任务、脚本结构与达人适配，不凭汇总数据直接认定某个功能必然转化更好。' },
+      { title: '03 / 单条样本：剧情冲突与功能需求不匹配', purpose: '分别评价剧情吸引力与产品功能的任务匹配。', failed: '单条 / 家庭接孩子冲突·AI约试驾', failedData: '289万VV / 3人拉新', better: '单条 / 贷款算账维权·帮选车+查优惠', betterData: '252万VV / 67人拉新', diagnosis: '家庭接孩子的冲突不直接产生试驾需求；贷款算账则对应当下购车信息决策。我将功能与场景不匹配作为前者的脚本诊断，而不将两条作品的拉新差异全部归因于植入方式。', action: '先写清角色难题、功能作用和观众可执行的动作，再在可比条件下测试；不只补充一句下载提示。', url: initial.campaignReview.samples[12].url }
     ];
     examples.forEach(example => {
       const item = document.createElement('article'); item.className = 'badcase-item';
@@ -342,7 +336,7 @@
       [[example.failed, example.failedData], [example.better, example.betterData]].forEach(([title, result]) => {
         const row = document.createElement('div'); text(row, 'dt', title); text(row, 'dd', result); comparison.append(row);
       }); item.append(comparison);
-      text(item, 'p', example.diagnosis, 'badcase-diagnosis'); text(item, 'p', `我的处理：${example.action}`, 'badcase-action');
+      text(item, 'p', example.diagnosis, 'badcase-diagnosis'); text(item, 'p', `下一轮动作：${example.action}`, 'badcase-action');
       if (example.url) externalLink(item, '查看分析样本', example.url);
       group.append(item);
     }); parent.append(group);
@@ -353,7 +347,10 @@
       const heading = document.createElement('div'); text(heading, 'h3', group.title); text(heading, 'p', group.description);
       const tools = document.createElement('div'); tools.className = 'tech-tools';
       group.indexes.forEach(index => text(tools, 'span', source.skills[index]));
-      article.append(heading, tools); $('#skills-list').append(article);
+      const application = document.createElement('div'); application.className = 'tech-application';
+      text(application, 'p', `实际交付：${group.deliverable}`);
+      const link = text(application, 'a', '查看相关实践', 'case-anchor'); link.href = pageHref('experience', group.href); link.append(iconElement('arrow-up-right'));
+      article.append(heading, tools, application); $('#skills-list').append(article);
     });
   }
   function renderMethods() {
@@ -361,6 +358,7 @@
       const article = document.createElement('article'); article.className = 'method-item';
       text(article, 'span', String(index + 1).padStart(2, '0'), 'method-number');
       text(article, 'h3', method.title); text(article, 'p', method.description);
+      text(article, 'p', method.flow, 'method-flow');
       renderCaseProof(article, initial.presentation.methodCases[index], 'method-case');
       const application = initial.extensions.methodApplications[index];
       const link = text(article, 'a', '相关实践', 'method-application'); link.href = pageHref('experience', application.href.slice(1));
@@ -373,6 +371,9 @@
       text(article, 'span', String(index + 1).padStart(2, '0'));
       const body = document.createElement('div');
       text(body, 'h3', insight.title.replace(/^\d+\.\s*/, '')); text(body, 'p', insight.description);
+      text(body, 'p', `我的决策：${insight.decision}`, 'insight-decision');
+      text(body, 'p', `下一步：${insight.next}`, 'insight-next');
+      const link = text(body, 'a', '相关案例', 'case-anchor'); link.href = pageHref('experience', insight.href); link.append(iconElement('arrow-up-right'));
       article.append(body); $('#insight-list').append(article);
     });
   }

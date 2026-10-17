@@ -56,9 +56,8 @@ async function regions(page, compare = false) {
       assert(await page.evaluate(() => {
         const image = document.querySelector('.portrait-image').getBoundingClientRect();
         const art = document.querySelector('.portrait-art').getBoundingClientRect();
-        const jump = document.querySelector('.capability-jump').getBoundingClientRect();
-        return image.top >= art.top && image.bottom <= art.bottom && jump.top >= art.bottom && Math.abs(jump.left + jump.width / 2 - innerWidth / 2) < 1 && document.documentElement.scrollWidth <= innerWidth;
-      }), 'Full image and centered entry must fit');
+        return image.top >= art.top && image.bottom <= art.bottom && !document.querySelector('.capability-entry, .capability-jump, .capability-halo') && document.documentElement.scrollWidth <= innerWidth;
+      }), 'Full image must fit without a capability entry or reserved spacer');
       // Sample alpha behind every introduction text rectangle, not the transparent image box.
       const overlaps = await page.evaluate(() => {
         const image = document.querySelector('.portrait-image');
@@ -80,11 +79,7 @@ async function regions(page, compare = false) {
       });
       assert.deepEqual(overlaps, [], `${width}x${height}: introduction must not cover the character`);
       await page.screenshot({ path: `${output}/hero-${width}.png` });
-      await page.locator('.capability-entry').scrollIntoViewIfNeeded();
-      const first = await page.locator('.capability-halo i').first().evaluate(el => getComputedStyle(el).offsetDistance);
-      await page.waitForTimeout(250);
-      assert.notEqual(await page.locator('.capability-halo i').first().evaluate(el => getComputedStyle(el).offsetDistance), first);
-      await page.locator('.capability-jump').focus(); await page.keyboard.press('Enter');
+      await page.goto(`${base}#/capabilities/capabilities`);
       await page.waitForURL('**#/capabilities/capabilities');
       await page.waitForFunction(() => document.querySelector('#capabilities').getBoundingClientRect().top < 200);
       assert.equal(await page.locator('.capability-case').count(), 5);
@@ -93,11 +88,10 @@ async function regions(page, compare = false) {
     }
     await page.emulateMedia({ reducedMotion: 'reduce' });
     await page.waitForFunction(() => document.querySelector('[data-toggle-portrait]').disabled);
-    assert.equal(await page.locator('.capability-halo i').first().evaluate(el => getComputedStyle(el).animationName), 'none');
-    await page.locator('.capability-jump').click(); await page.waitForURL('**#/capabilities/capabilities');
+    assert.equal(await page.locator('.capability-entry, .capability-jump, .capability-halo').count(), 0);
     await page.goto(`${base}#/capabilities/home`);
     assert(await page.locator('.about-copy').isVisible());
     assert.deepEqual(errors, []);
-    console.log(`PASS local hair/brow pixels (${hair}/${brows}), stationary eyes/body/book, seven responsive alpha-overlap checks, centered orbiting entry, keyboard/deep-link navigation, and reduced motion.`);
+    console.log(`PASS local hair/brow pixels (${hair}/${brows}), stationary eyes/body/book, seven responsive alpha-overlap checks, removed particle entry, retained capability deep links, and reduced motion.`);
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

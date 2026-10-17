@@ -36,9 +36,8 @@ fs.mkdirSync(output, { recursive: true });
         await page.waitForFunction(() => document.querySelector('.portrait-stage')?.dataset.status === 'webgl');
         const before = await page.locator('.portrait-stage').getAttribute('data-time');
         await page.waitForTimeout(300); assert(Number(await page.locator('.portrait-stage').getAttribute('data-time')) > Number(before));
-        await page.locator('.capability-jump').click();
-        await page.waitForURL('**#/capabilities/capabilities');
-        await page.waitForFunction(() => document.querySelector('#capabilities').getBoundingClientRect().top < 200);
+        assert.equal(await page.locator('.capability-entry, .capability-jump, .capability-halo').count(), 0);
+        await page.locator('#capabilities').scrollIntoViewIfNeeded();
         assert(await page.locator('#about-title').isVisible());
         assert((await page.locator('.about-copy').innerText()).includes('AIGC 用户增长运营 TL'));
         for (const id of ['experience', 'methods', 'insights', 'skills', 'capabilities']) {
