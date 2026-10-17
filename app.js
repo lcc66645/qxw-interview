@@ -101,7 +101,6 @@
   }
   function renderPortrait() {
     const section = document.createElement('section'); section.className = 'portrait-intro'; section.setAttribute('aria-label', '个人形象');
-    const room = document.createElement('img'); room.className = 'portrait-room'; room.src = initial.design.backgroundImage; room.alt = ''; room.setAttribute('aria-hidden', 'true'); section.append(room);
     const image = document.createElement('img'); image.className = 'portrait-image'; image.width = 1672; image.height = 941; image.fetchPriority = 'high';
     section.append(image);
     const stage = document.createElement('div'); stage.className = 'portrait-stage'; stage.dataset.status = 'loading'; stage.setAttribute('aria-hidden', 'true'); section.append(stage);
@@ -110,12 +109,16 @@
     const title = text(copy, 'h1', data.profile.name); title.dataset.bind = 'name';
     section.append(copy);
     text(section, 'span', '', 'portrait-kind');
-    const next = text(section, 'a', '个人简历', 'portrait-next'); next.href = '#home'; next.append(iconElement('arrow-down'));
+    const trigger = document.createElement('button'); trigger.type = 'button'; trigger.className = 'resume-trigger';
+    trigger.title = '打开简历'; trigger.setAttribute('aria-label', '打开简历'); trigger.setAttribute('aria-controls', 'home'); trigger.setAttribute('aria-expanded', 'false');
+    const label = text(trigger, 'span', '打开简历', 'resume-trigger-label'); label.append(iconElement('arrow-up-right')); section.append(trigger);
     const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'icon-button portrait-pause'; toggle.dataset.togglePortrait = '';
     toggle.setAttribute('aria-label', '暂停人物动态'); toggle.title = '暂停人物动态'; toggle.setAttribute('aria-pressed', 'false'); toggle.append(iconElement('pause')); section.append(toggle);
     $('#main').prepend(section);
     const about = $('#about-title'); const heading = document.createElement('h2');
     heading.id = about.id; heading.className = about.className; heading.textContent = about.textContent; about.replaceWith(heading);
+    const close = document.createElement('button'); close.type = 'button'; close.className = 'icon-button resume-close';
+    close.title = '关闭简历'; close.setAttribute('aria-label', '关闭简历'); close.append(iconElement('x')); $('.creator-about').prepend(close);
     const history = document.createElement('div'); history.className = 'resume-history';
     text(history, 'h3', '工作经历');
     source.jobs.forEach((job, index) => {
@@ -229,10 +232,13 @@
         text(works, 'h4', '个人代表作品');
         const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
         works.append(evidence); article.append(works);
+        renderProjectCase(article);
       }
       list.append(article);
     });
-    const heading = text(list, 'h3', '项目案例', 'portfolio-case-title');
+  }
+  function renderProjectCase(parent) {
+    const heading = text(parent, 'h4', '懂车帝 / 项目案例', 'portfolio-case-title');
     heading.id = 'case-study-title';
     const details = document.createElement('details'); details.className = 'review-tip portfolio-case'; details.id = 'business-review'; details.open = true;
     const summary = document.createElement('summary');
@@ -241,7 +247,7 @@
     text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '从内容策略到用户增长');
     summary.append(title); details.append(summary);
     const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body';
-    details.append(body); list.append(details);
+    details.append(body); parent.append(details);
   }
   function renderReviewTips() {
     const body = $('#business-review-body'); if (!body) return; body.replaceChildren();
@@ -381,6 +387,7 @@
     if (!anchor) return;
     const target = document.getElementById(anchor);
     if (!target) return;
+    if (anchor === 'home' && target.hidden) $('.resume-trigger')?.click();
     let parent = target;
     while (parent) {
       if (parent.tagName === 'DETAILS') parent.open = true;
@@ -618,6 +625,8 @@
       });
       main.querySelector('.portrait-intro')?.style.removeProperty('--scene-opacity');
       main.querySelector('.portrait-intro')?.classList.remove('resume-unfolding');
+      const resume = main.querySelector('.creator-about');
+      if (resume) { resume.hidden = false; resume.removeAttribute('inert'); }
       const embeddedImages = new Map([
         ...initial.images.map((path, index) => [path, images[index]]),
         ...initial.reviewCharts.map((path, index) => [path, reviewCharts[index]]),

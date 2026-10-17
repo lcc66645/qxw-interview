@@ -2,16 +2,23 @@
   'use strict';
   function mountResume(section, image, media) {
     const sheet = document.querySelector('.creator-about');
-    if (!sheet || section.dataset.hasBook !== 'true') return { update() {}, dispose() {} };
-    let frame = 0, disposed = false, layout, focusOnArrival = false;
+    const trigger = section.querySelector('.resume-trigger');
+    if (!sheet || !trigger) return { update() {}, dispose() {} };
+    const hasBook = section.dataset.hasBook === 'true';
+    const close = sheet.querySelector('.resume-close');
+    let frame = 0, disposed = false, layout, focusOnArrival = false, opened = false, returnScroll = 0;
     const clamp = value => Math.max(0, Math.min(1, value));
+    sheet.hidden = true; sheet.inert = true; sheet.tabIndex = -1;
+    sheet.dataset.resumeProgress = '0'; section.dataset.resumeState = 'closed';
     function update() {
-      if (disposed || !layout) return;
-      if (media.matches) {
+      if (disposed || !opened || !layout) return;
+      if (media.matches || !hasBook) {
         sheet.classList.remove('resume-sheet', 'resume-in-flight'); sheet.style.removeProperty('transform');
         sheet.style.removeProperty('--resume-progress'); section.style.removeProperty('--scene-opacity');
         section.classList.remove('resume-unfolding');
-        sheet.dataset.resumeProgress = '1'; return;
+        sheet.dataset.resumeProgress = '1'; section.dataset.resumeState = 'open';
+        if (focusOnArrival) { focusOnArrival = false; sheet.focus({ preventScroll: true }); }
+        return;
       }
       const progress = clamp((scrollY - layout.start) / (layout.end - layout.start));
       const eased = progress * progress * (3 - 2 * progress);
@@ -26,12 +33,19 @@
       sheet.dataset.resumeProgress = progress.toFixed(4);
       section.style.setProperty('--scene-opacity', String(1 - eased * .94));
       section.classList.toggle('resume-unfolding', progress > .18);
+      section.dataset.resumeState = progress >= .995 ? 'open' : 'opening';
       if (focusOnArrival && progress >= .995) { focusOnArrival = false; sheet.focus({ preventScroll: true }); }
     }
     function measure() {
       if (disposed) return;
+      const art = image.getBoundingClientRect(), hero = section.getBoundingClientRect();
+      trigger.style.left = `${Math.max(8, art.left - hero.left + art.width * .28)}px`;
+      trigger.style.top = `${art.top - hero.top + art.height * .75}px`;
+      trigger.style.width = `${Math.min(art.width * .27, hero.width - 16)}px`;
+      trigger.style.height = `${Math.max(48, art.height * .22)}px`;
+      if (!opened) return;
       sheet.style.transform = 'none';
-      const rect = sheet.getBoundingClientRect(), art = image.getBoundingClientRect();
+      const rect = sheet.getBoundingClientRect();
       const header = document.querySelector('.header').getBoundingClientRect().height;
       const y = rect.top + scrollY, end = Math.max(1, y - header - 24);
       const start = Math.min(end - 100, Math.max(section.offsetTop + art.height * .15, end - innerHeight * .92));
@@ -41,26 +55,41 @@
       section.dataset.resumeStartScroll = start.toFixed(2); section.dataset.resumeEndScroll = end.toFixed(2);
       update();
     }
-    function schedule() { if (!frame) frame = requestAnimationFrame(() => { frame = 0; update(); }); }
+    function schedule() { if (opened && !frame) frame = requestAnimationFrame(() => { frame = 0; update(); }); }
     function resize() { cancelAnimationFrame(frame); frame = requestAnimationFrame(() => { frame = 0; measure(); }); }
     function enter(event) {
-      if (!layout) return;
-      if (event?.type === 'click') { event.preventDefault(); event.stopPropagation(); focusOnArrival = true; }
+      if (event?.type === 'click') {
+        event.preventDefault(); event.stopPropagation();
+        if (!opened) returnScroll = scrollY;
+        opened = true; sheet.hidden = false; sheet.inert = false; focusOnArrival = true;
+        trigger.setAttribute('aria-expanded', 'true'); measure();
+      }
+      if (!opened || !layout) return;
       if (scrollY < layout.end) scrollTo({ top: layout.end + 1, behavior: media.matches || event?.type === 'focusin' ? 'instant' : 'smooth' });
     }
-    const next = section.querySelector('.portrait-next');
-    sheet.tabIndex = -1;
+    function collapse() {
+      opened = false; focusOnArrival = false; cancelAnimationFrame(frame); frame = 0;
+      sheet.hidden = true; sheet.inert = true; sheet.classList.remove('resume-sheet', 'resume-in-flight');
+      sheet.style.removeProperty('transform'); sheet.style.removeProperty('--resume-progress');
+      sheet.dataset.resumeProgress = '0'; section.dataset.resumeState = 'closed';
+      section.classList.remove('resume-unfolding'); section.style.removeProperty('--scene-opacity');
+      trigger.setAttribute('aria-expanded', 'false');
+      scrollTo({ top: returnScroll, behavior: 'instant' }); trigger.focus({ preventScroll: true });
+    }
+    function escape(event) { if (event.key === 'Escape' && opened && !document.querySelector('dialog[open]')) collapse(); }
     const observer = new ResizeObserver(resize); observer.observe(sheet); observer.observe(image);
     window.addEventListener('scroll', schedule, { passive: true }); window.addEventListener('resize', resize);
-    media.addEventListener('change', update); sheet.addEventListener('focusin', enter); next.addEventListener('click', enter);
+    media.addEventListener('change', update); sheet.addEventListener('focusin', enter); trigger.addEventListener('click', enter);
+    close.addEventListener('click', collapse); document.addEventListener('keydown', escape);
     measure();
     return { update, dispose() {
       disposed = true; cancelAnimationFrame(frame); observer.disconnect();
       window.removeEventListener('scroll', schedule); window.removeEventListener('resize', resize);
-      media.removeEventListener('change', update); sheet.removeEventListener('focusin', enter); next.removeEventListener('click', enter);
+      media.removeEventListener('change', update); sheet.removeEventListener('focusin', enter); trigger.removeEventListener('click', enter);
+      close.removeEventListener('click', collapse); document.removeEventListener('keydown', escape);
       sheet.classList.remove('resume-sheet', 'resume-in-flight'); sheet.style.removeProperty('transform');
       sheet.style.removeProperty('--resume-progress'); section.style.removeProperty('--scene-opacity');
-      section.classList.remove('resume-unfolding');
+      section.classList.remove('resume-unfolding'); sheet.hidden = false; sheet.inert = false;
     } };
   }
   function mount(section) {

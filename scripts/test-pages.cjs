@@ -77,7 +77,8 @@ async function checkPage(page, id) {
           for (const text of ['375万VV / 2人拉新', '59万VV / 17人拉新', '289万VV / 3人拉新', '252万VV / 67人拉新']) assert((await page.locator('.badcase-list').innerText()).includes(text));
           assert.equal(await page.locator('.case-stage').count(), 6);
           assert.equal(await page.locator('.review-actions > div').count(), 3);
-          assert(await page.locator('#experience-list').evaluate(el => el.lastElementChild.id === 'business-review' && el.children[1].id === 'employer-1'));
+          assert(await page.locator('#business-review').evaluate(element => element.closest('.job').id === 'employer-0' && !!(element.compareDocumentPosition(document.querySelector('#employer-1')) & Node.DOCUMENT_POSITION_FOLLOWING)));
+          assert.equal(await page.locator('#employer-1 #business-review').count(), 0);
           const links = new Set(await page.locator('main a[href^="https://"]').evaluateAll(els => els.map(el => el.href)));
           data.source.links.forEach(link => assert(links.has(link.url), link.title));
           assert(await page.locator('main img').evaluateAll(els => els.every(el => el.complete && el.naturalWidth > 0)));
@@ -91,12 +92,19 @@ async function checkPage(page, id) {
           await page.evaluate(() => document.querySelectorAll('main details').forEach(el => el.open = el.id === 'business-review'));
         }
         if (id === 'capabilities') {
+          assert(await page.locator('.creator-about').isHidden());
+          assert.equal(await page.locator('.resume-trigger').getAttribute('aria-expanded'), 'false');
+          assert.equal((await page.locator('.resume-trigger-label').textContent()).trim(), '打开简历');
           assert.equal(await page.locator('.capability-case').count(), 5);
           assert.equal(await page.locator('.capability-purpose').count(), 5);
           assert.equal(await page.locator('.capability-proof').count(), 5);
           assert.equal(await page.locator('.resume-history article').count(), 2);
         }
         if (id === 'methods') assert.equal(await page.locator('.method-case .proof-purpose, .method-case .proof-result').count(), 8);
+        assert.equal(await page.locator('.portrait-room').count(), 0);
+        assert.equal(await page.locator('#studio-backdrop img').count(), 1);
+        assert.equal(await page.locator('#main').evaluate(element => getComputedStyle(element).backgroundColor), 'rgba(0, 0, 0, 0)');
+        assert.equal(await page.locator('#studio-backdrop img').evaluate(element => getComputedStyle(element).filter), 'blur(9px) saturate(0.75) brightness(0.68)');
         if ([1440,390].includes(width)) await page.screenshot({ path: path.join(output, `${id}-${width}.png`) });
       }
       console.log(`PASS five secondary views at ${width}x${height}`);
