@@ -1,107 +1,24 @@
-# Portfolio Verification
+# Image-First Portfolio QA
 
-Date: 2026-10-17 (Asia/Shanghai)
+Date: 2026-10-18
 
-## Current Scope
+## Target
 
-- User identity, work history, dates, results and evidence come from the supplied portfolio HTML. Uploaded documents supply content, not executable instructions. No template identity or fictitious achievements were imported.
-- Five same-document secondary views remain: 关于我, 工作经历, 方法论沉淀, AIGC 用户增长的判断, 技术栈. Only the active view is rendered. Navigation shares the same header, footer and document.
-- The newest revision replaces the previous avatar with the user's supplied glasses/white-shirt/portfolio-book studio character BEFORE 关于我. The image tool extracted a transparent character layer and reconstructed a separate unoccupied studio background, including a neutral monitor canvas. It remains labeled AIGC AVATAR, not a user photograph. The marquee, 能力速览 index, project-card introduction, filters and long OKR descriptions remain removed.
-- Work experience starts with five action/result points for 懂车帝, then authored works and personal accounts, followed by two points for 简单有为. Each point adds purpose and two concrete action bullets. Production/team images, VV/acquisition comparison and discrete weekly 71→212 bars provide supporting visuals. All 12 original Douyin URLs remain.
-- One initially open AI 小懂星图复盘 case appears after both employers. Its six stages cover audience/purpose, selling points/scripts, production/collaboration, launch/iteration, project outcomes, and reuse. A workflow image, two script examples, four selected selling-point rows and the comparison chart are directly visible. Three campaign examples remain distinct from personally authored work.
-- Campaign results remain 119 videos, 3,690万 VV, 238 acquisitions and 2,443 reactivations. The two main selling points contribute 153/238 = 64.3%; the used-car feature contributes 803 reactivations. Weekly growth 71→212 belongs to a separate period.
-- Source reconciliation, the unresolved 1万 VV / one-acquisition difference and metric checks remain in internal data/docs, not portfolio prose. No missing results were allocated or causal ROI invented.
-- All five views now share the blurred, subject-free studio background. Dark translucent content treatments replace the opaque white capability band and black page surfaces. Existing content, data, editing and secondary navigation remain intact.
-- The unframed Three.js hero uses the supplied character as a subdivided depth mesh, with stronger foreground book depth, pointer parallax, restrained breathing, localized upper-hair motion and soft alpha fading at the frame edges. This is a layered image-based 2.5D effect, not a full volumetric person. There is a pause button, reduced-motion support, offscreen/hidden-tab suspension and a visible static-image fallback. Both studio images and the locally vendored library/scene are embedded in offline exports.
-- No actual backend screenshots were supplied. Existing images are project diagrams and reviewed data figures, not fabricated screenshots. The editor supports replacement portrait/production/growth/team images (PNG/JPEG/WebP, up to4MB), with image decoding, invalid-file rejection, reset, persistence and offline embedding. Image dialogs provide a 100–300% zoom slider and a scrollable viewport.
+User-supplied references show a diagram-led portfolio: clear section hierarchy, connected capability nodes, strategy relationships and quantitative comparisons. The requested adaptation retains the existing dark studio identity and actual portfolio content; this is not a pixel clone of the unrelated green carbon/game project.
 
-## Validation
+## Rendered Review
 
-Chromium browser suites passed:
+- Captured all five views at1440,768,390 and320px in Chromium/Playwright. Screenshots are in`/tmp/qxw-visual-story-qa`.
+- Compared the capability overview and personal page with the reference's hierarchy: a primary infographic now carries the main message; practice links and native disclosures retain detail without a second expanded text wall.
+- Seven infographic types have distinct desktop/mobile compositions. Native image dimensions and active breakpoint are checked, all images decode, and the viewport has no horizontal overflow.
+- Reviewed the rendered capability map, team branching diagram, mobile personal-results graphic and mobile campaign graphic. Chinese labels, numeric values and section boundaries are readable, with no observed text overlap.
+- Corrected initial team/case export overflow. Replaced ambiguous`TOP13 + 3`with explicitly labeled scripts and counterexamples.
+- Each graphic has a descriptive alternative, a keyboard-accessible enlarge button and100–300% zoom. The viewer uses the active mobile image on narrow screens.
+- Reference content is not presented as personal work. No fabricated screenshots, paid-conversion outcomes, budget savings or performance thresholds were added. Quantitative figures retain source-backed values and honest baselines.
+- Default visible prose is reduced on every view versus85b0089; full evidence remains available through disclosures. The studio portrait and same-document navigation are preserved.
 
-`scripts/test-pages.cjs`:
+## Remaining Scope
 
-- 25 combinations of five secondary views at 1920x1080, 1440x900, 768x1024, 390x844 and 320x568; no horizontal page overflow, including fully expanded experience content.
-- One active main view, one H1, unique IDs, correct document title and active navigation; all mobile navigation labels fit.
-- Portrait comes first, About second; removed blocks remain absent. Seven work points and five project figures are visible without expanding details; the open six-stage case follows both employers.
-- All 12 evidence/account URLs, campaign case structure and loaded diagrams remain intact. Four table rows were checked against the campaign dataset; weekly bars use only the two supplied observations.
-- Same-document switching preserves header identity and window state, makes no additional HTML request, and opens no new tabs.
-- Refresh, history, all four method-to-practice links and legacy bare hashes work. Target positions clear the sticky header.
-- Shared profile/case edits and uploaded portrait/evidence images persist after reload. Invalid SVG uploads are rejected. Image enlargement and 200% zoom keep overflow within the image viewer. Contact, clipboard and current-view print expansion/restoration work.
-- Offline export, five offline routes, refresh/history, embedded portrait/diagram assets, uploaded media, edited case text and offline re-export work without duplicated sections.
-- A clean browser context regenerated `/workspace/qxw-portfolio-preview.html` with default content.
-- No script errors or failed local resources were observed.
+Actual creator screenshots/frames were not supplied for this iteration. The added graphics are explicitly diagrams, not substitutes for authentic work screenshots. Broader device/browser coverage remains outside this Chromium check.
 
-`scripts/test-creator-motion.cjs`:
-
-- Portrait-then-About layout, a next-section hint at all tested sizes, and visible entry fades.
-- After 30 view switches, only the current reveal observer remains on non-hero routes; the hero adds its own visibility observer. No scroll/resize listeners accumulate. Scene teardown also releases its resize observer, preference timer, event listeners and GPU resources.
-- Reduced-motion text visibility, five viewport widths, long edited-name wrapping and print visibility.
-
-`scripts/test-studio-scene.cjs`:
-
-- Actual WebGL pixel reads confirm nonblank colored subject pixels, transparent areas and soft partial-alpha edges at all five viewport sizes. An early texture-upload issue from CSS-sized DOM images was fixed by decoding a detached texture image; final pixel checks pass.
-- Timed pixel comparisons confirm actual breathing/hair movement and stronger changes after pointer movement; pause freezes pixels and frame counts, and resume restarts rendering.
-- Reduced-motion changes stop the scene and disable the pause control. A small cleaned-up preference check also handles embedded browsers that update query matches without dispatching change events.
-- Repeated route changes leave one canvas on the hero and none on other routes. Offscreen rendering stops. Mobile rendering is capped at30fps, desktop at45fps, pixel ratio at1.5.
-- Normal-motion offline export displays and animates the character using only embedded scripts/textures/background, with no failed network requests. A deliberately blocked WebGL context retains the visible static portrait.
-- All four non-hero views use the blurred room plate without carrying over the central character.
-
-Desktop/mobile screenshots were visually inspected against the supplied image and extracted assets. Latest scene captures are `/tmp/qxw-studio-qa/studio-<width>.png`; secondary-view captures are in the same directory. Existing content screenshots and full case captures remain under `/tmp/qxw-pages-qa`.
-
-JavaScript syntax and Git whitespace checks passed. Browser file-URL navigation is unavailable in this environment, so offline verification uses an intercepted HTML fixture in an offline browser context, including refresh and re-export. External Douyin availability was not tested.
-
-## Local Workflow
-
-No runtime installation is required. Build generated files after source edits with `node scripts/build-pages.cjs`; open the generated static HTML or use a temporary static server for browser tests and initial export. Runtime source is plain HTML/CSS/JavaScript. The editor preserves custom browser values while migrating exact recognized old default copy.
-
-The user explicitly authorized publishing to the existing repository and GitHub Pages site on 2026-10-17. Local browser results alone do not establish remote deployment success; the public Pages workflow is checked separately against the pushed commit.
-
-## Standalone Delivery Repair
-
-- The reported full-screen code was reproduced by opening the prior artifact as `text/plain`. The same bytes served as `text/html` rendered correctly with UTF-8, no visible scripts/styles, and an animated portrait. The client download/preview MIME handling is not observable; this is not described as a confirmed charset failure.
-- Export now includes UTF-8 BOM and a static current-view first paint. Live canvases and reveal/scene hiding are removed from that snapshot; all cloned images, including the retained studio backdrop, are embedded before inline scripts rebuild the interactive view.
-- The five-view regression suite passed again, including editing and offline re-export.
-- `scripts/test-standalone.cjs` passed for `/workspace/portfolio-final.html`: readable Chinese, no source/base64/shader text in visible body, five offline views, animated WebGL portrait, desktop/mobile fit, and a visible static portrait/About/capabilities with JavaScript disabled.
-- `/workspace/portfolio-final.zip` contains only `portfolio-final.html`. The extracted bytes were compared exactly with the tested standalone HTML. The previous preview path was refreshed with the same verified file.
-- Latest screenshots: `/tmp/qxw-standalone-qa/final-desktop.png`, `final-mobile.png`, `static-first-paint.png`, `static-mobile.png`.
-- Direct `file://` browser navigation remains blocked by the environment administrator. Verification uses offline HTML responses with the proper MIME type; no claim is made that this environment allowed native file-URL navigation.
-- Continued delivery check: `scripts/test-delivery.cjs` extracted the actual ZIP to disk and served those exact bytes through a local HTTP server with UTF-8 HTML MIME. All five views passed at five viewport sizes, with no visible source or replacement-character garbling, no external resource requests, and the original campaign figures plus all12 work/account links intact.
-- The extracted artifact also passed300% image zoom at320px, contact email, editing and second export. The second exported experience view displayed correctly both with JavaScript enabled and blocked; test-only edits were confined to temporary files and did not change the final delivery profile.
-
-## Authorized Publication
-
-- Target: `lcc66645/qxw-interview`, normal fast-forward update of `main`; the existing successful Pages workflow uses that branch.
-- Added `downloads/portfolio-final.html`, `downloads/portfolio-final.zip`, a SHA-256 manifest and same-origin footer download controls. Offline export removes those relative download controls.
-- `scripts/test-public-downloads.cjs` confirmed actual mobile browser downloads, HTML/ZIP MIME types, suggested filenames and byte equality. The delivery and standalone suites were rerun on the files inside the repository's publication directory.
-- Direct requests to the Pages host and GitHub API currently receive a CONNECT403 from the environment proxy. Public `github.com` pages and Git transport are available. `scripts/check-pages-deployment.cjs` correlates the public Pages workflow with the exact pushed commit and records the deployment receipt; it does not claim a live Pages browser render when that host remains blocked.
-
-Final result: passed for the implemented image-based depth effect, retained content workflows and tested viewports. Remote publication is confirmed separately, not inferred from local tests. No claim of a fully modeled 3D human is made.
-
-## Dark Evidence And Growth Narrative
-
-- Rebuilt the three pale-blue cover graphics as new charcoal diagrams from structured portfolio/campaign data. Production shows all nine delivery nodes; matrix execution shows validation, replication, distribution and review with the supplied team results. The quantitative VV/acquisition chart uses the same charcoal background and neutral/green series, preserving all percentages and denominators.
-- 懂车帝 now displays three objectives and all eight supplied KRs, without fabricated target values or completion bars. Five practice points follow audience/measurement, script strategy, personal validation, production delivery, and matrix distribution/review. Original competence IDs and all12 original links remain stable.
-- Each point identifies specific personal actions and deliverables. Campaign conclusions compare830万VV/32 acquisitions with691万VV/89 acquisitions and distinguish803 reactivations from9 acquisitions for used-car search. Project totals remain119 videos/3,690万VV/238 acquisitions/2,443 reactivations; no paid ROI or causal increment is invented.
-- Hero scale changed from0.94 to1.48 on desktop, with a top anchor preserving the hairline. Tablet/mobile use separate framing and mobile name headroom. CSS fallback shares the sizing variable. The viewer also uses dark chrome.
-- Browser tests check all evidence graphics' dark pixel proportions, three OKR rows/eight KRs, five deliverables and correct lifecycle order. WebGL pixel bounds verify the enlarged subject occupies the hero at five sizes; breathing/hair, pointer response, pause, reduced motion, offscreen stop, cleanup and offline animation still pass. Desktop/tablet/mobile hero and dark diagrams were visually inspected.
-- The motion test now waits for the route's actual main view before counting observers; the previous immediate post-click assertion could race the hash-change handler. The corrected test passes without changing runtime lifecycle behavior.
-- Regenerated standalone HTML/ZIP retain the new content and visuals. Delivery verification includes UTF-8, script-disabled first paint, all25 view/size combinations, self-contained assets,300% viewer zoom, editing/re-export and real footer downloads. Public deployment and file hashes are checked separately after publishing.
-
-## Handheld Resume And Case Evidence
-
-- Decoupled portrait image size from section height. At the five tested sizes, the image uses the exact previous size formula; the section now adds sufficient headroom and vertical space for its entire height, including the foreground portfolio/resume. Reduced the lower alpha fade so the paper is visible instead of disappearing at the previous cutoff.
-- The actual profile/metrics HTML now includes two concise employment summaries. A scroll-bound affine transform initially locates this real element on the foreground book face and unfolds it to its natural document position. No duplicated text or bitmap screenshot replaces the final resume. It reverses with upward scrolling and remains normal selectable HTML at completion.
-- The initial resume link remains visible at every tested viewport. Its dark backing preserves contrast against white paper; portrait controls hide while the resume unfolds, preventing overlap. Link activation lands on the readable resume, and keyboard focus on resume content completes the transition. Reduced motion and custom portraits retain normal document layout. Print/export clear transient transforms and scene opacity.
-- The scroll helper batches updates through RAF and releases its scroll/resize/media/focus/click listeners, resize observer and pending frame on route disposal. Existing Three.js visibility, pause, reduced-motion, context-loss, offscreen stop and GPU cleanup are retained.
-- Five core capabilities, seven work practices and four methods now include purposes, concrete cases and results. Three Bad Cases show the supplied C63/Prado, appraisal/helpchoose and family-car/testdrive versus loan comparisons with specific script/resource decisions. They remain analyzed samples, not personal authored-work claims or causal lift measurements. No defect-rate or cost improvement is fabricated.
-- `test-resume-scroll.cjs` passed at1920/1440/768/390/320 widths: unchanged subject dimensions, complete image framing, start/mid/end/reverse transforms, visible resume entry, no horizontal overflow, reduced motion, route remount and self-contained offline scroll. Screenshots of all phases are under `/tmp/qxw-resume-scroll-qa/`; desktop/mobile resume and capability/Bad Case layouts were visually inspected.
-- Updated scene pixel checks compare the subject's alpha bounds to the actual image/frame ratio instead of the former clipped-frame ratio. Browser routing/content tests retain all12 original work/account links, existing three OKRs/eight KRs, five figures and the six-stage final case, and now assert the new purpose/case/result coverage and three numeric Bad Cases.
-
-## Paper Click, Shared Studio, Case Ownership
-
-- The white foreground paper remains unobscured on entry. Its native button covers the paper area, not the face, and carries the visible annotation “打开简历”, `aria-controls` and expanded state. The actual profile is hidden/inert without a blank reserved section until an explicit click or home deep link. Scrolling alone never opens it. Click then uses the retained unfolding effect; close/Escape restores the paper and keyboard Enter works. Reduced motion and custom portraits retain click gating without the book transform.
-- Removed the extra portrait-room image layer and route-specific main-background shading. Every route now uses the same single fixed studio clean plate with9px blur,0.75 saturation and0.68 brightness; content bands are transparent and the opened resume remains translucent. Desktop/mobile entry, opened resume and secondary-view screenshots were inspected.
-- Moved `business-review`, all its six stages, tables and three Bad Cases inside `employer-0`, after authored work and before `employer-1`. Existing IDs, original12 work/account links and all numerical data remain unchanged.
-- Browser coverage verifies the paper hit region, annotation, no scroll auto-open, explicit open, reverse unfolding, close/keyboard/reduced motion and offline use at five dimensions. Shared background source/filter/main transparency and actual DOM case ownership/order are asserted across25 route/viewport combinations. Motion cleanup, WebGL pixels/fallback and original editing/contact/print/media controls also pass.
-- Regenerated portable HTML/ZIP pass script-enabled click-to-open, readable script-disabled first paint, UTF-8/no visible source, five offline views, actual ZIP extraction,300% image viewing, editing/re-export and native downloads. Exported app/scene/CSS match the current sources exactly. Public deployment and downloaded artifact hashes are verified independently after publication.
+final result: passed

@@ -486,3 +486,33 @@ body #main { background: transparent; }
   .portrait-history h3, .portrait-history h4, .portrait-history p, .portrait-history .portrait-achievement, .portrait-email, .capability-case h4, .capability-case .capability-proof, .practice-case p, .practice-case h5, .method-case p, .method-case h5, .badcase-item h6, .badcase-item p, .badcase-comparison dt, .badcase-comparison dd { color: #444; }
   .method-item .method-flow, .case-deliverables, .insight-item .insight-decision, .insight-item .insight-next, .tech-application p { color: #444; }
 }
+.infographic-figure, #dimension-content > .infographic-figure { max-width: none; width: 100%; margin: 24px 0 30px; }
+.infographic-figure .visual-button { border: 0; border-radius: 6px; background: #151b19; }
+.infographic-figure .infographic-desktop { display: block; aspect-ratio: 1440 / 780; }
+.infographic-figure .infographic-mobile { display: none; aspect-ratio: 720 / 1200; }
+.infographic-figure figcaption { font-size: 12px; color: #bbcdc0; }
+.graphic-accessible { position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip-path: inset(50%); white-space: nowrap; padding: 0 !important; margin: 0 !important; }
+#capability-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 26px; }
+#capability-grid .capability-item { display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 18px 0; border-top: 1px solid var(--line); }
+#capability-grid .capability-item h3 { font-size: 16px; line-height: 1.8; margin: 0 0 8px; }
+#capability-grid .capability-number { font-size: 12px; color: #e4d49b; padding-top: 4px; }
+#capability-grid .capability-case { margin: 0; padding: 0; border: 0; }
+.dimension-point { display: block; padding: 0; }
+.dimension-point > summary { display: grid; grid-template-columns: minmax(0, 1fr) 18px; gap: 18px; align-items: center; padding: 20px 0; min-height: 64px; }
+.dimension-point > summary::after { content: none; }
+.dimension-point > summary .lucide { width: 17px; height: 17px; color: #a1d4af; }
+.dimension-point[open] > summary .lucide { transform: rotate(180deg); }
+.dimension-point > div { padding: 0 0 22px; }
+@media(max-width:900px) {
+  .infographic-figure .infographic-desktop { display: none; }
+  .infographic-figure .infographic-mobile { display: block; }
+  .infographic-figure { margin: 20px 0 24px; }
+  #capability-grid { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  #capability-grid .capability-item { padding: 14px 0; }
+  .dimension-point > summary { padding: 18px 0; }
+}
+@media print {
+  .infographic-figure .infographic-desktop { display: block; }
+  .infographic-figure .infographic-mobile { display: none; }
+  .infographic-figure { break-inside: avoid; }
+}

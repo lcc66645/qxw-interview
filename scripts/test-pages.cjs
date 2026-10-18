@@ -101,7 +101,8 @@ async function check(page, id) {
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.okr-row, .okr-results, #production-cost-control').count(), 0);
-          assert.equal(await page.locator('#team-review .evidence-flow li').count(), 4);
+          assert.equal(await page.locator('#team-review [data-visual="review"]').count(), 1);
+          assert.equal(await page.locator('[data-visual="team"]').count(), 1);
           assert.deepEqual(await page.locator('#team-analysis > h2, #team-review > h2, #team-execution > h2').allTextContents(), ['01 / 数据分析：从作品明细到管理决策', '02 / 内容×业务复盘', '03 / 团队管理与交付']);
           assert.equal(await page.locator('main details[open]').count(), 0);
           assert.equal(await page.locator('.management-table tbody tr').count(), 4);
@@ -116,7 +117,8 @@ async function check(page, id) {
             const children = [...el.children];
             return children.indexOf(el.querySelector('.dimension-points')) < children.indexOf(el.querySelector('#creation-workflow')) && children.indexOf(el.querySelector('#creation-workflow')) < children.indexOf(el.querySelector('.authored-work'));
           }));
-          const copy = await page.locator('.dimension-points').innerText();
+          assert.equal(await page.locator('.dimension-point:not([open])').count(), 3);
+          const copy = await page.locator('.dimension-points').textContent();
           for (const value of ['4个账号', '1000万', '抖音自然流拉新50+', '月均涨粉3万+']) assert(copy.includes(value));
           assert(await page.locator('.representative-link').evaluateAll(items => items.every((item, i) => !i || (item.getBoundingClientRect().top >= items[i - 1].getBoundingClientRect().bottom && Math.abs(item.getBoundingClientRect().left - items[i - 1].getBoundingClientRect().left) < 1))));
           await page.locator('#creator-case-detail > summary').click();
@@ -192,7 +194,7 @@ async function check(page, id) {
       await page.goto(new URL(`index.html${hash}`, base).href); await check(page, expected);
       if (target) { assert(await page.locator(`#${target}`).isVisible()); assert(await page.locator(`#${target}`).evaluate(el => el.tagName !== 'DETAILS' || el.open)); }
     }
-    await page.goto(route('skills')); await page.locator('[data-enlarge="growth"]').click();
+    await page.goto(route('skills')); await page.locator('#case-detail-evidence > summary').click(); await page.locator('[data-enlarge="growth"]').click();
     await page.locator('[aria-label="图像缩放"]').fill('300');
     assert(await page.locator('.visual-dialog-scroll').evaluate(el => el.scrollWidth > el.clientWidth)); await page.keyboard.press('Escape');
     const opened = await page.locator('main details').evaluateAll(items => items.map(item => item.open));

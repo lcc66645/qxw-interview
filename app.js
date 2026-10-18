@@ -151,6 +151,7 @@
     figure.append(button); text(figure, 'figcaption', data.media[key] ? caption.split(' · ')[0] : caption); parent.append(figure);
   }
   function renderCapabilities() {
+    visualFigure($('#capability-grid').parentElement, 'capabilities', $('#capability-grid'));
     initial.presentation.dimensions.forEach((dimension, index) => {
       const article = document.createElement('article');
       article.className = 'capability-item';
@@ -158,12 +159,24 @@
       const content = document.createElement('div');
       text(content, 'h3', dimension.title);
       const example = document.createElement('div'); example.className = 'capability-case';
-      text(example, 'p', dimension.thesis);
-      text(example, 'p', dimension.proof, 'capability-proof');
-      const link = text(example, 'a', '查看能力与证据', 'case-anchor'); link.href = pageHref(dimension.page); link.append(iconElement('arrow-up-right')); content.append(example);
+      const link = text(example, 'a', '查看具体实践', 'case-anchor'); link.href = pageHref(dimension.page); link.append(iconElement('arrow-up-right')); content.append(example);
       article.append(content);
       $('#capability-grid').append(article);
     });
+  }
+  function visualFigure(parent, key, before = null) {
+    const visual = initial.presentation.visualLibrary[key];
+    const figure = document.createElement('figure'); figure.className = 'project-visual infographic-figure'; figure.dataset.visual = key;
+    const button = document.createElement('button'); button.type = 'button'; button.className = 'visual-button'; button.dataset.enlarge = `visual-${key}`;
+    button.title = `放大查看：${visual.title}`; button.setAttribute('aria-label', button.title);
+    button.dataset.visualTitle = visual.title;
+    [['desktop',1440,780],['mobile',720,1200]].forEach(([variant,width,height]) => {
+      const image = document.createElement('img'); image.className = `infographic-${variant}`;
+      image.src = initial.images[visual[`${variant}Index`]]; image.alt = visual.alt; image.width = width; image.height = height; image.decoding = 'async'; button.append(image);
+    });
+    const indicator = document.createElement('span'); indicator.className = 'visual-zoom'; indicator.append(iconElement('arrow-up-right')); button.append(indicator);
+    figure.append(button); text(figure, 'figcaption', visual.title);
+    parent.insertBefore(figure, before); return figure;
   }
   function renderDimension(index, { before, afterIntro, showMetrics = true, showCaseLink = true, showPoints = true } = {}) {
     const dimension = initial.presentation.dimensions[index];
@@ -174,9 +187,11 @@
     if (afterIntro) afterIntro(parent);
     const list = document.createElement('div'); list.className = 'dimension-points';
     if (showPoints && index === 2) text(list, 'h2', '01 / 个人成果', 'board-title');
+    if (showPoints && index === 2) visualFigure(list, 'creation');
     if (showPoints) dimension.points.forEach((point, pointIndex) => {
-      const item = document.createElement('section'); item.className = 'dimension-point';
-      text(item, 'h3', `${pointIndex + 1}. ${point.title}`); const copy = document.createElement('div');
+      const item = document.createElement('details'); item.className = 'dimension-point';
+      const summary = document.createElement('summary'); text(summary, 'h3', `${pointIndex + 1}. ${point.title}`); summary.append(iconElement('arrow-down')); item.append(summary);
+      const copy = document.createElement('div');
       text(copy, 'p', point.action); text(copy, 'p', point.evidence, 'dimension-evidence'); item.append(copy); list.append(item);
     }); if (showPoints) parent.append(list);
     if (index !== 2 && showMetrics) metrics(parent, dimension.metrics).classList.add('dimension-metrics');
@@ -412,9 +427,10 @@
     metrics(results, [
       { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
       { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
-    ]).classList.add('campaign-metrics');
-    text(results, 'p', '我的交付：9个卖点表现对照、TOP13脚本与3条反例拆解、3套内容模板，以及下一轮选题和投放验证建议。', 'case-deliverables');
+    ]).classList.add('campaign-metrics', 'graphic-accessible');
+    visualFigure(results, 'case');
     text(results, 'p', '识别两大拉新主力卖点，贡献153人拉新（64.3%）；智能找二手车带来803人拉活。', 'review-highlight');
+    const extra = workDisclosure(results, 'case-detail-evidence', '展开卖点数据与分析图');
     const wrap = document.createElement('div'); wrap.className = 'review-table-wrap'; wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', '业务卖点成果对比');
     const table = document.createElement('table'); table.className = 'review-table';
     text(table, 'caption', '业务卖点成果对比');
@@ -425,9 +441,9 @@
       const point = initial.campaignReview.points[index]; const row = document.createElement('tr');
       const name = text(row, 'th', point.name); name.scope = 'row';
       [`${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`].forEach(value => text(row, 'td', value)); body.append(row);
-    }); table.append(body); wrap.append(table); results.append(wrap);
-    evidenceFigure(results, 'growth', '播放表现与拉新贡献 · 中秋国庆星图项目', 'review-chart');
-    text(results, 'p', '两个主力卖点占32.2%的VV、64.3%的拉新；三个高播放低拉新卖点占46.5%的VV、19.3%的拉新。下一轮优先验证选车优惠和语音讲车的需求匹配与脚本表达。', 'review-highlight');
+    }); table.append(body); wrap.append(table); extra.append(wrap);
+    evidenceFigure(extra, 'growth', '播放表现与拉新贡献 · 中秋国庆星图项目', 'review-chart');
+    text(extra, 'p', '两个主力卖点占32.2%的VV、64.3%的拉新；三个高播放低拉新卖点占46.5%的VV、19.3%的拉新。下一轮优先验证选车优惠和语音讲车的需求匹配与脚本表达。', 'review-highlight');
     parent.insertBefore(results, parent.querySelector('.case-perspective'));
     const lessons = caseDisclosure('pitfall-review', '反例与下一轮验证');
     renderBadCases(lessons);
@@ -464,11 +480,13 @@
   function renderMethods() {
     const parent = renderDimension(1, { showPoints: false, showMetrics: false, showCaseLink: false });
     pageOutline(parent, [['team-analysis', '数据分析', '采集 → 汇总 → 诊断 → 行动'], ['team-review', '内容×业务复盘', '问题 → 假设 → 内容修改 → 验证'], ['team-execution', '团队管理', '分工 → 验收 → 复用 → 反馈']]);
+    visualFigure(parent, 'team');
     renderTeamAnalysis(parent);
     const review = boardSection(parent, 'team-review', '02 / 内容×业务复盘');
     text(review, 'p', '我把数据差异翻译成脚本修改要求，而不是用播放排名替代内容判断。', 'board-objective');
-    flowMap(review, [['定位差异', '分开看传播、拉新与回访'], ['回看片段', '核对人群、卖点与功能动作'], ['形成假设', '每轮明确要改什么、为什么'], ['回收验证', '有效结构入库，反例写入检查项']]);
-    boardTable(review, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
+    visualFigure(review, 'review');
+    const reviewDetail = workDisclosure(review, 'team-review-actions', '展开复盘判断与内容动作');
+    boardTable(reviewDetail, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
       ['有播放、少新增', '先查使用动机与任务承接，不直接否定题材', '把功能放进角色难题；核对组件与发布条件', '同类内容分别比较VV与每百万VV拉新'],
       ['拉活强、拉新弱', '区分唤醒与获新，不用同一排名评价', '单列回访任务，调整新增任务选题', '分别回收拉新、拉活，避免混加'],
       ['同模板表现分化', '下钻人群、开头与功能动作，区分内容差异与分发影响', '保留有效结构，优先修改一个关键变量', '记录改动与同期表现，判断能否复用']
@@ -476,8 +494,9 @@
     const caseLink = text(review, 'a', '查看真实项目中的诊断与取舍', 'case-anchor'); caseLink.href = pageHref('skills', 'case-growth'); caseLink.append(iconElement('arrow-up-right'));
     const execution = boardSection(parent, 'team-execution', '03 / 团队管理与交付');
     text(execution, 'p', '我把复盘结论落实到任务、验收标准与维护责任，跟进至下一轮验证。', 'board-objective');
-    metrics(execution, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
-    boardTable(execution, '管理动作与可检查交付', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
+    metrics(execution, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics', 'graphic-accessible');
+    const managementDetail = workDisclosure(execution, 'team-management-actions', '展开管理分工与交付标准');
+    boardTable(managementDetail, '管理动作与可检查交付', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
       ['目标对齐', '按内容任务拆到小组与个人；双周与业务校准', '负责人定方向，组长承接排期', '排期表 / 每条内容的任务'],
       ['交付检查', '统一9步流程、六维质检和P0–P3分级', '组长检查，创作者修正', '验收清单 / 退回原因 / 修复记录'],
       ['验证与复制', '创意组验证，二创组复用；指定模板维护人', '贡献人说明适用场景，维护人更新', '模板版本 / 人物车型资产 / 反例'],
@@ -638,11 +657,13 @@
     const types = document.createElement('dl'); types.className = 'policy-content-types';
     policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); priorities.append(types);
     const path = boardSection(parent, 'growth-channels', '02 / 增长策略与验证');
-    flowMap(path, board.path);
+    visualFigure(path, 'growth');
+    const strategy = workDisclosure(path, 'growth-strategy-actions', '展开人群、渠道与脚本判断');
+    flowMap(strategy, board.path);
     const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
     board.decisions.forEach(([label, title, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
-    }); path.append(decisions);
+    }); strategy.append(decisions);
     const comparison = document.createElement('figure'); comparison.className = 'weekly-comparison';
     text(comparison, 'figcaption', '矩阵阶段表现 · 相邻两周拉新 · 人 · 零基线');
     [[71, '前一周'], [212, '后一周']].forEach(([value, label]) => {
@@ -652,7 +673,9 @@
     }); text(comparison, 'p', '环比 +198.6% · 矩阵相邻两周表现', 'board-note'); path.append(comparison);
     const budget = boardSection(parent, 'growth-budget', '03 / 预算与生产成本控制');
     text(budget, 'p', '按新增效率分配测试与放量资源，按镜头要求控制生成与返工消耗。', 'board-objective');
-    boardTable(budget, '预算决策与成本约束', ['环节','我的动作','决策依据','交付'], [
+    visualFigure(budget, 'budget');
+    const budgetDetail = workDisclosure(budget, 'growth-budget-actions', '展开预算决策与执行动作');
+    boardTable(budgetDetail, '预算决策与成本约束', ['环节','我的动作','决策依据','交付'], [
       ['测试前', '前置对齐任务预算、组件与发布条件', '内容能否归因、是否具备承接条件', '任务检查表 / 预算需求'],
       ['测试后', '回收新增与内容表现，用有效样本争取资源', '拉新量、每百万VV拉新与实际消耗分开看', '放量建议 / 下一轮验证项'],
       ['生产中', '按内容等级分配模型，先定位返工原因', '画质、表演要求与生成消耗', '模型规范 / 返工检查项'],
@@ -874,12 +897,13 @@
     const visual = event.target.closest('[data-enlarge]');
     if (visual) {
       const content = $('#project-detail'); content.replaceChildren();
-      const title = text(content, 'h2', visual.querySelector('img').alt); title.id = 'detail-title';
+      const selected = [...visual.querySelectorAll('img')].find(image => getComputedStyle(image).display !== 'none') || visual.querySelector('img');
+      const title = text(content, 'h2', visual.dataset.visualTitle || selected.alt); title.id = 'detail-title';
       const controls = document.createElement('label'); controls.className = 'image-zoom-control'; text(controls, 'span', '缩放');
       const slider = document.createElement('input'); slider.type = 'range'; slider.min = '100'; slider.max = '300'; slider.step = '25'; slider.value = '100'; slider.setAttribute('aria-label', '图像缩放');
       controls.append(slider); const value = text(controls, 'output', '100%'); content.append(controls);
       const frame = document.createElement('div'); frame.className = 'visual-dialog-scroll'; frame.tabIndex = 0; frame.setAttribute('role', 'region'); frame.setAttribute('aria-label', '项目图片');
-      const image = visual.querySelector('img').cloneNode(); image.className = 'expanded-visual'; frame.append(image); content.append(frame);
+      const image = selected.cloneNode(); image.className = 'expanded-visual'; frame.append(image); content.append(frame);
       slider.addEventListener('input', () => { image.style.width = `${slider.value}%`; value.value = `${slider.value}%`; });
       $('#project-dialog').showModal(); return;
     }

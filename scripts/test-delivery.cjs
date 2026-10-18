@@ -100,6 +100,7 @@ async function assertReadable(page) {
     }
     data.source.links.forEach(link => assert(evidence.has(link.url)));
     await page.locator('nav [data-page-link="skills"]').click(); await page.locator('#skills').waitFor();
+    await page.locator('#case-detail-evidence > summary').click();
     await page.locator('[data-enlarge="growth"]').click();
     await page.locator('[aria-label="图像缩放"]').fill('300');
     assert(await page.locator('.visual-dialog-scroll').evaluate(element => element.scrollWidth > element.clientWidth));
