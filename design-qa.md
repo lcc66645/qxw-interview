@@ -1,24 +1,23 @@
-# Image-First Portfolio QA
+# Transparent Portfolio QA
 
 Date: 2026-10-18
 
 ## Target
 
-User-supplied references show a diagram-led portfolio: clear section hierarchy, connected capability nodes, strategy relationships and quantitative comparisons. The requested adaptation retains the existing dark studio identity and actual portfolio content; this is not a pixel clone of the unrelated green carbon/game project.
+The latest correction requires native transparent tables and diagrams integrated with the existing studio, not separate bitmap posters. Preserve the portrait, five views, three competencies, real-case isolation and source evidence.
 
 ## Rendered Review
 
-- Captured all five views at1440,768,390 and320px in Chromium/Playwright. Screenshots are in`/tmp/qxw-visual-story-qa`.
-- Compared the capability overview and personal page with the reference's hierarchy: a primary infographic now carries the main message; practice links and native disclosures retain detail without a second expanded text wall.
-- Seven infographic types have distinct desktop/mobile compositions. Native image dimensions and active breakpoint are checked, all images decode, and the viewport has no horizontal overflow.
-- Reviewed the rendered capability map, team branching diagram, mobile personal-results graphic and mobile campaign graphic. Chinese labels, numeric values and section boundaries are readable, with no observed text overlap.
-- Corrected initial team/case export overflow. Replaced ambiguous`TOP13 + 3`with explicitly labeled scripts and counterexamples.
-- Each graphic has a descriptive alternative, a keyboard-accessible enlarge button and100–300% zoom. The viewer uses the active mobile image on narrow screens.
-- Reference content is not presented as personal work. No fabricated screenshots, paid-conversion outcomes, budget savings or performance thresholds were added. Quantitative figures retain source-backed values and honest baselines.
-- Default visible prose is reduced on every view versus85b0089; full evidence remains available through disclosures. The studio portrait and same-document navigation are preserved.
+- Captured all five views at1440,768,390 and320px in Chromium/Playwright, in`/tmp/qxw-transparent-qa`. Also inspected a scrolled desktop review table to confirm that the fixed studio remains behind the transparent content. A full-page screenshot alone does not accurately represent fixed-backdrop coverage while scrolling.
+- Native surfaces have transparent backgrounds; semantic tables use transparent cells, fine rules and one subtle blur surface. No active infographic PNG requests or desktop/mobile image variants remain. Original supplemental evidence images retain zoom/edit support.
+- Capability paths, key figures and practice links now share three native nodes. Personal results use three closed disclosures without a duplicated results poster. Growth and review have one flow each; on mobile nodes reflow vertically. Table overflow is confined to focusable scrolling regions.
+- Checked five routes across25 viewport/route combinations, no document overflow; all twelve original links, image editor, printing, legacy anchors, nine creation stages and same-document navigation pass the main suite.
+- Anonymous analysis retains keyboard tabs and filtered tables/charts; exact aggregates and weighted efficiencies pass at1440/390/320. Demonstration values are not added to personal achievements.
+- Content ownership checks: one growth planning target; team scope only in execution; no costs or repeated OKRs in team; campaign budget only under case-growth; project results versus personal deliverables and subsequent validation explicitly separated.
+- No fabricated screenshots, causal lift, actual savings or completed goals added. Campaign data and original prompt attachment remain unchanged.
 
 ## Remaining Scope
 
-Actual creator screenshots/frames were not supplied for this iteration. The added graphics are explicitly diagrams, not substitutes for authentic work screenshots. Broader device/browser coverage remains outside this Chromium check.
+Template adoption outcomes, actual spend/acquisition cost, goal periods/completion and monthly follower reporting scope still need supporting material. Native diagrams show methods and known facts, not fabricated evidence. Broader browser/device coverage remains outside Chromium checks.
 
 final result: passed

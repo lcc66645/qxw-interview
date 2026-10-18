@@ -5,13 +5,6 @@ const root = path.resolve(__dirname, '..');
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data/portfolio.json'), 'utf8'));
 data.presentation.managementDemo = JSON.parse(fs.readFileSync(path.join(root, 'data/management-demo.json'), 'utf8'));
 data.presentation.visualLibrary = JSON.parse(fs.readFileSync(path.join(root, 'data/visual-library.json'), 'utf8'));
-Object.entries(data.presentation.visualLibrary).forEach(([key, visual]) => {
-  visual.desktop = `assets/visual-${key}.png`;
-  visual.mobile = `assets/visual-${key}-mobile.png`;
-  visual.desktopIndex = data.images.length;
-  visual.mobileIndex = data.images.length + 1;
-  data.images.push(visual.desktop, visual.mobile);
-});
 const shell = fs.readFileSync(path.join(root, 'templates/page.html'), 'utf8');
 const escape = value => value.replaceAll('&', '&amp;').replaceAll('"', '&quot;').replaceAll('<', '&lt;').replaceAll('>', '&gt;');
 function write(file, content) {

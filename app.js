@@ -151,13 +151,22 @@
     figure.append(button); text(figure, 'figcaption', data.media[key] ? caption.split(' · ')[0] : caption); parent.append(figure);
   }
   function renderCapabilities() {
-    visualFigure($('#capability-grid').parentElement, 'capabilities', $('#capability-grid'));
+    const grid = $('#capability-grid'); grid.classList.add('native-visual'); grid.dataset.visual = 'capabilities';
+    const snapshots = [
+      ['拉新优先', '用户任务 → 功能动机 → 分发承接', '目标拆解 / 投入取舍 / 效果验证', 'chart-no-axes-combined'],
+      ['20人+', '数据定位 → 内容复盘 → 任务验收', '5名组长 / 62个活跃账号协作', 'users'],
+      ['4个账号', '选题脚本 → 生成剪辑 → 传播分析', '单条千万VV / 单条自然流拉新50+', 'clapperboard']
+    ];
     initial.presentation.dimensions.forEach((dimension, index) => {
       const article = document.createElement('article');
       article.className = 'capability-item';
       text(article, 'span', String(index + 1).padStart(2, '0'), 'capability-number');
       const content = document.createElement('div');
+      content.append(iconElement(snapshots[index][3]));
       text(content, 'h3', dimension.title);
+      text(content, 'strong', snapshots[index][0], 'capability-value');
+      text(content, 'p', snapshots[index][1], 'capability-path');
+      text(content, 'p', snapshots[index][2], 'capability-output');
       const example = document.createElement('div'); example.className = 'capability-case';
       const link = text(example, 'a', '查看具体实践', 'case-anchor'); link.href = pageHref(dimension.page); link.append(iconElement('arrow-up-right')); content.append(example);
       article.append(content);
@@ -166,16 +175,21 @@
   }
   function visualFigure(parent, key, before = null) {
     const visual = initial.presentation.visualLibrary[key];
-    const figure = document.createElement('figure'); figure.className = 'project-visual infographic-figure'; figure.dataset.visual = key;
-    const button = document.createElement('button'); button.type = 'button'; button.className = 'visual-button'; button.dataset.enlarge = `visual-${key}`;
-    button.title = `放大查看：${visual.title}`; button.setAttribute('aria-label', button.title);
-    button.dataset.visualTitle = visual.title;
-    [['desktop',1440,780],['mobile',720,1200]].forEach(([variant,width,height]) => {
-      const image = document.createElement('img'); image.className = `infographic-${variant}`;
-      image.src = initial.images[visual[`${variant}Index`]]; image.alt = visual.alt; image.width = width; image.height = height; image.decoding = 'async'; button.append(image);
-    });
-    const indicator = document.createElement('span'); indicator.className = 'visual-zoom'; indicator.append(iconElement('arrow-up-right')); button.append(indicator);
-    figure.append(button); text(figure, 'figcaption', visual.title);
+    const figure = document.createElement('figure'); figure.className = 'native-visual'; figure.dataset.visual = key;
+    text(figure, 'figcaption', visual.title);
+    if (key === 'growth') flowMap(figure, initial.presentation.evidenceBoards.growth.path);
+    if (key === 'review') flowMap(figure, [
+      ['识别差异', '传播与获新分别评价'], ['回查内容', '人群任务 / 功能动作 / 分发条件'],
+      ['下发改动', '保留结构，修改关键变量'], ['回收验证', '比较同任务表现，更新模板']
+    ]);
+    if (key === 'budget') flowMap(figure, [
+      ['测试准入', '预算需求、组件与发布条件'], ['效率评估', '同时看拉新规模与单位流量效率'],
+      ['资源分配', '按内容等级选择模型'], ['放量复查', '实际消耗 / 质量 / 转化衰减']
+    ]);
+    if (key === 'team') {
+      metrics(figure, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
+      flowMap(figure, [['负责人', '业务对齐与优先级'], ['组长', '排期 / 质检 / 回收'], ['创意组 × 二创组', '小范围验证 → 结构复用']]);
+    }
     parent.insertBefore(figure, before); return figure;
   }
   function renderDimension(index, { before, afterIntro, showMetrics = true, showCaseLink = true, showPoints = true } = {}) {
@@ -187,7 +201,7 @@
     if (afterIntro) afterIntro(parent);
     const list = document.createElement('div'); list.className = 'dimension-points';
     if (showPoints && index === 2) text(list, 'h2', '01 / 个人成果', 'board-title');
-    if (showPoints && index === 2) visualFigure(list, 'creation');
+    if (showPoints && index === 2) { list.classList.add('native-visual'); list.dataset.visual = 'creation'; }
     if (showPoints) dimension.points.forEach((point, pointIndex) => {
       const item = document.createElement('details'); item.className = 'dimension-point';
       const summary = document.createElement('summary'); text(summary, 'h3', `${pointIndex + 1}. ${point.title}`); summary.append(iconElement('arrow-down')); item.append(summary);
@@ -319,14 +333,12 @@
     const budget = initial.presentation.matrixBudget;
     const detail = workDisclosure(parent, 'matrix-budget-control', budget.title);
     text(detail, 'p', `目的：${budget.purpose}`, 'decision-purpose');
-    const decisions = document.createElement('dl'); decisions.className = 'growth-diagnostics matrix-decisions';
-    budget.decisions.forEach(item => {
-      const row = document.createElement('div'); text(row, 'dt', item.title);
-      const copy = document.createElement('dd'); text(copy, 'p', item.problem, 'diagnostic-evidence');
-      text(copy, 'p', `判断：${item.judgment}`); text(copy, 'p', `我的动作：${item.action}`); row.append(copy); decisions.append(row);
-    }); detail.append(decisions); text(detail, 'h5', '预算与激励的具体管理');
-    const steps = document.createElement('dl'); steps.className = 'budget-steps';
-    budget.budgetSteps.forEach(step => { text(steps, 'dt', step.title); text(steps, 'dd', step.action); }); detail.append(steps);
+    boardTable(detail, '本次项目的资源管理动作', ['决策点', '我的动作', '检查边界'], [
+      ['任务上线', '内容方向确定时前置准备CPM任务与组件', '任务创建不代表预算到账；聚星曾因预算不足暂停'],
+      ['资源追加', '用活动拉新表现申请追加激励', '申请不等于获批，曝光不替代新增'],
+      ['生产配置', '推进画布额度至15,000积分/人', '额度不等于实际支出，扩量同步观察新增'],
+      ['结算校验', '逐链接检查活动期、任务组件与作品状态', '9/25–10/7激励任务 · CPM 4元/千次 · T+7；与复盘样本范围不同']
+    ], 'case-budget-table');
     text(detail, 'p', budget.result, 'decision-result');
   }
   function renderCaseProof(parent, example, className, showPurpose = true) {
@@ -406,7 +418,6 @@
   }
   function renderBusinessReview(parent) {
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
-    text(parent, 'p', '个人负责：9卖点分析、TOP13与3条反例拆解、3套模板及脚本检查项交付。', 'case-responsibility');
     initial.presentation.casePerspectives.forEach(({ id, title, decision, action, output }) => {
       const section = caseDisclosure(id, title);
       const reasoning = document.createElement('dl'); reasoning.className = 'case-reasoning';
@@ -417,9 +428,6 @@
         renderCampaignEvidence(section);
         renderMatrixBudget(section);
       }
-      if (id === 'case-team') {
-        const link = text(section, 'a', '查看日常生产中的模型分级与成本管理', 'case-anchor'); link.href = pageHref('experience', 'production-cost-control'); link.append(iconElement('arrow-up-right'));
-      }
       parent.append(section);
     });
     const results = document.createElement('section'); results.className = 'case-results'; results.id = 'case-results';
@@ -427,9 +435,13 @@
     metrics(results, [
       { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
       { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
-    ]).classList.add('campaign-metrics', 'graphic-accessible');
-    visualFigure(results, 'case');
-    text(results, 'p', '识别两大拉新主力卖点，贡献153人拉新（64.3%）；智能找二手车带来803人拉活。', 'review-highlight');
+    ]).classList.add('campaign-metrics');
+    results.classList.add('native-visual'); results.dataset.visual = 'case';
+    boardTable(results, '我的复盘交付', ['分析范围', '分析动作', '形成的交付'], [
+      ['9个业务卖点', '对照VV、拉新和拉活，识别任务差异', '卖点优先级与后续验证方向'],
+      ['TOP13 + 3条反例', '逐句标注角色难题、功能动作与决策结果', '3套模板 / 脚本检查项']
+    ], 'case-delivery-table');
+    text(results, 'p', '上述为项目整体成绩；个人交付为复盘分析与模板，模板复用后的增量效果仍需后续验证。', 'board-note');
     const extra = workDisclosure(results, 'case-detail-evidence', '展开卖点数据与分析图');
     const wrap = document.createElement('div'); wrap.className = 'review-table-wrap'; wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', '业务卖点成果对比');
     const table = document.createElement('table'); table.className = 'review-table';
@@ -480,7 +492,6 @@
   function renderMethods() {
     const parent = renderDimension(1, { showPoints: false, showMetrics: false, showCaseLink: false });
     pageOutline(parent, [['team-analysis', '数据分析', '采集 → 汇总 → 诊断 → 行动'], ['team-review', '内容×业务复盘', '问题 → 假设 → 内容修改 → 验证'], ['team-execution', '团队管理', '分工 → 验收 → 复用 → 反馈']]);
-    visualFigure(parent, 'team');
     renderTeamAnalysis(parent);
     const review = boardSection(parent, 'team-review', '02 / 内容×业务复盘');
     text(review, 'p', '我把数据差异翻译成脚本修改要求，而不是用播放排名替代内容判断。', 'board-objective');
@@ -494,7 +505,7 @@
     const caseLink = text(review, 'a', '查看真实项目中的诊断与取舍', 'case-anchor'); caseLink.href = pageHref('skills', 'case-growth'); caseLink.append(iconElement('arrow-up-right'));
     const execution = boardSection(parent, 'team-execution', '03 / 团队管理与交付');
     text(execution, 'p', '我把复盘结论落实到任务、验收标准与维护责任，跟进至下一轮验证。', 'board-objective');
-    metrics(execution, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics', 'graphic-accessible');
+    visualFigure(execution, 'team');
     const managementDetail = workDisclosure(execution, 'team-management-actions', '展开管理分工与交付标准');
     boardTable(managementDetail, '管理动作与可检查交付', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
       ['目标对齐', '按内容任务拆到小组与个人；双周与业务校准', '负责人定方向，组长承接排期', '排期表 / 每条内容的任务'],
@@ -659,7 +670,6 @@
     const path = boardSection(parent, 'growth-channels', '02 / 增长策略与验证');
     visualFigure(path, 'growth');
     const strategy = workDisclosure(path, 'growth-strategy-actions', '展开人群、渠道与脚本判断');
-    flowMap(strategy, board.path);
     const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
     board.decisions.forEach(([label, title, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); const copy = document.createElement('dd'); text(copy, 'h3', title); text(copy, 'p', action); row.append(copy); decisions.append(row);
