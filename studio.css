@@ -658,3 +658,127 @@ body #main { background: transparent; }
   [data-subsection-panel][hidden] { display: block !important; }
   .contribution-lead dt, .contribution-lead dd, .ability-result, .section-index, .creation-phase, .creation-stage-preview, .badcase-preview { color: #333; }
 }
+
+/* Light studio palette; leave the existing print and offline contracts intact. */
+@media screen {
+  :root {
+    --bg: #f7f9f8;
+    --text: #202c29;
+    --muted: #52615c;
+    --line: #233c3326;
+    --accent: #16705b;
+    --mint: #16705b;
+    --blue: #325f9e;
+    --coral: #ab4a3b;
+    --glass: #ffffff70;
+    color-scheme: light;
+  }
+  html { background: var(--bg); }
+  body { background: transparent; color: var(--text); }
+  ::selection { background: #bde6d5; color: #173e30; }
+  #studio-backdrop { background: var(--bg); }
+  #studio-backdrop img { filter: blur(12px) saturate(.55) brightness(1.15); }
+  #studio-backdrop::after { background: #f7f9f8eb; }
+  body[data-page="capabilities"] #studio-backdrop::after { background: #f7f9f8db; }
+  .announcement { background: #ffffff78; color: var(--muted); }
+  .header { background: #ffffffe6; border-color: var(--line); }
+  .brand, .brand-period, footer .brand { color: var(--text); }
+  .header nav, .header nav a { color: var(--muted); }
+  .header nav a:hover { color: var(--accent); }
+  .header nav a[aria-current="page"] { color: var(--accent); box-shadow: inset 0 -2px var(--accent); }
+  footer, .published-downloads { background: #ffffff85; color: var(--muted); }
+  footer .email-link, .published-downloads .text-button { color: var(--accent); }
+  .button, #contact-action {
+    color: #fff; background: var(--accent); border-color: var(--accent); box-shadow: none;
+  }
+  .button:hover, #contact-action:hover { background: #0d5947; filter: none; }
+  .icon-button { color: var(--muted); }
+  .icon-button:hover { color: var(--accent); background: #16705b10; }
+  .text-button { color: var(--accent); }
+  .text-button:hover { color: #0d5947; }
+  .paper-band { --line: #233c3326; background: transparent; color: var(--text); }
+  #main :where(h1, h2, h3, h4, h5, h6, p, li, dt, dd, th, td, summary, a, span, strong, b, small, figcaption, caption, label) { color: inherit; }
+  #main :is(h1, h2, h3, h4, h5, h6, .board-title, .board-objective, .stage-skill, .contribution-lead dd) { color: var(--text); }
+  .hero-heading, .section-top h1 { background: none; -webkit-text-fill-color: currentColor; }
+  #main :is(.section-kicker, .section-note, .board-note, .dimension-tools, .creation-stage-preview, .project-visual figcaption, .case-context, .profile-description, .profile-facts, .portrait-period, .cost-measure-title, .badcase-preview, .analysis-reading) { color: var(--muted); }
+  #main :is(.metric-list dt, .growth-krs dt, .stage-content dt, .contribution-lead dt, .demo-label, .native-visual > figcaption) { color: var(--muted); }
+  #main :is(.metric-list dd, .capability-value, .section-index, .ability-result, .comparison-result, .proof-result, .board-takeaway, .board-return, .dimension-evidence, .share-acquisition strong) { color: var(--accent); }
+  #main :is(.contribution-lead > div:nth-child(2) dt, .decision-strips dt, .creation-phase, .creator-decisions dt) { color: var(--blue); }
+  #main :is(.contribution-lead > div:nth-child(3) dt, .creator-case-subtitle) { color: var(--coral); }
+  #main :is(.case-anchor, .account-links a, .representative-link, .portrait-email, .capability-case a, .review-table a) { color: var(--accent); }
+  #main :is(.case-anchor, .account-links a, .representative-link, .capability-case a):hover { color: #0d5947; }
+  #main :is(.board-title, .contribution-lead > div, .creation-phase, .dimension-points.native-visual, .board-table-scroll, .case-results, .evidence-flow) { border-color: var(--line); }
+  #main :is(.inline-icon, .flow-number, .ability-index, .capability-number) { color: var(--accent); }
+  #main .section-top .icon-button { color: var(--muted); }
+  .portrait-copy h1, .portrait-copy .section-kicker, .portrait-kind { text-shadow: none; }
+  #main .portrait-copy .about-copy #about-title, #main .portrait-history > h3 { color: var(--accent); }
+  #main .portrait-history .portrait-achievement { color: #21634d; }
+  #main .profile-facts .lucide { color: var(--muted); }
+  .portrait-pause { background: #ffffffd9; border-color: var(--line); color: var(--accent); }
+  .page-outline { background: #ffffffe0; border-color: var(--line); }
+  #main .page-outline a { border-right-color: var(--line); color: var(--muted); }
+  #main .page-outline a[aria-selected="true"] { background: #16705b0c; border-bottom-color: var(--accent); color: var(--accent); }
+  #main .page-outline a:hover strong { color: var(--accent); }
+  #main .page-outline .outline-number { color: #5c766a; }
+  #main .page-outline [aria-selected="true"] .outline-number { color: var(--accent); }
+  #main .page-outline small { color: var(--muted); }
+  [data-subsection-panel]:focus-visible { outline-color: var(--accent); }
+  #capability-grid { border-color: var(--line); }
+  #capability-grid .capability-item { background: transparent; border-color: var(--line); border-top: 3px solid var(--accent); }
+  #capability-grid .capability-item:nth-child(2) { border-top-color: var(--blue); }
+  #capability-grid .capability-item:nth-child(3) { border-top-color: var(--coral); }
+  #capability-grid .capability-item h3, #capability-grid .capability-path { color: var(--text); }
+  #capability-grid .capability-output { color: var(--muted); }
+  #capability-grid .capability-item > div > .inline-icon { color: var(--accent); }
+  #capability-grid .capability-item:nth-child(2) > div > .inline-icon { color: var(--blue); }
+  #capability-grid .capability-item:nth-child(3) > div > .inline-icon { color: var(--coral); }
+  .native-visual .evidence-flow { border-color: var(--line); }
+  .native-visual .evidence-flow li { background: transparent; border-color: var(--line); border-top: 2px solid #16705b80; }
+  #main .native-visual .evidence-flow p { color: var(--muted); }
+  .dimension-point > summary { background: transparent; }
+  .dimension-point > summary:hover { background: #ffffff60; }
+  .dimension-point > summary .lucide { color: var(--accent); }
+  .board-table-scroll, .review-table-wrap, .analysis-demo { background: var(--glass); border-color: var(--line); }
+  .analysis-demo .board-table-scroll { background: transparent; }
+  .board-table caption, .review-table caption, .cost-policy caption { background: transparent; }
+  .board-table thead th, .review-table thead th, .cost-policy thead th { background: #16705b09; }
+  #main :is(.board-table thead th, .review-table thead th, .cost-policy thead th) { color: #405d50; }
+  .board-table tbody th, .board-table td, .review-table tbody th, .review-table td, .cost-policy tbody th, .cost-policy td { background: transparent; border-color: var(--line); }
+  .board-table tbody tr:hover, .review-table tbody tr:hover { background: #16705b08; }
+  #main .selling-point-table tbody tr:nth-child(-n+2) th { color: var(--accent); }
+  .analysis-controls select { background: #ffffffb8; color: var(--text); border-color: #668578; }
+  .analysis-steps button { color: var(--muted); }
+  .analysis-steps button[aria-selected="true"] { color: var(--accent); background: #16705b0b; border-color: var(--accent); }
+  .analysis-steps button:hover { background: #16705b08; }
+  .analysis-steps button:focus-visible, .page-outline a:focus-visible, .analysis-controls select:focus-visible { outline-color: var(--accent); }
+  #main .demo-bar-row strong { color: var(--text); }
+  .demo-bar-track, .share-track, .cost-track, .comparison-track { background: #233c3310; border-color: #7a9688; }
+  .demo-bar-track > span, .share-acquisition .share-track > span, .cost-track > span { background: #23866a; }
+  .analysis-charts .demo-bars:nth-child(2) .demo-bar-track > span, .cost-segment:last-child .cost-track > span { background: #477dc0; }
+  .share-track > span { background: #477dc0; }
+  .comparison-track > span { background: #8b9b94; }
+  .comparison-row:nth-of-type(2) .comparison-track > span { background: #23866a; }
+  .policy-allocation > span:first-child { background: #23866a; }
+  .policy-allocation > span:last-child { background: #db9477; }
+  #main .policy-labels strong { color: var(--accent); }
+  #main .policy-labels > span { color: var(--coral); }
+  #main .growth-krs dd { color: var(--blue); }
+  .creation-stage[open] { background: #ffffff75; }
+  .creation-step-link { border-color: var(--line); }
+  .creation-step-link:hover, .creation-step-link:focus-visible { background: #16705b0b; }
+  .board-takeaway, .board-return { border-color: var(--accent); }
+  .badcase-comparison > div { border-color: var(--coral); }
+  .badcase-comparison > div + div { border-color: var(--accent); }
+  .prompt-sample, .prompt-sample blockquote { background: transparent; border-color: var(--line); }
+  #main .prompt-sample blockquote { color: var(--muted); }
+  .visual-button { background: var(--glass); border-color: var(--line); }
+  .visual-zoom { background: #ffffffe8; color: var(--accent); border: 1px solid var(--line); }
+  .visual-button:hover .visual-zoom { background: #e1f2e9; }
+  .visual-dialog-scroll { background: #f0f4f2; }
+  #project-dialog:has(.expanded-visual) { background: #fbfdfc; color: var(--text); color-scheme: light; border-color: var(--line); }
+  #project-dialog:has(.expanded-visual) > .dialog-close { color: var(--text); background: #eaf0ed; }
+  dialog { border-radius: 8px; border-color: var(--line); background: #fbfdfc; box-shadow: 0 24px 80px #203c3326; }
+  dialog::backdrop { background: #203c3345; }
+  .dialog-close.icon-button { color: var(--text); background: #eaf0ed; }
+  .toast { border-color: var(--line); border-radius: 8px; box-shadow: 0 10px 30px #203c331a; }
+}

@@ -7,32 +7,32 @@ const portfolio = require('../data/portfolio.json');
 const campaign = require('../data/campaign-review.json');
 const escape = value => String(value).replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]);
 const css = `
-* { box-sizing: border-box; } body { margin: 0; background: #171b1c; color: #f0f3f2; font-family: 'Noto Sans CJK SC', 'Noto Sans CJK JP', sans-serif; letter-spacing: 0; }
+* { box-sizing: border-box; } body { margin: 0; background: transparent; color: #202c29; font-family: 'Noto Sans CJK SC', 'Noto Sans CJK JP', sans-serif; letter-spacing: 0; }
 main { width: 1200px; height: 780px; padding: 42px 48px; display: flex; flex-direction: column; }
-header { border-top: 1px solid #576260; padding-top: 20px; }
-.eyebrow { color: #a6b8b2; font-size: 17px; margin: 0 0 14px; }
+header { border-top: 1px solid #a6b9af; padding-top: 20px; }
+.eyebrow { color: #52615c; font-size: 17px; margin: 0 0 14px; }
 h1 { font-size: 42px; font-weight: 500; line-height: 1.4; margin: 0 0 10px; }
-.subtitle { color: #bdc8c5; font-size: 22px; margin: 0; line-height: 1.7; }
+.subtitle { color: #52615c; font-size: 22px; margin: 0; line-height: 1.7; }
 ol { list-style: none; padding: 0; margin: 28px 0 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-li { background: #22292a; border: 1px solid #46524e; border-radius: 6px; padding: 16px 18px; min-width: 0; }
-.number { font-size: 17px; color: #95d4b8; margin-right: 12px; }
+li { background: transparent; border: 1px solid #a6b9af; border-radius: 6px; padding: 16px 18px; min-width: 0; }
+.number { font-size: 17px; color: #16705b; margin-right: 12px; }
 h2 { display: inline; font-size: 25px; font-weight: 500; line-height: 1.5; }
-li p { font-size: 19px; line-height: 1.7; margin: 7px 0 0; color: #bdc8c5; }
-li:last-child { border-color: #8cc9ad; }
-footer { border-top: 1px solid #576260; padding-top: 20px; margin-top: auto; color: #b3c5bd; font-size: 19px; line-height: 1.8; }
+li p { font-size: 19px; line-height: 1.7; margin: 7px 0 0; color: #52615c; }
+li:last-child { border-color: #16705b; }
+footer { border-top: 1px solid #a6b9af; padding-top: 20px; margin-top: auto; color: #52615c; font-size: 19px; line-height: 1.8; }
 .metrics { display: grid; grid-template-columns: repeat(3, 1fr); margin: 30px 0 4px; }
-.metrics > div { padding-left: 22px; border-left: 2px solid #6ba68d; }
-.metrics strong { display: block; font-size: 40px; font-weight: 500; line-height: 1.5; color: #d8eee3; }
-.metrics span { font-size: 19px; color: #b9c7c1; }
+.metrics > div { padding-left: 22px; border-left: 2px solid #16705b; }
+.metrics strong { display: block; font-size: 40px; font-weight: 500; line-height: 1.5; color: #16705b; }
+.metrics span { font-size: 19px; color: #52615c; }
 .team ol { grid-template-columns: repeat(2, 1fr); }
 .team li { padding: 18px 22px; }
 .growth .metrics { margin-top: 34px; }
 .growth .metrics strong { font-size: 48px; }
 .comparison { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; margin: 38px 0 0; }
-.comparison section { border-top: 1px solid #576260; padding-top: 20px; }
+.comparison section { border-top: 1px solid #a6b9af; padding-top: 20px; }
 .comparison h2 { font-size: 24px; }
-.comparison p { color: #b9c7c1; font-size: 21px; margin: 12px 0; line-height: 1.7; }
-.comparison strong { color: #a6dfc4; font-size: 27px; font-weight: 500; }
+.comparison p { color: #52615c; font-size: 21px; margin: 12px 0; line-height: 1.7; }
+.comparison strong { color: #16705b; font-size: 27px; font-weight: 500; }
 `;
 function diagram(key) {
   const visual = portfolio.presentation.visuals[key];
@@ -57,8 +57,8 @@ function growth() {
       const footerTop = await page.locator('footer').evaluate(element => element.getBoundingClientRect().top);
       const contentBottom = await page.locator('ol, .comparison').evaluate(element => element.getBoundingClientRect().bottom);
       assert(footerTop >= contentBottom + 12, `Overlapping ${key} diagram`);
-      await page.screenshot({ path: path.join(root, `assets/qxw-${key}.png`) });
-      console.log(`Rendered dark ${key} diagram (1200x780)`);
+      await page.screenshot({ path: path.join(root, `assets/qxw-${key}.png`), omitBackground: true });
+      console.log(`Rendered transparent light ${key} diagram (1200x780)`);
     }
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
