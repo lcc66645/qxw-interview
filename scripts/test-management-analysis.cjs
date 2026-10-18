@@ -34,16 +34,9 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
       await page.setViewportSize({width,height});
       await page.goto(`${base}#/methods`, {waitUntil:'networkidle'});
       assert.equal(await page.locator('.okr-row, #production-cost-control').count(),0);
-      for (const group of ['', '小组A', '小组B']) {
-        await page.locator('#demo-group').selectOption(group);
-        const rows = demo.rows.filter(row => !group || row.group === group);
-        for (let stage=0;stage<4;stage++) {
-          await page.locator(`#analysis-tab-${stage+1}`).click();
-          assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').count(),1);
-          assert.equal(await page.locator('#analysis-panel').getAttribute('aria-labelledby'),`analysis-tab-${stage+1}`);
+      assert.equal(await page.locator('#analysis-demo select, .analysis-steps, .demo-detail-table').count(), 0);
+        const rows = demo.rows;
           assert.deepEqual(await page.locator('.demo-metrics dd').allTextContents(), [`${rows.length}条`,wan(sum(rows,'vv')),`${sum(rows,'newUsers')}人`,efficiency(rows)]);
-          if (stage === 0) assert.deepEqual(await page.locator('.demo-detail-table tbody tr th').allTextContents(),rows.map(row => row.day));
-          if (stage === 1) {
             const members = [...new Set(rows.map(row => row.member))];
             const expected = members.map(member => {
               const selected=rows.filter(row => row.member===member);
@@ -53,25 +46,24 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
             const daily = ['D1','D2','D3','D4'].map(day => sum(rows.filter(row=>row.day===day),'vv'));
             const heights = await page.locator('.daily-column-chart .column-track').evaluateAll(tracks => tracks.map(track=>track.firstElementChild.getBoundingClientRect().height/(track.clientHeight)*100));
             heights.forEach((value,index)=>assert(Math.abs(value-daily[index]/Math.max(...daily)*100)<.4));
+          assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(),new Set(rows.map(row=>row.type)).size);
+          for (const type of ['效果型', '品宣型']) {
+            const selected = rows.filter(row => row.type === type);
+            const cells = await page.locator('.demo-diagnosis-table tbody tr').filter({hasText:type}).locator('th, td').allTextContents();
+            assert.deepEqual(cells.slice(0,5), [type,String(selected.length),wan(sum(selected,'vv')),`${sum(selected,'newUsers')}人`,efficiency(selected)]);
           }
-          if (stage === 2) assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(),new Set(rows.map(row=>row.type)).size);
-          if (stage === 3) assert.equal(await page.locator('.demo-actions-table tbody tr').count(),4);
+          assert(await page.locator('.demo-pivot-table').isVisible());
+          assert(await page.locator('.demo-diagnosis-table').isVisible());
           assert(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'Only dense tables may scroll, not the page');
           assert(await page.locator('#analysis-demo button').evaluateAll(buttons=>buttons.every(el=>el.scrollWidth<=el.clientWidth+1)));
-        }
-      }
-      await page.locator('#demo-group').selectOption('');
-      await page.locator('#analysis-tab-1').focus(); await page.keyboard.press('ArrowRight');
-      assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-2');
-      await page.keyboard.press('End'); assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-4');
-      await page.keyboard.press('Home'); assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-1');
-      await page.locator('#analysis-tab-2').click();
+      assert(!(await page.locator('main').textContent()).includes('北极星'));
       await page.evaluate(() => { document.activeElement.blur(); window.scrollTo(0,0); });
       await page.screenshot({path:`${out}/team-${width}.png`,fullPage:true});
       for (const id of ['experience','insights','skills']) {
         await page.goto(`${base}#/${id}`,{waitUntil:'networkidle'});
         assert.equal(await page.locator('.page-outline a').count(),3);
         if (id === 'experience') {
+          assert.equal(await page.locator('.north-star').count(),1);
           assert.equal(await page.locator('#growth-budget #production-cost-control').count(),1);
           assert.equal(await page.locator('.growth-krs > div').count(),1);
         }
@@ -89,7 +81,7 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
           assert(await page.locator(`#${anchor}`).isVisible());
         }
       }
-      console.log(`PASS analysis workflow, filters, exact totals, weighted efficiencies, charts and page outlines at ${width}px`);
+      console.log(`PASS static analysis, exact totals, weighted efficiencies, charts and separated ownership at ${width}px`);
     }
     assert.deepEqual(errors,[]);
   } finally { await browser.close(); }

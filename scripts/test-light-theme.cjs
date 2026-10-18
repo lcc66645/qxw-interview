@@ -35,9 +35,8 @@ fs.mkdirSync(output, { recursive: true });
         }
         if (id === 'methods') {
           await page.locator('[data-section-target="team-analysis"]').click();
-          for (const tab of await page.locator('.analysis-steps button').all()) await tab.click();
-          await page.locator('#demo-group').selectOption('小组B');
-          assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '34人');
+          assert.equal(await page.locator('#demo-group, .analysis-steps').count(), 0);
+          assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '89人');
         }
         if (id === 'insights') {
           await page.locator('[data-section-target="creation-workflow"]').click();

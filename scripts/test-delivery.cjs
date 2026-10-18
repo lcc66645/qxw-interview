@@ -63,11 +63,9 @@ async function assertReadable(page) {
           assert.equal(await page.locator('.page-outline a').count(), 3);
           assert.equal(await page.locator('.management-table tbody tr').count(), 4);
           assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 3);
-          await page.locator('#analysis-tab-3').click();
           assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(), 2);
-          await page.locator('#demo-group').selectOption('小组B');
-          assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(), 1);
-          assert.deepEqual(await page.locator('.demo-metrics dd').allTextContents(), ['4条', '70.0万', '34人', '48.6人']);
+          assert.equal(await page.locator('#demo-group, .analysis-steps').count(), 0);
+          assert.deepEqual(await page.locator('.demo-metrics dd').allTextContents(), ['12条', '437.0万', '89人', '20.4人']);
         }
         if (id === 'insights') {
           assert.equal(await page.locator('.creation-stage[open]').count(), 0);
@@ -124,7 +122,8 @@ async function assertReadable(page) {
       await copy.goto('https://portfolio.test/re-export.html'); await copy.locator('#skills').waitFor();
       await assertReadable(copy);
       assert.equal(await copy.locator('.header [data-bind="name"]').textContent(), '离线导出验证');
-      assert.equal(await copy.locator('.review-table tbody tr').count(), 4);
+      assert.equal(await copy.locator('.case-delivery-table tbody tr').count(), 2);
+      assert.equal(await copy.locator('.selling-point-table tbody tr').count(), 9);
       if (javaScriptEnabled) {
         await copy.locator('nav [data-page-link="capabilities"]').click(); await copy.locator('.portrait-intro').waitFor(); await assertReadable(copy);
         await copy.locator('nav [data-page-link="insights"]').click(); await copy.locator('[data-section-target="featured-evidence"]').click(); await copy.locator('#creator-case-detail > summary').click(); await copy.locator('[data-attachment]').waitFor();

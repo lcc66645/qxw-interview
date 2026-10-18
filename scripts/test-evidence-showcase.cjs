@@ -26,10 +26,10 @@ fs.mkdirSync(output, { recursive: true });
       await page.locator('#data-infrastructure').scrollIntoViewIfNeeded();
       await page.screenshot({ path: `${output}/data-library-${width}.png` });
       await page.locator('[data-section-target="team-review"]').click();
-      assert.equal(await page.locator('.management-node').count(), 8);
-      assert.equal(await page.locator('.management-branch .management-node').count(), 2);
+      assert.equal(await page.locator('.page-workflow[data-workflow="team"] li').count(), 4);
+      assert(!(await page.locator('main').textContent()).includes('北极星'));
       assert(await page.locator('.review-action-table').isVisible());
-      await page.locator('.management-loop').scrollIntoViewIfNeeded();
+      await page.locator('.review-action-table').scrollIntoViewIfNeeded();
       await page.screenshot({ path: `${output}/management-loop-${width}.png` });
       await page.locator('[data-section-target="team-execution"]').click();
       assert.deepEqual(await page.locator('.organization-roles h3').allTextContents(), source.organization.map(item => item[0]));
@@ -62,7 +62,7 @@ fs.mkdirSync(output, { recursive: true });
       await page.screenshot({ path: `${output}/script-comparison-${width}.png` });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
       assert(await page.locator('.script-verdict, .template-card').evaluateAll(items => items.every(el => !el.checkVisibility() || el.scrollWidth <= el.clientWidth + 1)));
-      console.log(`PASS seven data assets, management loop, organization, visible nine-row decisions, templates and positive/negative sample table at ${width}px`);
+      console.log(`PASS seven data assets, analytical handoff, execution organization, nine-row decisions, templates and positive/negative sample table at ${width}px`);
     }
     assert.deepEqual(errors, []);
   } finally { await browser.close(); }

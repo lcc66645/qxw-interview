@@ -45,28 +45,26 @@ fs.mkdirSync(output, { recursive: true });
       assert.equal(await page.locator('#growth-channels .flow-return').count(), 1);
       await page.goto(`${base}portfolio-light.html#/methods`, { waitUntil: 'networkidle' });
       assert(await page.locator('.column-plot').isVisible());
-      assert(!await page.locator('.demo-pivot-table').isVisible());
-      await page.locator('#demo-group').selectOption('小组B');
-      assert.deepEqual(await page.locator('.daily-column > strong').allTextContents(), ['12.0万', '16.0万', '19.0万', '23.0万']);
-      await page.locator('#analysis-member-detail > summary').click();
+      assert.equal(await page.locator('#analysis-demo select, .analysis-steps').count(), 0);
+      assert.deepEqual(await page.locator('.daily-column > strong').allTextContents(), ['90.0万', '112.0万', '105.0万', '130.0万']);
       assert(await page.locator('.demo-pivot-table').isVisible());
-      assert.equal(await page.locator('.cell-meter').count(), 2);
-      await page.locator('#analysis-member-detail > summary').click();
+      assert.equal(await page.locator('.cell-meter').count(), 12);
       await page.locator('.analysis-charts').scrollIntoViewIfNeeded();
       await page.screenshot({ path: path.join(output, `analysis-charts-${width}.png`) });
       await page.goto(`${base}portfolio-light.html#/skills/case-growth`, { waitUntil: 'networkidle' });
-      assert.equal(await page.locator('.efficiency-row').count(), 9);
+      assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
       const points = await page.evaluate(() => window.portfolioData.campaignReview.points);
-      const max = Math.max(...points.map(point => point.acquisitionsPerMillion));
+      const displayed = points.map(point => Number(point.acquisitionsPerMillion.toFixed(1)));
+      const max = Math.max(...displayed);
       for (let i = 0; i < points.length; i++) {
-        const mark = page.locator('.efficiency-track > span').nth(i);
+        const mark = page.locator('.selling-point-table tbody tr').nth(i).locator('td').nth(4).locator('.cell-meter');
         const percent = await mark.evaluate(el => Number.parseFloat(el.style.width));
-        assert(Math.abs(percent - points[i].acquisitionsPerMillion / max * 100) < .001);
+        assert(Math.abs(percent - displayed[i] / max * 100) < .001);
       }
-      await page.locator('.selling-efficiency-chart').scrollIntoViewIfNeeded();
+      await page.locator('.selling-point-table').scrollIntoViewIfNeeded();
       await page.screenshot({ path: path.join(output, `selling-efficiency-${width}.png`) });
       assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-      console.log(`PASS versioned fresh entry, capability tree, planning diagram, filtered chart-first analysis and nine-point efficiency at ${width}px`);
+      console.log(`PASS versioned fresh entry, capability tree, planning diagram, direct analysis and table efficiency at ${width}px`);
     }
     assert.deepEqual(staleRequests, [], 'No request may fall back to a stale unversioned asset');
     assert.deepEqual(errors, []);

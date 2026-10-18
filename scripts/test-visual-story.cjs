@@ -5,7 +5,7 @@ const { chromium } = require(process.env.PLAYWRIGHT_MODULE || 'playwright');
 const base = process.env.BASE_URL || 'http://127.0.0.1:4217/';
 const output = '/tmp/qxw-transparent-qa';
 fs.mkdirSync(output, { recursive: true });
-const expected = { capabilities: ['capabilities'], experience: ['growth','budget'], methods: ['review','team'], insights: ['creation'], skills: ['case'] };
+const expected = { capabilities: ['capabilities'], experience: ['growth','budget'], methods: ['team'], insights: ['creation'], skills: ['case'] };
 (async () => {
   const browser = await chromium.launch({ executablePath: '/usr/bin/chromium', args: ['--no-sandbox'] });
   const errors = [], failures = [];
@@ -44,12 +44,10 @@ const expected = { capabilities: ['capabilities'], experience: ['growth','budget
             return style.backgroundColor === 'rgba(0, 0, 0, 0)' && style.backdropFilter === 'none';
           }));
           assert(await page.locator('#analysis-demo').evaluate(el => getComputedStyle(el).backdropFilter.includes('blur')));
-          await page.locator('#demo-group').selectOption('小组B');
-          assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 1);
-          assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '34人');
-          await page.locator('#demo-group').selectOption('');
+          assert.equal(await page.locator('#demo-group, .analysis-steps').count(), 0);
+          assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 3);
+          assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '89人');
           await page.locator('[data-section-target="team-review"]').click();
-          await page.locator('#team-review-actions > summary').click();
           assert.equal(await page.locator('.review-action-table tbody tr').count(), 3);
           await page.locator('#team-review').scrollIntoViewIfNeeded();
         }

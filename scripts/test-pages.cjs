@@ -19,7 +19,7 @@ async function checkCampaignEvidence(page) {
     assert.deepEqual(await group.locator('strong').allTextContents(), values.map(v => `${v.toFixed(1)}%`));
     assert(await group.locator('.share-track').evaluateAll((tracks, values) => tracks.every((track, i) => Math.abs(track.firstElementChild.getBoundingClientRect().width / track.getBoundingClientRect().width * 100 - values[i]) < .15), values));
   }
-  assert.equal(await page.locator('.focus-table tbody tr').count(), 3);
+  assert.equal(await page.locator('.focus-table, .selling-efficiency-chart').count(), 0, 'Keep one detailed selling-point table, not repeated derivatives');
   await page.locator('#selling-point-data > summary').click();
   assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
   for (const [i, point] of data.campaignReview.points.entries()) {
@@ -108,9 +108,9 @@ async function check(page, id) {
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.okr-row, .okr-results, #production-cost-control').count(), 0);
-          assert.equal(await page.locator('#team-review [data-visual="review"]').count(), 1);
+          assert.equal(await page.locator('#team-review .review-action-table').count(), 1);
           assert.equal(await page.locator('[data-visual="team"]').count(), 1);
-          assert.deepEqual(await page.locator('#team-analysis > h2, #team-review > h2, #team-execution > h2').allTextContents(), ['01 / 数据分析：从作品明细到管理决策', '02 / 内容×业务复盘', '03 / 团队管理与交付']);
+          assert.deepEqual(await page.locator('#team-analysis > h2, #team-review > h2, #team-execution > h2').allTextContents(), ['01 / 数据分析：从作品回收到增长诊断依据', '02 / 诊断支持：用内容×业务解释数据差异', '03 / 组织执行：把增长决策变成可验收交付']);
           assert.equal(await page.locator('main details[open]').count(), 0);
           assert.equal(await page.locator('.management-table tbody tr').count(), 4);
           assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 3);
@@ -167,11 +167,8 @@ async function check(page, id) {
           assert.equal(await page.locator('.case-perspective').count(), 4); assert.equal(await page.locator('.case-perspective[open]').count(), 0);
           await checkCampaignEvidence(page);
           assert.deepEqual(await page.locator('.case-results .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
-          assert.equal(await page.locator('.review-table tbody tr').count(), 4); assert.equal(await page.locator('.badcase-item').count(), 3);
-          for (const [row, index] of [0, 1, 2, 4].entries()) {
-            const point = data.campaignReview.points[index];
-            assert.deepEqual(await page.locator('.review-table tbody tr').nth(row).locator('th,td').allTextContents(), [point.name, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`]);
-          }
+          assert.equal(await page.locator('.review-table').count(), 0, 'Do not duplicate the nine-selling-point table');
+          assert.equal(await page.locator('.badcase-item').count(), 3);
           for (const item of data.presentation.casePerspectives) {
             await page.goto(new URL(`index.html#/skills/${item.id}`, base).href);
             assert((await page.locator(`#${item.id}`).innerText()).includes(item.action));

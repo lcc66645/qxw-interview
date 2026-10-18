@@ -71,11 +71,10 @@ async function assertActive(page, target) {
       console.log(`PASS three-subsection framework, contribution labels, keyboard, reload, disclosure and layout at ${width}px`);
     }
     await page.goto(`${base}#/methods`);
-    await page.locator('#demo-group').selectOption('小组B');
     await page.locator('[data-section-target="team-review"]').click();
     await page.locator('[data-section-target="team-analysis"]').click();
-    assert.equal(await page.locator('#demo-group').inputValue(), '小组B');
-    assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '34人');
+    assert.equal(await page.locator('#demo-group, .analysis-steps').count(), 0);
+    assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '89人');
     await page.locator('[data-section-target="team-execution"]').click();
     await page.locator('[data-section-target="team-review"]').click();
     await page.goBack(); await assertActive(page, 'team-execution');
@@ -104,6 +103,6 @@ async function assertActive(page, target) {
       await context.close();
     }
     assert.deepEqual(errors, []);
-    console.log('PASS filter preservation, history, print state restore and offline JS on/off section navigation');
+    console.log('PASS static data preservation, history, print state restore and offline JS on/off section navigation');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });
