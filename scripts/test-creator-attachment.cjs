@@ -24,7 +24,10 @@ const expected = fs.readFileSync(attachment.path);
       await context.route('https://portfolio.test/creator.html', route => route.fulfill({ contentType: 'text/html; charset=utf-8', body: html }));
       const copy = await context.newPage(); copy.on('pageerror', error => errors.push(error.message)); copy.on('requestfailed', request => failed.push(request.url()));
       await copy.goto('https://portfolio.test/creator.html');
-      if (javaScriptEnabled) await copy.locator('#creator-case-detail > summary').click();
+      if (javaScriptEnabled) {
+        await copy.locator('[data-section-target="featured-evidence"]').click();
+        await copy.locator('#creator-case-detail > summary').click();
+      }
       await copy.locator('#creator-xiaolaoban').waitFor();
       assert.deepEqual(await copy.locator('.creator-case-metrics dd').allTextContents(), ['1天', '1–2次', '23条']);
       assert.equal(await copy.locator('.prompt-sample').count(), 3);

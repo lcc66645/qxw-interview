@@ -2,6 +2,14 @@
 
 Date: 2026-10-18
 
+## Subsection Framework Update
+
+- Growth, team, creation and case each have three local anchor-tabs and exactly one visible content panel. Native ARIA tab/panel linkage, roving focus, Left/Right/Home/End, refresh and back/forward are covered by `scripts/test-section-framework.cjs` at1440/768/390/320px. Screenshots: `/tmp/qxw-section-framework-qa`.
+- Personal role, decision/action and deliverable are explicitly labeled before detailed evidence. Large result figures and numbered headings replace long introductory paragraphs; goal rationale and execution details remain available through disclosures.
+- Nine creation nodes are grouped into three phases and show short competency previews. Corrected initial narrow-screen number/name grid wrapping; phase titles and step names now retain stable columns. Three numeric Bad Case previews expand independently.
+- Removed duplicate employer/case headings and the outer case accordion; `business-review` remains as a stable section anchor. Original case numbers, source links and prompt attachment remain unchanged.
+- Print temporarily exposes all subpanels and restores selection. Exported static first paint removes interactive tab roles, uses ordinary in-document links and exposes all panels; JavaScript restores the single-panel experience. Analysis filters survive same-page local tab switches.
+
 ## Target
 
 The latest correction requires native transparent tables and diagrams integrated with the existing studio, not separate bitmap posters. Preserve the portrait, five views, three competencies, real-case isolation and source evidence.

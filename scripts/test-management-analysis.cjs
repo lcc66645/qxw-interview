@@ -39,8 +39,8 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
         const rows = demo.rows.filter(row => !group || row.group === group);
         for (let stage=0;stage<4;stage++) {
           await page.locator(`#analysis-tab-${stage+1}`).click();
-          assert.equal(await page.locator('[role="tab"][aria-selected="true"]').count(),1);
-          assert.equal(await page.locator('[role="tabpanel"]').getAttribute('aria-labelledby'),`analysis-tab-${stage+1}`);
+          assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').count(),1);
+          assert.equal(await page.locator('#analysis-panel').getAttribute('aria-labelledby'),`analysis-tab-${stage+1}`);
           assert.deepEqual(await page.locator('.demo-metrics dd').allTextContents(), [`${rows.length}条`,wan(sum(rows,'vv')),`${sum(rows,'newUsers')}人`,efficiency(rows)]);
           if (stage === 0) assert.deepEqual(await page.locator('.demo-detail-table tbody tr th').allTextContents(),rows.map(row => row.day));
           if (stage === 1) {
@@ -62,9 +62,9 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
       }
       await page.locator('#demo-group').selectOption('');
       await page.locator('#analysis-tab-1').focus(); await page.keyboard.press('ArrowRight');
-      assert.equal(await page.locator('[role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-2');
-      await page.keyboard.press('End'); assert.equal(await page.locator('[role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-4');
-      await page.keyboard.press('Home'); assert.equal(await page.locator('[role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-1');
+      assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-2');
+      await page.keyboard.press('End'); assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-4');
+      await page.keyboard.press('Home'); assert.equal(await page.locator('.analysis-steps [role="tab"][aria-selected="true"]').getAttribute('id'),'analysis-tab-1');
       await page.locator('#analysis-tab-2').click();
       await page.evaluate(() => { document.activeElement.blur(); window.scrollTo(0,0); });
       await page.screenshot({path:`${out}/team-${width}.png`,fullPage:true});

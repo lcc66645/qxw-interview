@@ -10,7 +10,7 @@ fs.mkdirSync(output, { recursive: true });
 const ids = Object.keys(data.pages);
 const route = id => new URL(`index.html${data.pages[id].route}`, base).href;
 async function checkCampaignEvidence(page) {
-  await page.locator('#case-growth > summary').click();
+  await page.locator('[data-section-target="case-growth"]').click();
   assert.deepEqual(await page.locator('.campaign-metrics dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
   for (const [groupIndex, indices] of [[0, 1], [2, 5, 6]].entries()) {
     const points = indices.map(i => data.campaignReview.points[i]);
@@ -25,6 +25,7 @@ async function checkCampaignEvidence(page) {
   for (const [i, point] of data.campaignReview.points.entries()) assert.deepEqual(await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents(), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await page.locator('#selling-point-data > summary').click(); await page.locator('#case-growth > summary').click();
+  await page.locator('[data-section-target="case-results"]').click();
 }
 async function check(page, id) {
   await page.locator(`main > #${id}`).waitFor();
@@ -93,11 +94,13 @@ async function check(page, id) {
           assert.deepEqual(await page.locator('.policy-content-types dt').allTextContents(), ['品宣型', '效果型']);
           assert((await page.locator('.policy-labels').innerText()).includes('至少80%'));
           assert((await page.locator('.growth-policy').innerText()).includes('排期要求'));
+          await page.locator('[data-section-target="growth-budget"]').click();
           await page.locator('#production-cost-control > summary').click();
           assert.deepEqual(await page.locator('.cost-segment strong').allTextContents(), ['495 token', '约135 token']);
           assert.deepEqual(await page.locator('.cost-policy tbody tr td:first-of-type').allTextContents(), ['Seedance 2.5', 'Seedance 2.0', '禁用2.5']);
           assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
           await page.locator('#production-cost-control > summary').click();
+          await page.locator('[data-section-target="growth-goal"]').click();
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.okr-row, .okr-results, #production-cost-control').count(), 0);
@@ -120,6 +123,7 @@ async function check(page, id) {
           assert.equal(await page.locator('.dimension-point:not([open])').count(), 3);
           const copy = await page.locator('.dimension-points').textContent();
           for (const value of ['4个账号', '1000万', '抖音自然流拉新50+', '月均涨粉3万+']) assert(copy.includes(value));
+          await page.locator('[data-section-target="featured-evidence"]').click();
           assert(await page.locator('.representative-link').evaluateAll(items => items.every((item, i) => !i || (item.getBoundingClientRect().top >= items[i - 1].getBoundingClientRect().bottom && Math.abs(item.getBoundingClientRect().left - items[i - 1].getBoundingClientRect().left) < 1))));
           await page.locator('#creator-case-detail > summary').click();
           assert.deepEqual(await page.locator('.creator-case-metrics dd').allTextContents(), ['1天', '1–2次', '23条']);
@@ -140,12 +144,13 @@ async function check(page, id) {
           assert.equal(await page.locator('.creation-stage').count(), 9);
           assert.equal(await page.locator('.creation-stage[open]').count(), 0);
           assert.equal(await page.locator('.creation-failure-table tbody tr').count(), 3);
+          await page.locator('#creator-case-detail > summary').click();
+          await page.locator('[data-section-target="creation-workflow"]').click();
           for (const [i, stage] of data.presentation.evidenceBoards.creation.stages.entries()) {
             const detail = page.locator('.creation-stage').nth(i); await detail.locator('summary').click();
             assert.deepEqual(await detail.locator('.stage-content dd').allTextContents(), [stage.tools, stage.action, stage.output, stage.check, stage.example]);
             await detail.locator('summary').click();
           }
-          await page.locator('#creator-case-detail > summary').click();
           await page.locator('.creation-step-link').nth(4).click();
           await page.waitForFunction(() => document.querySelector('#creation-step-5')?.open);
           assert.equal(await page.locator('#creation-step-5').evaluate(el => el.open), true);
@@ -154,7 +159,7 @@ async function check(page, id) {
           await page.goto(route('insights')); await check(page, id);
         }
         if (id === 'skills') {
-          assert(await page.locator('#business-review').evaluate(el => el.open));
+          assert(await page.locator('#business-review').isVisible());
           assert.equal(await page.locator('.case-perspective').count(), 4); assert.equal(await page.locator('.case-perspective[open]').count(), 0);
           await checkCampaignEvidence(page);
           assert.deepEqual(await page.locator('.case-results .metric-list dd').allTextContents(), ['119条', '3,690万', '238人', '2,443人']);
@@ -164,10 +169,11 @@ async function check(page, id) {
             assert.deepEqual(await page.locator('.review-table tbody tr').nth(row).locator('th,td').allTextContents(), [point.name, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`]);
           }
           for (const item of data.presentation.casePerspectives) {
-            await page.locator(`#${item.id} > summary`).click();
+            await page.goto(new URL(`index.html#/skills/${item.id}`, base).href);
             assert((await page.locator(`#${item.id}`).innerText()).includes(item.action));
             await page.locator(`#${item.id} > summary`).click();
           }
+          await page.locator('[data-section-target="case-results"]').click();
         }
         if ([1440,390,320].includes(width)) {
           await page.mouse.move(0, 0); await page.evaluate(() => { document.activeElement?.blur(); scrollTo({ top: 0, behavior: 'instant' }); });

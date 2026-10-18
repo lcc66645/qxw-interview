@@ -31,7 +31,9 @@ const expected = { capabilities: ['capabilities'], experience: ['growth','budget
           assert.equal(await page.locator('.growth-krs > div').count(), 1);
           assert.equal(await page.locator('#growth-channels .evidence-flow').count(), 1);
           assert.equal(await page.locator('.cost-comparison').count(), 1);
+          await page.locator('#growth-goal-detail > summary').click();
           assert((await page.locator('.growth-policy').innerText()).includes('不等同于80/20'));
+          await page.locator('#growth-goal-detail > summary').click();
         }
         if (id === 'methods') {
           assert.equal(await page.locator('.dimension-metrics').count(), 1);
@@ -46,6 +48,7 @@ const expected = { capabilities: ['capabilities'], experience: ['growth','budget
           assert.equal(await page.locator('.demo-pivot-table tbody tr').count(), 1);
           assert.equal(await page.locator('.demo-metrics dd').nth(2).textContent(), '34人');
           await page.locator('#demo-group').selectOption('');
+          await page.locator('[data-section-target="team-review"]').click();
           await page.locator('#team-review-actions > summary').click();
           assert.equal(await page.locator('.review-action-table tbody tr').count(), 3);
           await page.locator('#team-review').scrollIntoViewIfNeeded();
@@ -61,7 +64,7 @@ const expected = { capabilities: ['capabilities'], experience: ['growth','budget
           assert.equal(await page.locator('.case-delivery-table tbody tr').count(), 2);
           assert((await page.locator('#case-results').innerText()).includes('仍需后续验证'));
           assert.equal(await page.locator('#case-team #matrix-budget-control').count(), 0);
-          await page.locator('#case-growth > summary').click();
+          await page.locator('[data-section-target="case-growth"]').click();
           assert.equal(await page.locator('#case-growth #matrix-budget-control').count(), 1);
           assert.equal(await page.locator('.case-budget-table tbody tr').count(), 4);
           await page.locator('#case-growth > summary').click();

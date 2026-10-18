@@ -182,10 +182,18 @@
       ['识别差异', '传播与获新分别评价'], ['回查内容', '人群任务 / 功能动作 / 分发条件'],
       ['下发改动', '保留结构，修改关键变量'], ['回收验证', '比较同任务表现，更新模板']
     ]);
-    if (key === 'budget') flowMap(figure, [
-      ['测试准入', '预算需求、组件与发布条件'], ['效率评估', '同时看拉新规模与单位流量效率'],
-      ['资源分配', '按内容等级选择模型'], ['放量复查', '实际消耗 / 质量 / 转化衰减']
-    ]);
+    if (key === 'budget') {
+      const cost = initial.presentation.productionCost;
+      const comparison = document.createElement('div'); comparison.className = 'cost-comparison';
+      text(comparison, 'h3', `${cost.model} · 每次生成${cost.durationSeconds}秒片段`, 'cost-measure-title');
+      cost.segments.forEach(segment => {
+        const row = document.createElement('div'); row.className = 'cost-segment'; text(row, 'span', segment.resolution);
+        const track = document.createElement('span'); track.className = 'cost-track'; track.setAttribute('aria-hidden', 'true');
+        const bar = document.createElement('span'); bar.style.width = `${segment.tokens / Math.max(...cost.segments.map(item => item.tokens)) * 100}%`;
+        track.append(bar); row.append(track); text(row, 'strong', `${segment.approximate ? '约' : ''}${segment.tokens} token`); comparison.append(row);
+      }); figure.append(comparison);
+      text(figure, 'p', '两种清晰度的生成消耗实测；精品画质另行验收，不是降本前后对照。', 'board-note');
+    }
     if (key === 'team') {
       metrics(figure, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
       flowMap(figure, [['负责人', '业务对齐与优先级'], ['组长', '排期 / 质检 / 回收'], ['创意组 × 二创组', '小范围验证 → 结构复用']]);
@@ -202,9 +210,15 @@
     const list = document.createElement('div'); list.className = 'dimension-points';
     if (showPoints && index === 2) text(list, 'h2', '01 / 个人成果', 'board-title');
     if (showPoints && index === 2) { list.classList.add('native-visual'); list.dataset.visual = 'creation'; }
+    if (showPoints && index === 2) contributionLead(list, '独立运营与全流程创作', '用一线作品检验选题、表演与质感', '账号运营 / 传播 / 自然流获客');
     if (showPoints) dimension.points.forEach((point, pointIndex) => {
       const item = document.createElement('details'); item.className = 'dimension-point';
-      const summary = document.createElement('summary'); text(summary, 'h3', `${pointIndex + 1}. ${point.title}`); summary.append(iconElement('arrow-down')); item.append(summary);
+      const summary = document.createElement('summary');
+      const titles = ['矩阵运营', '传播与自然流获客', '持续账号增长'];
+      const values = ['4个账号', '千万VV / 拉新50+', '月均涨粉3万+'];
+      text(summary, 'span', String(pointIndex + 1).padStart(2, '0'), 'ability-index');
+      text(summary, 'h3', titles[pointIndex]); text(summary, 'strong', values[pointIndex], 'ability-result');
+      summary.append(iconElement('arrow-down')); item.append(summary);
       const copy = document.createElement('div');
       text(copy, 'p', point.action); text(copy, 'p', point.evidence, 'dimension-evidence'); item.append(copy); list.append(item);
     }); if (showPoints) parent.append(list);
@@ -312,15 +326,6 @@
     const cost = initial.presentation.productionCost;
     const detail = workDisclosure(parent, 'production-cost-control', cost.title);
     text(detail, 'p', `目的：${cost.purpose}`, 'decision-purpose'); text(detail, 'p', cost.context);
-    const comparison = document.createElement('figure'); comparison.className = 'cost-comparison';
-    text(comparison, 'figcaption', `${cost.model} · 每次生成${cost.durationSeconds}秒片段`);
-    cost.segments.forEach(segment => {
-      const row = document.createElement('div'); row.className = 'cost-segment';
-      text(row, 'span', segment.resolution);
-      const track = document.createElement('span'); track.className = 'cost-track'; track.setAttribute('aria-hidden', 'true');
-      const bar = document.createElement('span'); bar.style.width = `${segment.tokens / Math.max(...cost.segments.map(item => item.tokens)) * 100}%`; track.append(bar); row.append(track);
-      text(row, 'strong', `${segment.approximate ? '约' : ''}${segment.tokens} token`); comparison.append(row);
-    }); detail.append(comparison);
     const table = document.createElement('table'); table.className = 'cost-policy';
     text(table, 'caption', '按内容等级约束模型使用');
     const head = table.createTHead().insertRow(); ['内容类型', '模型', '使用判断'].forEach(label => { const cell = document.createElement('th'); cell.scope = 'col'; cell.textContent = label; head.append(cell); });
@@ -385,22 +390,16 @@
     });
   }
   function renderProjectCase(parent) {
-    const heading = text(parent, 'h4', '懂车帝 / 项目案例', 'portfolio-case-title');
+    const heading = text(parent, 'p', '懂车帝 / 项目复盘', 'section-kicker case-employer');
     heading.id = 'case-study-title';
-    const details = document.createElement('details'); details.className = 'review-tip portfolio-case'; details.id = 'business-review'; details.open = true;
-    const summary = document.createElement('summary');
-    text(summary, 'span', 'CASE 01', 'tip-label');
-    const title = document.createElement('span'); title.className = 'tip-heading';
-    text(title, 'strong', 'AI 小懂星图复盘'); text(title, 'span', '卖点判断、模板交付、脚本验证');
-    summary.append(title); details.append(summary);
-    const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body';
+    const details = document.createElement('section'); details.className = 'portfolio-case'; details.id = 'business-review';
+    const body = document.createElement('div'); body.id = 'business-review-body'; body.className = 'review-body case-body';
     details.append(body); parent.append(details);
   }
   function renderReviewTips() {
     const body = $('#business-review-body'); if (!body) return; body.replaceChildren();
     const project = data.projects.find(item => item.id === 'holiday');
-    text(body, 'h4', project.title, 'tip-project-title');
-    text(body, 'p', project.description, 'review-intro');
+    text(body, 'h2', project.title, 'tip-project-title');
     renderBusinessReview(body);
   }
   function reviewActions(parent, items) {
@@ -418,6 +417,9 @@
   }
   function renderBusinessReview(parent) {
     text(parent, 'p', `${initial.campaignReview.overview.period} · 中秋国庆项目`, 'case-context');
+    const perspectives = document.createElement('section'); perspectives.id = 'case-capabilities'; perspectives.dataset.subsectionGroup = '';
+    text(perspectives, 'h2', '02 / 我的判断与推进', 'board-title');
+    contributionLead(perspectives, '内容与业务复盘负责人', '卖点比较 → 脚本诊断 → 模板交付', '增长判断 / 团队交接 / 创作标准');
     initial.presentation.casePerspectives.forEach(({ id, title, decision, action, output }) => {
       const section = caseDisclosure(id, title);
       const reasoning = document.createElement('dl'); reasoning.className = 'case-reasoning';
@@ -428,10 +430,11 @@
         renderCampaignEvidence(section);
         renderMatrixBudget(section);
       }
-      parent.append(section);
+      perspectives.append(section);
     });
+    parent.append(perspectives);
     const results = document.createElement('section'); results.className = 'case-results'; results.id = 'case-results';
-    text(results, 'h4', '项目整体结果与个人交付');
+    text(results, 'h2', '01 / 项目结果与个人交付', 'board-title');
     metrics(results, [
       { label: '活动视频', value: '119条' }, { label: '累计VV', value: '3,690万' },
       { label: '项目拉新', value: '238人' }, { label: '项目拉活', value: '2,443人' }
@@ -443,6 +446,7 @@
     ], 'case-delivery-table');
     text(results, 'p', '上述为项目整体成绩；个人交付为复盘分析与模板，模板复用后的增量效果仍需后续验证。', 'board-note');
     const extra = workDisclosure(results, 'case-detail-evidence', '展开卖点数据与分析图');
+    text(extra, 'p', data.projects.find(item => item.id === 'holiday').description, 'review-intro');
     const wrap = document.createElement('div'); wrap.className = 'review-table-wrap'; wrap.tabIndex = 0; wrap.setAttribute('role', 'region'); wrap.setAttribute('aria-label', '业务卖点成果对比');
     const table = document.createElement('table'); table.className = 'review-table';
     text(table, 'caption', '业务卖点成果对比');
@@ -456,13 +460,13 @@
     }); table.append(body); wrap.append(table); extra.append(wrap);
     evidenceFigure(extra, 'growth', '播放表现与拉新贡献 · 中秋国庆星图项目', 'review-chart');
     text(extra, 'p', '两个主力卖点占32.2%的VV、64.3%的拉新；三个高播放低拉新卖点占46.5%的VV、19.3%的拉新。下一轮优先验证选车优惠和语音讲车的需求匹配与脚本表达。', 'review-highlight');
-    parent.insertBefore(results, parent.querySelector('.case-perspective'));
-    const lessons = caseDisclosure('pitfall-review', '反例与下一轮验证');
+    parent.insertBefore(results, perspectives);
+    const lessons = caseDisclosure('pitfall-review', '03 / 反例与下一轮验证');
     renderBadCases(lessons);
     parent.append(lessons);
     const links = document.createElement('div'); links.className = 'case-links';
     ['贷款维权', '借车讲车', '借车接客'].forEach((title, index) => externalLink(links, title, source.links[index + 9].url));
-    parent.append(links);
+    perspectives.append(links);
   }
   function renderBadCases(parent) {
     const group = document.createElement('div'); group.className = 'badcase-list';
@@ -473,8 +477,11 @@
       { title: '03 / 单条样本：剧情冲突与功能需求不匹配', purpose: '分别评价剧情吸引力与产品功能的任务匹配。', failed: '单条 / 家庭接孩子冲突·AI约试驾', failedData: '289万VV / 3人拉新', better: '单条 / 贷款算账维权·帮选车+查优惠', betterData: '252万VV / 67人拉新', diagnosis: '家庭接孩子的冲突不直接产生试驾需求；贷款算账则对应当下购车信息决策。我将功能与场景不匹配作为前者的脚本诊断，而不将两条作品的拉新差异全部归因于植入方式。', action: '先写清角色难题、功能作用和观众可执行的动作，再在可比条件下测试；不只补充一句下载提示。', url: initial.campaignReview.samples[12].url }
     ];
     examples.forEach(example => {
-      const item = document.createElement('article'); item.className = 'badcase-item';
-      text(item, 'h6', example.title); text(item, 'p', `目的：${example.purpose}`, 'proof-purpose');
+      const item = document.createElement('details'); item.className = 'badcase-item';
+      const summary = document.createElement('summary'); text(summary, 'h6', example.title);
+      text(summary, 'span', `${example.failedData}  对照  ${example.betterData}`, 'badcase-preview');
+      summary.append(iconElement('arrow-down')); item.append(summary);
+      text(item, 'p', `目的：${example.purpose}`, 'proof-purpose');
       const comparison = document.createElement('dl'); comparison.className = 'badcase-comparison';
       [[example.failed, example.failedData], [example.better, example.betterData]].forEach(([title, result]) => {
         const row = document.createElement('div'); text(row, 'dt', title); text(row, 'dd', result); comparison.append(row);
@@ -494,7 +501,7 @@
     pageOutline(parent, [['team-analysis', '数据分析', '采集 → 汇总 → 诊断 → 行动'], ['team-review', '内容×业务复盘', '问题 → 假设 → 内容修改 → 验证'], ['team-execution', '团队管理', '分工 → 验收 → 复用 → 反馈']]);
     renderTeamAnalysis(parent);
     const review = boardSection(parent, 'team-review', '02 / 内容×业务复盘');
-    text(review, 'p', '我把数据差异翻译成脚本修改要求，而不是用播放排名替代内容判断。', 'board-objective');
+    contributionLead(review, '内容×业务复盘', '把数据差异转成脚本修改要求', '改稿检查项 / 下一轮验证');
     visualFigure(review, 'review');
     const reviewDetail = workDisclosure(review, 'team-review-actions', '展开复盘判断与内容动作');
     boardTable(reviewDetail, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
@@ -504,7 +511,7 @@
     ], 'review-action-table');
     const caseLink = text(review, 'a', '查看真实项目中的诊断与取舍', 'case-anchor'); caseLink.href = pageHref('skills', 'case-growth'); caseLink.append(iconElement('arrow-up-right'));
     const execution = boardSection(parent, 'team-execution', '03 / 团队管理与交付');
-    text(execution, 'p', '我把复盘结论落实到任务、验收标准与维护责任，跟进至下一轮验证。', 'board-objective');
+    contributionLead(execution, '团队分工与交付负责人', '组长承接排期、质检与回收', '分工 / 验收 / 模板维护机制');
     visualFigure(execution, 'team');
     const managementDetail = workDisclosure(execution, 'team-management-actions', '展开管理分工与交付标准');
     boardTable(managementDetail, '管理动作与可检查交付', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
@@ -523,6 +530,7 @@
     renderCreationBoard(parent);
     const works = document.createElement('section'); works.className = 'authored-work';
     text(works, 'h2', '03 / 个人代表作品');
+    contributionLead(works, '本人原创作品', '从成片回看创作判断与修改', '作品链接 / 制作拆解 / 原始提示词');
     const evidence = document.createElement('div'); evidence.className = 'evidence-list'; evidence.id = 'featured-evidence';
     works.append(evidence); parent.append(works); renderEvidence();
   }
@@ -546,6 +554,13 @@
     const heading = text(section, 'h2', title, 'board-title'); heading.id = `${id}-title`;
     section.setAttribute('aria-labelledby', heading.id); parent.append(section); return section;
   }
+  function contributionLead(parent, role, decision, output) {
+    const lead = document.createElement('dl'); lead.className = 'contribution-lead';
+    [['我的作用', role, 'users'], ['关键动作', decision, 'workflow'], ['交付 / 证据', output, 'layers']].forEach(([label, value, symbol]) => {
+      const item = document.createElement('div'); const term = text(item, 'dt', label); term.prepend(iconElement(symbol));
+      text(item, 'dd', value); lead.append(item);
+    }); parent.append(lead); return lead;
+  }
   function boardTable(parent, caption, headings, rows, className = '') {
     const scroll = document.createElement('div'); scroll.className = 'board-table-scroll';
     scroll.tabIndex = 0; scroll.setAttribute('role', 'region'); scroll.setAttribute('aria-label', caption);
@@ -565,16 +580,46 @@
   }
   function pageOutline(parent, items) {
     const nav = document.createElement('nav'); nav.className = 'page-outline'; nav.setAttribute('aria-label', '本页结构');
+    nav.setAttribute('role', 'tablist');
     items.forEach(([id, title, note], index) => {
       const link = document.createElement('a'); link.href = pageHref(currentPage, id);
+      link.dataset.sectionTarget = id; link.id = `section-tab-${id}`; link.setAttribute('role', 'tab');
       text(link, 'span', String(index + 1).padStart(2, '0'), 'outline-number');
       const copy = document.createElement('span'); text(copy, 'strong', title); text(copy, 'small', note); link.append(copy); nav.append(link);
     }); parent.append(nav);
   }
+  function mountSubsections() {
+    const tabs = $$('.page-outline [data-section-target]');
+    tabs.forEach(tab => {
+      const target = document.getElementById(tab.dataset.sectionTarget);
+      const panel = target.closest('[data-subsection-group], .authored-work') || target;
+      if (!panel.id) panel.id = `section-panel-${tab.dataset.sectionTarget}`;
+      panel.dataset.subsectionPanel = tab.dataset.sectionTarget;
+      panel.setAttribute('role', 'tabpanel'); panel.setAttribute('aria-labelledby', tab.id); panel.tabIndex = 0;
+      const heading = panel.querySelector(':scope > h2');
+      const match = heading?.textContent.match(/^(\d{2})( \/ .+)$/);
+      if (match) {
+        heading.replaceChildren(); heading.classList.add('board-title');
+        text(heading, 'span', match[1], 'section-index'); text(heading, 'span', match[2], 'section-heading-text');
+      }
+      tab.setAttribute('aria-controls', panel.id);
+    });
+    selectSubsection('');
+  }
+  function selectSubsection(anchor) {
+    const panels = $$('[data-subsection-panel]'); if (!panels.length) return;
+    const target = document.getElementById(anchor);
+    const active = panels.find(panel => panel === target || panel.contains(target)) || panels[0];
+    panels.forEach(panel => { panel.hidden = panel !== active; });
+    $$('.page-outline [data-section-target]').forEach(tab => {
+      const selected = tab.dataset.sectionTarget === active.dataset.subsectionPanel;
+      tab.setAttribute('aria-selected', String(selected)); tab.tabIndex = selected ? 0 : -1;
+    });
+    return active;
+  }
   function renderTeamAnalysis(parent) {
     const section = boardSection(parent, 'team-analysis', '01 / 数据分析：从作品明细到管理决策');
-    text(section, 'p', '我搭建作品级回收表，按账号、小组、平台和内容类型汇总；先定位差异，再下钻脚本与分发条件。', 'board-objective');
-    text(section, 'p', 'Excel数据透视 / SUMIFS / RANK.EQ · 日报监测、周报诊断、双周业务复盘', 'board-note');
+    contributionLead(section, '搭建作品级回收与分析体系', '明细校验 → 透视汇总 → 交叉诊断', '日报监测 / 周报诊断 / 双周校准');
     const demo = document.createElement('div'); demo.id = 'analysis-demo'; demo.className = 'analysis-demo';
     text(demo, 'p', initial.presentation.managementDemo.label, 'demo-label');
     const controls = document.createElement('div'); controls.className = 'analysis-controls';
@@ -649,7 +694,7 @@
     const board = initial.presentation.evidenceBoards.growth;
     pageOutline(parent, [['growth-goal', '目标判断', '以拉新为主，不把VV当增长'], ['growth-channels', '增长策略', '人群 × 内容 × 分发承接'], ['growth-budget', '预算控制', '测试 → 验证 → 放量']]);
     const goals = boardSection(parent, 'growth-goal', '01 / 增长目标与指标取舍');
-    text(goals, 'p', board.objective, 'board-objective'); text(goals, 'p', board.ownership, 'board-note');
+    contributionLead(goals, '制定内容增长目标与优先级', '拉新主考核，拉活单列评价', '目标拆解 / 卖点内容排期要求');
     const list = document.createElement('dl'); list.className = 'growth-krs';
     board.keyResults.slice(0, 1).forEach(([label, value, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); text(row, 'dd', value); text(row, 'p', action); list.append(row);
@@ -657,17 +702,18 @@
     const policy = board.operatingPolicy;
     const priorities = document.createElement('section'); priorities.className = 'growth-policy';
     text(priorities, 'h3', policy.title);
-    text(priorities, 'p', policy.valueChain, 'policy-value-chain');
-    text(priorities, 'p', policy.decision, 'board-note');
     const split = document.createElement('div'); split.className = 'policy-allocation'; split.setAttribute('aria-hidden', 'true');
     [policy.sellingPointPercent, policy.explorationPercent].forEach(value => { const segment = document.createElement('span'); segment.style.flexBasis = `${value}%`; split.append(segment); });
     priorities.append(split);
     const labels = document.createElement('div'); labels.className = 'policy-labels';
     text(labels, 'strong', policy.sellingPointLabel); text(labels, 'span', policy.explorationLabel); priorities.append(labels);
-    text(priorities, 'p', `排期要求：${policy.execution}`, 'board-note'); goals.append(priorities);
+    const rationale = workDisclosure(priorities, 'growth-goal-detail', '排期要求 / 指标分工与业务承接');
+    text(rationale, 'p', board.objective, 'board-objective'); text(rationale, 'p', policy.valueChain, 'policy-value-chain');
+    text(rationale, 'p', policy.decision, 'board-note'); text(rationale, 'p', policy.execution, 'board-note'); goals.append(priorities);
     const types = document.createElement('dl'); types.className = 'policy-content-types';
-    policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); priorities.append(types);
+    policy.contentTypes.forEach(([name, task]) => { const item = document.createElement('div'); text(item, 'dt', name); text(item, 'dd', task); types.append(item); }); rationale.append(types);
     const path = boardSection(parent, 'growth-channels', '02 / 增长策略与验证');
+    contributionLead(path, '选择人群、内容与分发方向', '任务匹配 / 功能解题 / 发布承接', '选题优先级 / 脚本与分发要求');
     visualFigure(path, 'growth');
     const strategy = workDisclosure(path, 'growth-strategy-actions', '展开人群、渠道与脚本判断');
     const decisions = document.createElement('dl'); decisions.className = 'decision-strips';
@@ -682,7 +728,7 @@
       const mark = document.createElement('span'); mark.style.width = `${value / 212 * 100}%`; track.append(mark); row.append(track); text(row, 'strong', `${value}人`); comparison.append(row);
     }); text(comparison, 'p', '环比 +198.6% · 矩阵相邻两周表现', 'board-note'); path.append(comparison);
     const budget = boardSection(parent, 'growth-budget', '03 / 预算与生产成本控制');
-    text(budget, 'p', '按新增效率分配测试与放量资源，按镜头要求控制生成与返工消耗。', 'board-objective');
+    contributionLead(budget, '资源申请与模型使用规范', '先评估增长，再分配生成资源', '模型分级规范 / 追加资源申请');
     visualFigure(budget, 'budget');
     const budgetDetail = workDisclosure(budget, 'growth-budget-actions', '展开预算决策与执行动作');
     boardTable(budgetDetail, '预算决策与成本约束', ['环节','我的动作','决策依据','交付'], [
@@ -748,12 +794,18 @@
   function renderCreationBoard(parent) {
     const board = initial.presentation.evidenceBoards.creation;
     const section = boardSection(parent, 'creation-workflow', '02 / 个人工作流：从用户问题到成片，再回到数据');
+    contributionLead(section, '从选题到成片独立交付', '逐环节判断内容价值与生成可行性', '脚本 / 分镜 / 资产 / 成片 / 复盘');
     const tools = text(section, 'p', '工具概述：内部画布Auto Agent组织制作，ChatGPT生成图片，Seedance 2.5 / 2.0生成视频；Excel回收分析，Prompt与素材库支持复用。', 'board-note'); tools.id = 'creation-tools';
     const steps = document.createElement('div'); steps.className = 'creation-map';
     board.stages.forEach((stage, index) => {
+      if (index % 3 === 0) {
+        const phase = text(steps, 'h3', ['A / 策划与预演', 'B / 资产与成片', 'C / 上线与反馈'][index / 3], 'creation-phase');
+        phase.dataset.phase = String(index / 3);
+      }
       const detail = document.createElement('details'); detail.className = 'creation-stage'; detail.id = `creation-step-${index + 1}`;
       const summary = document.createElement('summary'); summary.className = 'creation-step-link'; text(summary, 'span', String(index + 1).padStart(2, '0'), 'flow-number');
       text(summary, 'strong', stage.name, 'creation-stage-name'); summary.append(iconElement('arrow-down')); detail.append(summary);
+      text(summary, 'small', stage.skill, 'creation-stage-preview');
       text(detail, 'h3', stage.skill, 'stage-skill');
       const content = document.createElement('dl'); content.className = 'stage-content';
       [['工具', stage.tools], ['我的操作', stage.action], ['交付物', stage.output], ['验收判断', stage.check], ['实践', stage.example]].forEach(([label, value]) => { text(content, 'dt', label); text(content, 'dd', value); });
@@ -793,6 +845,8 @@
     if (!anchor) return;
     const target = document.getElementById(anchor);
     if (!target) return;
+    const subsection = selectSubsection(anchor);
+    const sectionTab = $$('.page-outline [data-section-target]').some(tab => tab.dataset.sectionTarget === anchor);
     const panel = target.closest('[data-experience-panel]');
     if (panel) selectExperiencePanel(panel.dataset.experiencePanel);
     let parent = target;
@@ -800,7 +854,7 @@
       if (parent.tagName === 'DETAILS') parent.open = true;
       parent = parent.parentElement;
     }
-    requestAnimationFrame(() => target.scrollIntoView({ block: 'start', behavior: 'instant' }));
+    requestAnimationFrame(() => (sectionTab && subsection ? subsection : target).scrollIntoView({ block: 'start', behavior: 'instant' }));
   }
   function renderPage(id, anchor = '') {
     disposeMotion();
@@ -812,6 +866,7 @@
     if (id === 'methods') renderMethods();
     if (id === 'insights') renderInsights();
     if (id === 'skills') renderTechStack();
+    mountSubsections();
     if (id !== 'capabilities') {
       const print = document.createElement('button'); print.type = 'button'; print.id = 'print-journey'; print.className = 'icon-button';
       print.title = '打印当前内容'; print.setAttribute('aria-label', print.title); print.append(iconElement('printer')); $('.section-top').append(print);
@@ -896,7 +951,7 @@
     const workflow = event.target.closest('summary.creation-step-link');
     if (workflow) {
       const detail = workflow.parentElement;
-      history.replaceState(null, '', pageHref('insights', detail.open ? '' : detail.id));
+      history.replaceState(null, '', pageHref('insights', detail.open ? 'creation-workflow' : detail.id));
       return;
     }
     const experience = event.target.closest('[data-experience-tab]');
@@ -921,6 +976,13 @@
     if (event.target.closest('#print-profile, #print-journey')) { printProfile(); return; }
   });
   $('#main').addEventListener('keydown', event => {
+    const section = event.target.closest('[data-section-target]');
+    if (section && ['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) {
+      const tabs = $$('.page-outline [data-section-target]'), index = tabs.indexOf(section);
+      const next = event.key === 'Home' ? 0 : event.key === 'End' ? tabs.length - 1 : (index + (event.key === 'ArrowRight' ? 1 : -1) + tabs.length) % tabs.length;
+      event.preventDefault(); const tab = tabs[next];
+      history.replaceState(null, '', tab.getAttribute('href')); openAnchor(tab.dataset.sectionTarget); tab.focus(); return;
+    }
     const button = event.target.closest('[data-experience-tab]');
     if (!button || !['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
     const buttons = $$('[data-experience-tab]'), index = buttons.indexOf(button);
@@ -934,6 +996,10 @@
       const [id, anchor = ''] = link.hash.slice(1).replace(/^\//, '').split('/');
       if (hasPage(id)) {
         event.preventDefault();
+        if (link.dataset.sectionTarget && id === currentPage) {
+          if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+          openAnchor(anchor); link.focus({ preventScroll: true }); return;
+        }
         if (location.hash !== link.hash) location.hash = link.hash;
         else { renderPage(id, anchor); if (!anchor) window.scrollTo({ top: 0, behavior: 'instant' }); }
         return;
@@ -970,7 +1036,7 @@
   });
   function printProfile() {
     const details = $$('main details'); const states = details.map(element => element.open);
-    const panels = $$('[data-experience-panel]'); const hidden = panels.map(panel => panel.hidden);
+    const panels = $$('[data-experience-panel], [data-subsection-panel]'); const hidden = panels.map(panel => panel.hidden);
     details.forEach(element => { element.open = true; });
     panels.forEach(panel => { panel.hidden = false; panel.classList.add('is-visible'); });
     const restore = () => { details.forEach((element, index) => { element.open = states[index]; }); panels.forEach((panel, index) => { panel.hidden = hidden[index]; }); };
@@ -989,7 +1055,8 @@
   function refreshCurrentView() {
     const opened = $$('main details[open]').map(element => element.id).filter(Boolean);
     const selected = $('[data-experience-tab][aria-expanded="true"]')?.dataset.experienceTab;
-    renderPage(currentPage);
+    const section = $('.page-outline [aria-selected="true"]')?.dataset.sectionTarget || '';
+    renderPage(currentPage); selectSubsection(section);
     if (selected) selectExperiencePanel(selected);
     opened.forEach(id => { const element = document.getElementById(id); if (element?.tagName === 'DETAILS') element.open = true; });
   }
@@ -1057,6 +1124,15 @@
       // Keep a readable first paint even when a preview blocks JavaScript.
       const main = clone.querySelector('#main');
       main.classList.remove('motion-enabled');
+      main.querySelectorAll('[data-subsection-panel]').forEach(panel => { panel.hidden = false; panel.removeAttribute('role'); panel.removeAttribute('aria-labelledby'); panel.removeAttribute('tabindex'); });
+      const outline = main.querySelector('.page-outline');
+      if (outline) {
+        outline.removeAttribute('role');
+        outline.querySelectorAll('[data-section-target]').forEach(link => {
+          link.href = `#${link.dataset.sectionTarget}`;
+          ['role', 'aria-selected', 'aria-controls', 'tabindex'].forEach(attribute => link.removeAttribute(attribute));
+        });
+      }
       main.querySelectorAll('canvas').forEach(canvas => canvas.remove());
       main.querySelectorAll('.scene-ready').forEach(element => element.classList.remove('scene-ready'));
       main.querySelectorAll('[data-experience-panel]').forEach(panel => {

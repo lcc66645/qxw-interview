@@ -23,6 +23,7 @@ const base = process.env.BASE_URL || 'http://127.0.0.1:4201/';
       assert(fs.readFileSync(await file.path()).equals(fs.readFileSync(path.join(root, 'downloads', filename))));
     }
     await page.locator('nav [data-page-link="insights"]').click();
+    await page.locator('[data-section-target="featured-evidence"]').click();
     await page.locator('#creator-case-detail > summary').click();
     const attachment = data.attachments[0]; const link = page.locator(`[data-attachment="${attachment.id}"]`);
     await link.waitFor(); assert.equal(await link.getAttribute('href'), attachment.path);
