@@ -501,7 +501,8 @@
   function renderMethods() {
     const parent = renderDimension(1, { showPoints: false, showMetrics: false, showCaseLink: false });
     renderPageWorkflow(parent, 'team');
-    pageOutline(parent, [['team-analysis', '数据分析', '作品回收 → 分层汇总 → 识别差异'], ['team-review', '诊断与决策支持', '内容×业务 → 假设 → 验证建议'], ['team-execution', '组织与执行落地', '承接决策 → 分工验收 → 回传结果']]);
+    renderInfrastructure(parent);
+    pageOutline(parent, [['team-analysis', '数据分析', '作品回收 → 汇总 → 异常定位'], ['team-review', '诊断与决策支持', '异常下钻 → 内容复盘 → 建议'], ['team-execution', '组织与执行落地', '数据复盘 → 任务调整 → 结果复查']]);
     renderTeamAnalysis(parent);
     const review = boardSection(parent, 'team-review', '02 / 诊断支持：用内容×业务解释数据差异');
     contributionLead(review, '为增长决策提供诊断依据', '从表现差异下钻人群、脚本与分发', '问题假设 / 验证建议 / 改稿检查项');
@@ -513,12 +514,12 @@
     text(review, 'p', '交给增长决策：问题证据 + 待验证假设 + 优先级建议。方向确认后，再交组长安排改稿、排期与复查；用下一轮同任务数据检验判断。', 'evidence-result-band');
     const caseLink = text(review, 'a', '查看真实项目中的诊断与取舍', 'case-anchor'); caseLink.href = pageHref('skills', 'case-growth'); caseLink.append(iconElement('arrow-up-right'));
     const execution = boardSection(parent, 'team-execution', '03 / 组织执行：把增长决策变成可验收交付');
-    contributionLead(execution, '承接增长决策并推动团队交付', '组长负责排期、质检与问题关闭', '任务分工 / 验收记录 / 结果回传');
+    contributionLead(execution, '承接增长决策并推动团队交付', '依据数据复盘调整排期、质检与复查', '行动台账 / 产出差异 / 增长反馈');
     visualFigure(execution, 'team');
     boardTable(execution, '执行闭环 / 每个决策都有责任角色和验收物', ['管理环节', '我的动作', '角色分工', '可检查交付'], [
-      ['01 承接任务', '将已确认方向拆到小组、个人与排期', '我校准任务，组长安排执行', '内容任务 / 责任角色 / 复查节点'],
-      ['02 交付检查', '统一9步流程、六维质检和P0–P3分级', '组长检查，创作者修正', '验收清单 / 退回原因 / 修复记录'],
-      ['03 验证复制', '创意组验证，二创组复用；指定模板维护人', '贡献人说明适用场景，维护人更新', '模板版本 / 人物车型资产 / 反例'],
+      ['01 承接任务', '按已确认的复盘结论拆任务、个人与排期', '我校准任务，组长安排执行', '内容任务 / 责任角色 / 复查节点'],
+      ['02 交付检查', '依据退回问题复盘，落实9步流程、六维质检与P0–P3分级', '组长检查，创作者修正', '验收清单 / 退回原因 / 修复记录'],
+      ['03 验证复制', '按同任务作品表现复查模板，再交二创组复用', '贡献人说明适用场景，维护人更新', '模板版本 / 人物车型资产 / 反例'],
       ['04 结果回传', '核对行动完成与作品结果，未达预期回查原因', '组长回收，我向业务反馈', '行动关闭记录 / 偏差原因 / 下一轮建议']
     ], 'management-table');
     text(execution, 'p', '验收通过 → 更新模板与资产；执行偏差 → 返修并复查；业务结果偏离 → 带证据回到增长决策，不用“已发布”代替“已验证”。', 'evidence-result-band');
@@ -573,7 +574,9 @@
       const fields = document.createElement('dl');
       [['用途', item.purpose], ['我的动作', item.action], ['关键字段', item.fields]].forEach(([label, value]) => { text(fields, 'dt', label); text(fields, 'dd', value); });
       detail.append(fields); grid.append(detail);
-    }); section.append(grid); parent.append(section);
+    }); section.append(grid);
+    text(section, 'p', '同一套作品数据支持三个环节：分析定位差异 → 内容×业务复盘形成建议 → 团队调整任务并复查；执行与增长结果再回填日报、周报和资产库。', 'infrastructure-feedback');
+    parent.append(section);
   }
   function renderPageWorkflow(parent, key) {
     const workflow = initial.presentation.showcase.pageWorkflows[key];
@@ -745,17 +748,32 @@
     const brand = tasks.find(row => row.name === '品宣型');
     text(panel, 'p', `演示诊断：品宣型${wan(brand.vv)}VV、${brand.newUsers}人拉新；效果型${wan(effect.vv)}VV、${effect.newUsers}人拉新。播放与新增贡献排序不同，先按任务比较，再下钻脚本与分发，不能直接按VV给团队排名。`, 'evidence-result-band');
     text(panel, 'p', '交付增长侧：分层差异 + 可比样本 + 验证建议；回收下一轮同任务表现后，再更新判断。成员表用于定位支持需求，不用混合任务效率代替个人绩效。', 'board-return');
-    demo.append(panel); section.append(demo); renderInfrastructure(section);
+    demo.append(panel); section.append(demo);
+  }
+  function renderNorthStarLoop(parent) {
+    const figure = document.createElement('figure'); figure.className = 'north-star-loop';
+    text(figure, 'figcaption', '北极星目标与增长决策闭环', 'showcase-title');
+    const northStar = document.createElement('div'); northStar.className = 'north-star';
+    const label = text(northStar, 'h3', '阶段北极星 / 内容增长'); label.prepend(iconElement('target'));
+    text(northStar, 'strong', '拉新');
+    text(northStar, 'p', '获取App新用户；拉活单列，VV用于诊断，留资与成交由业务协同观察。'); figure.append(northStar);
+    const list = document.createElement('ol'); list.className = 'north-loop-steps';
+    initial.presentation.showcase.growthLoop.steps.forEach(([title, detail], index) => {
+      const item = document.createElement('li');
+      text(item, 'span', String(index + 1).padStart(2, '0'), 'loop-number');
+      text(item, 'h3', title); text(item, 'p', detail);
+      const arrow = iconElement('arrow-up-right'); arrow.classList.add('loop-arrow'); arrow.setAttribute('aria-hidden', 'true'); item.append(arrow); list.append(item);
+    }); figure.append(list);
+    const feedback = text(figure, 'p', initial.presentation.showcase.growthLoop.feedback, 'north-loop-feedback');
+    const arrow = iconElement('arrow-up-right'); arrow.setAttribute('aria-hidden', 'true'); feedback.prepend(arrow);
+    parent.append(figure);
   }
   function renderGrowthBoard(parent) {
     const board = initial.presentation.evidenceBoards.growth;
-    renderPageWorkflow(parent, 'growth');
+    renderNorthStarLoop(parent);
     pageOutline(parent, [['growth-goal', '目标判断', '以拉新为主，不把VV当增长'], ['growth-channels', '增长策略', '人群 × 内容 × 分发承接'], ['growth-budget', '预算控制', '测试 → 验证 → 放量']]);
     const goals = boardSection(parent, 'growth-goal', '01 / 增长目标与指标取舍');
     contributionLead(goals, '制定内容增长目标与优先级', '拉新主考核，拉活单列评价', '目标拆解 / 卖点内容排期要求');
-    const northStar = document.createElement('div'); northStar.className = 'north-star';
-    const northLabel = text(northStar, 'h3', '阶段北极星 / 内容增长'); northLabel.prepend(iconElement('target'));
-    text(northStar, 'strong', '拉新'); text(northStar, 'p', '获取App新用户；拉活单列，VV用于诊断，留资与成交由业务协同观察。'); goals.append(northStar);
     const list = document.createElement('dl'); list.className = 'growth-krs';
     board.keyResults.slice(0, 1).forEach(([label, value, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); text(row, 'dd', value); text(row, 'p', action); list.append(row);
