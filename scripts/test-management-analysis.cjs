@@ -51,8 +51,8 @@ const efficiency = rows => `${(sum(rows,'newUsers')/sum(rows,'vv')*1000000).toFi
             });
             assert.deepEqual(await page.locator('.demo-pivot-table tbody tr').evaluateAll(rows => rows.map(row => [...row.cells].map(cell => cell.textContent))),expected);
             const daily = ['D1','D2','D3','D4'].map(day => sum(rows.filter(row=>row.day===day),'vv'));
-            const widths = await page.locator('.demo-bars').first().locator('.demo-bar-track').evaluateAll(tracks => tracks.map(track=>track.firstElementChild.getBoundingClientRect().width/(track.clientWidth)*100));
-            widths.forEach((value,index)=>assert(Math.abs(value-daily[index]/Math.max(...daily)*100)<.4));
+            const heights = await page.locator('.daily-column-chart .column-track').evaluateAll(tracks => tracks.map(track=>track.firstElementChild.getBoundingClientRect().height/(track.clientHeight)*100));
+            heights.forEach((value,index)=>assert(Math.abs(value-daily[index]/Math.max(...daily)*100)<.4));
           }
           if (stage === 2) assert.equal(await page.locator('.demo-diagnosis-table tbody tr').count(),new Set(rows.map(row=>row.type)).size);
           if (stage === 3) assert.equal(await page.locator('.demo-actions-table tbody tr').count(),4);

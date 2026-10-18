@@ -86,11 +86,17 @@
     link.append(iconElement('arrow-up-right'));
     return link;
   }
+  function assetUrl(path) {
+    if (!initial.release?.id || /^(data:|blob:)/.test(path)) return path;
+    const url = new URL(path, location.href);
+    url.searchParams.set('v', initial.release.id);
+    return url.href;
+  }
   function renderProfile() {
     let backdrop = $('#studio-backdrop');
     if (!backdrop) {
       backdrop = document.createElement('div'); backdrop.id = 'studio-backdrop'; backdrop.setAttribute('aria-hidden', 'true');
-      const image = document.createElement('img'); image.src = initial.design.backgroundImage; image.alt = ''; backdrop.append(image); document.body.prepend(backdrop);
+      const image = document.createElement('img'); image.src = assetUrl(initial.design.backgroundImage); image.alt = ''; backdrop.append(image); document.body.prepend(backdrop);
     }
     $$('[data-bind]').forEach(element => { element.textContent = data.profile[element.dataset.bind]; });
     $$('[data-year]').forEach(element => { element.textContent = new Date().getFullYear(); });
@@ -99,7 +105,7 @@
     const portrait = $('.portrait-image');
     if (portrait) {
       portrait.closest('section').dataset.avatar = data.media.portrait ? 'custom' : 'studio';
-      portrait.src = data.media.portrait || initial.design.heroImage;
+      portrait.src = data.media.portrait || assetUrl(initial.design.heroImage);
       portrait.alt = data.media.portrait ? `${data.profile.name}的个人肖像` : '工作室中戴眼镜的AIGC创作者，伸手递出作品画册';
       $('.portrait-kind').textContent = data.media.portrait ? 'PORTRAIT' : 'AIGC AVATAR';
       $('.portrait-copy').classList.toggle('is-long-name', data.profile.name.length > 10);
@@ -138,7 +144,7 @@
     bio.append(history, $('.hero-metrics')); section.append(bio); $('.creator-about').remove();
   }
   function visualPath(key) {
-    return data.media[key] || ({ production: initial.images[1], growth: initial.reviewCharts[0], team: initial.images[2] })[key];
+    return data.media[key] || assetUrl(({ production: initial.images[1], growth: initial.reviewCharts[0], team: initial.images[2] })[key]);
   }
   function evidenceFigure(parent, key, caption, className = '') {
     const figure = document.createElement('figure'); figure.className = `project-visual ${className}`.trim();
@@ -152,6 +158,9 @@
   }
   function renderCapabilities() {
     const grid = $('#capability-grid'); grid.classList.add('native-visual'); grid.dataset.visual = 'capabilities';
+    const core = document.createElement('div'); core.className = 'capability-core';
+    text(core, 'small', '内容 × 业务'); text(core, 'strong', '内容增长');
+    text(core, 'span', '策略判断 · 组织交付 · 亲自创作'); grid.append(core);
     const snapshots = [
       ['拉新优先', '用户任务 → 功能动机 → 分发承接', '目标拆解 / 投入取舍 / 效果验证', 'chart-no-axes-combined'],
       ['20人+', '数据定位 → 内容复盘 → 任务验收', '5名组长 / 62个活跃账号协作', 'users'],
@@ -197,6 +206,7 @@
     if (key === 'team') {
       metrics(figure, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
       flowMap(figure, [['负责人', '业务对齐与优先级'], ['组长', '排期 / 质检 / 回收'], ['创意组 × 二创组', '小范围验证 → 结构复用']]);
+      figure.classList.add('organization-map');
     }
     parent.insertBefore(figure, before); return figure;
   }
@@ -567,6 +577,19 @@
     strategyTable(scroll, caption, headings, rows);
     scroll.querySelector('table').classList.add('board-table');
     if (className) scroll.querySelector('table').classList.add(className);
+    const numericColumns = {
+      'demo-pivot-table': [3, 5], 'demo-detail-table': [4, 5],
+      'demo-diagnosis-table': [2, 3, 4], 'selling-point-table': [2, 3, 5]
+    }[className] || [];
+    numericColumns.forEach(column => {
+      const values = rows.map(row => Number.parseFloat(String(row[column]).replaceAll(',', '')) || 0);
+      const max = Math.max(...values, 1);
+      [...scroll.querySelectorAll('tbody tr')].forEach((row, index) => {
+        const cell = row.cells[column]; cell.classList.add('meter-cell');
+        const meter = document.createElement('span'); meter.className = 'cell-meter'; meter.setAttribute('aria-hidden', 'true');
+        meter.style.width = `${values[index] / max * 100}%`; cell.append(meter);
+      });
+    });
     parent.append(scroll);
   }
   function flowMap(parent, steps) {
@@ -577,6 +600,10 @@
       if (index < steps.length - 1) item.append(iconElement('arrow-up-right'));
       list.append(item);
     }); parent.append(list);
+    const key = parent.dataset.visual;
+    if (key === 'growth' || key === 'review') {
+      text(parent, 'p', key === 'growth' ? '结果回收 → 判断人群与功能匹配 → 更新下一轮内容' : '验证结论 → 更新模板与反例 → 回到下一轮选题', 'flow-return');
+    }
   }
   function pageOutline(parent, items) {
     const nav = document.createElement('nav'); nav.className = 'page-outline'; nav.setAttribute('aria-label', '本页结构');
@@ -654,6 +681,19 @@
         text(item, 'strong', format(row[valueKey])); figure.append(item);
       }); parent.append(figure);
     }
+    function columns(parent, rows) {
+      const figure = document.createElement('figure'); figure.className = 'demo-bars daily-column-chart';
+      text(figure, 'figcaption', '日度VV · 演示 · 零基线');
+      const plot = document.createElement('div'); plot.className = 'column-plot';
+      const max = Math.max(...rows.map(row => row.vv), 1);
+      rows.forEach(row => {
+        const column = document.createElement('div'); column.className = 'daily-column';
+        text(column, 'strong', wan(row.vv));
+        const track = document.createElement('span'); track.className = 'column-track'; track.setAttribute('aria-hidden', 'true');
+        const bar = document.createElement('span'); bar.style.height = `${row.vv / max * 100}%`; track.append(bar); column.append(track);
+        text(column, 'span', row.name); plot.append(column);
+      }); figure.append(plot); parent.append(figure);
+    }
     function update() {
       buttons.forEach((button, index) => { button.setAttribute('aria-selected', String(index === stage)); button.tabIndex = index === stage ? 0 : -1; });
       panel.setAttribute('aria-labelledby', buttons[stage].id); panel.replaceChildren();
@@ -670,10 +710,11 @@
       if (stage === 0) {
         boardTable(panel, '作品级回收明细 · 演示', ['日期','作品','成员 / 小组','内容任务 / 方法','VV','拉新','每百万VV拉新'], rows.map(row => [row.day,row.work,`${row.member} / ${row.group}`,`${row.type} / ${row.method}`,wan(row.vv),`${row.newUsers}人`,`${perMillion(row)}人`]), 'demo-detail-table');
       } else if (stage === 1) {
-        boardTable(panel, '成员维度透视 · 演示 · 生产数关联同周期生产台账', ['成员','小组','发布 / 生产','VV','涨粉','拉新','每百万VV拉新'], aggregate(rows,'member').map(row => [row.name,rows.find(item => item.member === row.name).group,`${row.published} / ${initial.presentation.managementDemo.production.find(item => item.member === row.name).produced}`,wan(row.vv),row.followers,`${row.newUsers}人`,`${perMillion(row)}人`]), 'demo-pivot-table');
         const charts = document.createElement('div'); charts.className = 'analysis-charts';
-        bars(charts, '日度VV · 演示 · 零基线', aggregate(rows,'day'), 'vv', wan);
+        columns(charts, aggregate(rows,'day'));
         bars(charts, '小组拉新 · 演示 · 零基线', aggregate(rows,'group'), 'newUsers', value => `${value}人`); panel.append(charts);
+        const table = workDisclosure(panel, 'analysis-member-detail', '查看成员透视明细');
+        boardTable(table, '成员维度透视 · 演示 · 生产数关联同周期生产台账', ['成员','小组','发布 / 生产','VV','涨粉','拉新','每百万VV拉新'], aggregate(rows,'member').map(row => [row.name,rows.find(item => item.member === row.name).group,`${row.published} / ${initial.presentation.managementDemo.production.find(item => item.member === row.name).produced}`,wan(row.vv),row.followers,`${row.newUsers}人`,`${perMillion(row)}人`]), 'demo-pivot-table');
       } else if (stage === 2) {
         boardTable(panel, '任务分层诊断 · 演示', ['任务','作品数','VV','拉新','每百万VV拉新','评价重点'], aggregate(rows,'type').map(row => [row.name,row.published,wan(row.vv),`${row.newUsers}人`,`${perMillion(row)}人`,row.name === '效果型' ? '新增与功能使用动机' : '传播、认知与回访']), 'demo-diagnosis-table');
         const members = aggregate(rows,'member');
@@ -698,7 +739,16 @@
     const list = document.createElement('dl'); list.className = 'growth-krs';
     board.keyResults.slice(0, 1).forEach(([label, value, action]) => {
       const row = document.createElement('div'); text(row, 'dt', label); text(row, 'dd', value); text(row, 'p', action); list.append(row);
-    }); goals.append(list);
+    });
+    const goalMap = document.createElement('div'); goalMap.className = 'goal-map';
+    const drivers = document.createElement('div'); drivers.className = 'goal-drivers';
+    [['10条', '高拉新作品'], ['30人', '单条预期拉新']].forEach(([value, label], index) => {
+      if (index) text(drivers, 'span', '×', 'formula-symbol');
+      const term = document.createElement('div'); text(term, 'strong', value); text(term, 'span', label); drivers.append(term);
+    });
+    goalMap.append(drivers); const equal = text(goalMap, 'span', '=', 'formula-symbol'); equal.setAttribute('aria-hidden', 'true');
+    goalMap.append(list); goals.append(goalMap);
+    list.querySelector('p').textContent = '规划模型，按实际命中率与资源调整，不是已达业绩。';
     const policy = board.operatingPolicy;
     const priorities = document.createElement('section'); priorities.className = 'growth-policy';
     text(priorities, 'h3', policy.title);
@@ -707,6 +757,10 @@
     priorities.append(split);
     const labels = document.createElement('div'); labels.className = 'policy-labels';
     text(labels, 'strong', policy.sellingPointLabel); text(labels, 'span', policy.explorationLabel); priorities.append(labels);
+    const allocation = document.createElement('div'); allocation.className = 'allocation-map';
+    const ring = document.createElement('div'); ring.className = 'allocation-ring'; ring.setAttribute('aria-hidden', 'true');
+    ring.style.setProperty('--allocation', `${policy.sellingPointPercent}%`); text(ring, 'strong', `${policy.sellingPointPercent}%`); text(ring, 'span', '卖点内容');
+    priorities.insertBefore(allocation, split); allocation.append(ring, split, labels);
     const rationale = workDisclosure(priorities, 'growth-goal-detail', '排期要求 / 指标分工与业务承接');
     text(rationale, 'p', board.objective, 'board-objective'); text(rationale, 'p', policy.valueChain, 'policy-value-chain');
     text(rationale, 'p', policy.decision, 'board-note'); text(rationale, 'p', policy.execution, 'board-note'); goals.append(priorities);
@@ -757,6 +811,18 @@
       }); text(group, 'p', `${added}人拉新 · ${vv / 10000}万VV`, 'board-note'); chart.append(group);
     }); result.append(chart);
     text(result, 'p', '我的判断与动作：两个主力卖点以32.2%的VV贡献64.3%的拉新，优先验证需求与功能匹配；下钻TOP13与3条反例，再把结论转成脚本要求。', 'board-takeaway');
+    const efficiencies = document.createElement('figure'); efficiencies.className = 'selling-efficiency-chart';
+    text(efficiencies, 'figcaption', '9个卖点 / 每百万VV拉新人数 · 零基线');
+    const maxEfficiency = Math.max(...campaign.points.map(point => point.acquisitionsPerMillion), 1);
+    campaign.points.forEach((point, index) => {
+      const row = document.createElement('div'); row.className = 'efficiency-row';
+      if (index < 2) row.classList.add('is-priority');
+      text(row, 'span', point.name, 'efficiency-name');
+      const track = document.createElement('span'); track.className = 'efficiency-track'; track.setAttribute('aria-hidden', 'true');
+      const mark = document.createElement('span'); mark.style.width = `${point.acquisitionsPerMillion / maxEfficiency * 100}%`; track.append(mark); row.append(track);
+      text(row, 'strong', point.acquisitionsPerMillion.toFixed(1));
+      text(row, 'small', `${point.videos}条`); efficiencies.append(row);
+    }); result.append(efficiencies);
     boardTable(result, '人群任务 → 功能匹配 → 投入判断', ['用户任务', '功能卖点', '项目表现', '我的判断'], board.focus, 'focus-table');
     const full = workDisclosure(result, 'selling-point-data', '9个卖点 / 作品量与增长效率对照');
     boardTable(full, '项目卖点表现', ['卖点', '条数', 'VV', '拉新', '拉活', '拉新 / 百万VV'], campaign.points.map(point => [point.name, point.videos, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]), 'selling-point-table');
@@ -1062,7 +1128,7 @@
   }
 
   async function readSource(path) {
-    const response = await fetch(path); if (!response.ok) throw new Error('Export source unavailable'); return response;
+    const response = await fetch(assetUrl(path)); if (!response.ok) throw new Error('Export source unavailable'); return response;
   }
   async function inlineImage(path) {
     if (path.startsWith('data:')) return path;
@@ -1160,6 +1226,7 @@
         [initial.design.heroImage, design.heroImage],
         [initial.design.backgroundImage, design.backgroundImage]
       ]);
+      [...embeddedImages].forEach(([path, value]) => embeddedImages.set(assetUrl(path), value));
       clone.querySelectorAll('img').forEach(image => {
         const src = image.getAttribute('src');
         if (embeddedImages.has(src)) image.src = embeddedImages.get(src);
@@ -1168,11 +1235,7 @@
       clone.querySelectorAll('link[rel="stylesheet"]').forEach(link => link.remove());
       clone.querySelector('style[data-embedded]')?.remove();
       const style = document.createElement('style'); style.dataset.embedded = 'true'; style.textContent = css; clone.querySelector('head').append(style);
-      clone.querySelector('script[src="app.js"]')?.remove();
-      clone.querySelector('script[src="portfolio-data.js"]')?.remove();
-      clone.querySelector('script[src="motion.js"]')?.remove();
-      clone.querySelector('script[src="assets/vendor/three-0.160.1.min.js"]')?.remove();
-      clone.querySelector('script[src="portrait-scene.js"]')?.remove();
+      clone.querySelectorAll('script[src]').forEach(script => script.remove());
       clone.querySelector('script[data-three]')?.remove();
       clone.querySelector('script[data-portrait]')?.remove();
       clone.querySelector('script[data-motion]')?.remove();
