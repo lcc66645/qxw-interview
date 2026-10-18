@@ -22,7 +22,11 @@ async function checkCampaignEvidence(page) {
   assert.equal(await page.locator('.focus-table tbody tr').count(), 3);
   await page.locator('#selling-point-data > summary').click();
   assert.equal(await page.locator('.selling-point-table tbody tr').count(), 9);
-  for (const [i, point] of data.campaignReview.points.entries()) assert.deepEqual(await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents(), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
+  for (const [i, point] of data.campaignReview.points.entries()) {
+    const cells = await page.locator('.selling-point-table tbody tr').nth(i).locator('th,td').allTextContents();
+    assert.deepEqual(cells.slice(0, 6), [point.name, String(point.videos), `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]);
+    assert(cells[6].length > 0, 'Each selling point exposes a concrete operating judgment');
+  }
   assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
   await page.locator('#selling-point-data > summary').click(); await page.locator('#case-growth > summary').click();
   await page.locator('[data-section-target="case-results"]').click();

@@ -6,6 +6,7 @@ const root = path.resolve(__dirname, '..');
 const data = JSON.parse(fs.readFileSync(path.join(root, 'data/portfolio.json'), 'utf8'));
 data.presentation.managementDemo = JSON.parse(fs.readFileSync(path.join(root, 'data/management-demo.json'), 'utf8'));
 data.presentation.visualLibrary = JSON.parse(fs.readFileSync(path.join(root, 'data/visual-library.json'), 'utf8'));
+data.presentation.showcase = JSON.parse(fs.readFileSync(path.join(root, 'data/evidence-showcase.json'), 'utf8'));
 const shell = fs.readFileSync(path.join(root, 'templates/page.html'), 'utf8');
 const releaseFiles = ['style.css', 'creator.css', 'studio.css', 'app.js', 'motion.js', 'portrait-scene.js', 'assets/vendor/three-0.160.1.min.js', ...data.images, ...data.reviewCharts];
 const fingerprint = createHash('sha256').update(JSON.stringify(data)).update(shell);

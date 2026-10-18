@@ -187,10 +187,7 @@
     const figure = document.createElement('figure'); figure.className = 'native-visual'; figure.dataset.visual = key;
     text(figure, 'figcaption', visual.title);
     if (key === 'growth') flowMap(figure, initial.presentation.evidenceBoards.growth.path);
-    if (key === 'review') flowMap(figure, [
-      ['识别差异', '传播与获新分别评价'], ['回查内容', '人群任务 / 功能动作 / 分发条件'],
-      ['下发改动', '保留结构，修改关键变量'], ['回收验证', '比较同任务表现，更新模板']
-    ]);
+    if (key === 'review') renderManagementLoop(figure);
     if (key === 'budget') {
       const cost = initial.presentation.productionCost;
       const comparison = document.createElement('div'); comparison.className = 'cost-comparison';
@@ -205,8 +202,13 @@
     }
     if (key === 'team') {
       metrics(figure, initial.presentation.dimensions[1].metrics).classList.add('dimension-metrics');
-      flowMap(figure, [['负责人', '业务对齐与优先级'], ['组长', '排期 / 质检 / 回收'], ['创意组 × 二创组', '小范围验证 → 结构复用']]);
-      figure.classList.add('organization-map');
+      const organization = document.createElement('div'); organization.className = 'team-organization';
+      const lead = document.createElement('div'); lead.className = 'organization-lead';
+      text(lead, 'strong', '我 / 内容运营TL'); text(lead, 'span', '方向与优先级 · 组长培养 · 交付验收'); organization.append(lead);
+      const roles = document.createElement('div'); roles.className = 'organization-roles';
+      initial.presentation.showcase.organization.forEach(([title, task]) => {
+        const role = document.createElement('div'); text(role, 'h3', title); text(role, 'p', task); roles.append(role);
+      }); organization.append(roles); figure.append(organization);
     }
     parent.insertBefore(figure, before); return figure;
   }
@@ -440,6 +442,8 @@
         renderCampaignEvidence(section);
         renderMatrixBudget(section);
       }
+      if (id === 'case-team') renderTemplateShowcase(section);
+      if (id === 'case-creation') renderScriptComparison(section);
       perspectives.append(section);
     });
     parent.append(perspectives);
@@ -514,7 +518,8 @@
     contributionLead(review, '内容×业务复盘', '把数据差异转成脚本修改要求', '改稿检查项 / 下一轮验证');
     visualFigure(review, 'review');
     const reviewDetail = workDisclosure(review, 'team-review-actions', '展开复盘判断与内容动作');
-    boardTable(reviewDetail, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
+    text(reviewDetail, 'p', '我的交接要求：每个复盘结论都对应修改项、责任角色和复查节点；下轮先回收执行与结果，再决定复用或继续验证。', 'board-note');
+    boardTable(review, '我的复盘拆解表', ['观察信号', '判断与取舍', '落到内容的动作', '下一轮检查'], [
       ['有播放、少新增', '先查使用动机与任务承接，不直接否定题材', '把功能放进角色难题；核对组件与发布条件', '同类内容分别比较VV与每百万VV拉新'],
       ['拉活强、拉新弱', '区分唤醒与获新，不用同一排名评价', '单列回访任务，调整新增任务选题', '分别回收拉新、拉活，避免混加'],
       ['同模板表现分化', '下钻人群、开头与功能动作，区分内容差异与分发影响', '保留有效结构，优先修改一个关键变量', '记录改动与同期表现，判断能否复用']
@@ -570,6 +575,72 @@
       const item = document.createElement('div'); const term = text(item, 'dt', label); term.prepend(iconElement(symbol));
       text(item, 'dd', value); lead.append(item);
     }); parent.append(lead); return lead;
+  }
+  function renderInfrastructure(parent) {
+    const section = document.createElement('section'); section.className = 'infrastructure-board'; section.id = 'data-infrastructure';
+    text(section, 'h3', '数据基建全景 / 我维护什么、用来决定什么', 'showcase-title');
+    const grid = document.createElement('div'); grid.className = 'infrastructure-grid';
+    initial.presentation.showcase.infrastructure.forEach((item, index) => {
+      const detail = document.createElement('details'); detail.className = 'infrastructure-card'; detail.id = `data-asset-${index + 1}`;
+      const summary = document.createElement('summary');
+      text(summary, 'strong', item.title); text(summary, 'span', item.cadence, 'asset-cadence'); summary.append(iconElement('arrow-down')); detail.append(summary);
+      const fields = document.createElement('dl');
+      [['用途', item.purpose], ['我的动作', item.action], ['关键字段', item.fields]].forEach(([label, value]) => { text(fields, 'dt', label); text(fields, 'dd', value); });
+      detail.append(fields); grid.append(detail);
+    }); section.append(grid); parent.append(section);
+  }
+  function renderManagementLoop(parent) {
+    const graph = document.createElement('div'); graph.className = 'management-loop';
+    const nodes = initial.presentation.showcase.managementLoop;
+    function node(item, container) {
+      const box = document.createElement('div'); box.className = `management-node loop-${item.key}`;
+      text(box, 'h3', item.title); text(box, 'p', item.detail); container.append(box);
+    }
+    nodes.slice(0, 4).forEach(item => node(item, graph));
+    const branch = document.createElement('div'); branch.className = 'management-branch';
+    nodes.slice(4, 6).forEach(item => node(item, branch)); graph.append(branch);
+    nodes.slice(6).forEach(item => node(item, graph));
+    text(graph, 'p', '复用表现回到下一轮分工、选题与排期', 'management-feedback');
+    parent.append(graph);
+  }
+  function renderTemplateShowcase(parent) {
+    const section = document.createElement('section'); section.className = 'template-showcase'; section.id = 'case-template-library';
+    text(section, 'h3', '3套可复用模板 / 从脚本拆解到团队交接', 'showcase-title');
+    const triggers = document.createElement('div'); triggers.className = 'conflict-triggers';
+    [['利益差异', '具体价格、成本或选择差异'], ['情绪张力', '角色处境与当下利益冲突'], ['认知反差', '熟悉事物中的意外判断']].forEach(([title, detail]) => {
+      const item = document.createElement('div'); text(item, 'strong', title); text(item, 'span', detail); triggers.append(item);
+    }); section.append(triggers);
+    const grid = document.createElement('div'); grid.className = 'template-grid';
+    initial.presentation.showcase.templateCards.forEach(item => {
+      const article = document.createElement('article'); article.className = 'template-card';
+      text(article, 'span', item.name, 'template-name'); text(article, 'h4', item.title);
+      const steps = document.createElement('ol'); item.path.forEach(step => text(steps, 'li', step)); article.append(steps);
+      text(article, 'p', `适用：${item.scenario}`, 'board-note'); text(article, 'p', `验收：${item.check}`, 'template-check'); grid.append(article);
+    }); section.append(grid);
+    text(section, 'p', '我的交付：模板结构 + 适用场景 + 脚本检查项；交接时明确贡献人与维护人，复用后继续回收质量与增长表现。', 'evidence-result-band');
+    parent.append(section);
+  }
+  function renderScriptComparison(parent) {
+    const section = document.createElement('section'); section.className = 'script-showcase'; section.id = 'case-script-comparison';
+    text(section, 'h3', '有效表达 VS 常见问题 / 我怎么检查脚本', 'showcase-title');
+    const grid = document.createElement('div'); grid.className = 'script-verdict-grid';
+    [['有效表达', 'check', 'positive', 1], ['常见问题', 'x', 'negative', 2]].forEach(([title, symbol, type, column]) => {
+      const article = document.createElement('article'); article.className = `script-verdict ${type}`;
+      const heading = text(article, 'h4', title); heading.prepend(iconElement(symbol));
+      const list = document.createElement('ul');
+      initial.presentation.showcase.scriptChecks.forEach(row => { const item = document.createElement('li'); text(item, 'strong', row[0]); text(item, 'span', row[column]); list.append(item); });
+      article.append(list); grid.append(article);
+    }); section.append(grid);
+    const [good, weak] = initial.campaignReview.storyComparison;
+    boardTable(section, '真实正反样本 / 传播表现与获新效率分开看', ['拆解维度', weak.name, good.name], [
+      ['观察结果', `${weak.vv / 10000}万VV / ${weak.acquisitions}人拉新`, `${good.vv / 10000}万VV / ${good.acquisitions}人拉新`],
+      ['每百万VV拉新', weak.perMillion.toFixed(1), good.perMillion.toFixed(1)],
+      ['角色难题', '剧情已经识别车辆，缺少尚未解决的决策', '父亲需要判断车辆价值，才能作出卖车决定'],
+      ['工具位置', weak.interpretation, good.interpretation],
+      ['我的改稿要求', '删除重复介绍，先补足真实决策任务', '保留现场工具动作，让结果影响角色选择']
+    ], 'script-sample-table');
+    text(section, 'p', '我的结论：功能露出不等于使用动机。正反样本用于形成改稿判断，下一轮在可比条件下验证。', 'evidence-result-band');
+    parent.append(section);
   }
   function boardTable(parent, caption, headings, rows, className = '') {
     const scroll = document.createElement('div'); scroll.className = 'board-table-scroll';
@@ -647,6 +718,7 @@
   function renderTeamAnalysis(parent) {
     const section = boardSection(parent, 'team-analysis', '01 / 数据分析：从作品明细到管理决策');
     contributionLead(section, '搭建作品级回收与分析体系', '明细校验 → 透视汇总 → 交叉诊断', '日报监测 / 周报诊断 / 双周校准');
+    renderInfrastructure(section);
     const demo = document.createElement('div'); demo.id = 'analysis-demo'; demo.className = 'analysis-demo';
     text(demo, 'p', initial.presentation.managementDemo.label, 'demo-label');
     const controls = document.createElement('div'); controls.className = 'analysis-controls';
@@ -797,6 +869,19 @@
     const board = initial.presentation.evidenceBoards.growth;
     const result = boardSection(parent, 'growth-evidence', '卖点分析 / 从曝光贡献到新增贡献');
     const campaign = initial.campaignReview; const totals = campaign.overview;
+    const layout = document.createElement('div'); layout.className = 'decision-table-layout';
+    const conclusions = document.createElement('aside'); conclusions.className = 'decision-conclusions';
+    [
+      ['拉新方向', '帮选车优惠与语音讲车合计153人拉新，占64.3%；VV占32.2%。优先验证需求与功能匹配。'],
+      ['拉活方向', '智能找二手车带来803人拉活，单列回访任务，不以拉新排名直接淘汰。'],
+      ['投入取舍', '估价、避坑与约试驾占46.5%的VV，只贡献19.3%的拉新。回查人群、脚本和分发，再决定投入。']
+    ].forEach(([title, detail]) => { const item = document.createElement('div'); text(item, 'h3', title); text(item, 'p', detail); conclusions.append(item); });
+    const dataRegion = document.createElement('div'); dataRegion.className = 'decision-data';
+    layout.append(conclusions, dataRegion); result.append(layout);
+    const full = workDisclosure(dataRegion, 'selling-point-data', '9个卖点 / 数据与内容决策对照'); full.open = true;
+    const judgments = ['拉新优先验证', '传播与拉新兼顾', '回查使用动机', '新增与回访分开看', '回访任务单列', '高VV低新增，回查脚本', '验证功能与场景匹配', '继续积累样本', '单条样本不推断稳定性'];
+    boardTable(full, '项目卖点表现', ['卖点', '条数', 'VV', '拉新', '拉活', '拉新 / 百万VV', '我的判断'], campaign.points.map((point, index) => [point.name, point.videos, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1), judgments[index]]), 'selling-point-table');
+    text(full, 'p', '拍报价单仅1条，继续积累样本；百万VV拉新用于比较曝光效率，不是点击转化率。', 'board-note');
     const chart = document.createElement('figure'); chart.className = 'share-chart';
     text(chart, 'figcaption', '各卖点组合的播放份额与拉新份额 · 占项目总量 · 0–100%');
     [[0, 1], [2, 5, 6]].forEach((indices, index) => {
@@ -824,9 +909,6 @@
       text(row, 'small', `${point.videos}条`); efficiencies.append(row);
     }); result.append(efficiencies);
     boardTable(result, '人群任务 → 功能匹配 → 投入判断', ['用户任务', '功能卖点', '项目表现', '我的判断'], board.focus, 'focus-table');
-    const full = workDisclosure(result, 'selling-point-data', '9个卖点 / 作品量与增长效率对照');
-    boardTable(full, '项目卖点表现', ['卖点', '条数', 'VV', '拉新', '拉活', '拉新 / 百万VV'], campaign.points.map(point => [point.name, point.videos, `${point.vv / 10000}万`, `${point.acquisitions}人`, `${point.reactivations}人`, point.acquisitionsPerMillion.toFixed(1)]), 'selling-point-table');
-    text(full, 'p', '拍报价单仅1条，继续积累样本；百万VV拉新用于比较曝光效率，不是点击转化率。', 'board-note');
   }
   function renderCreatorCase(parent) {
     const work = initial.presentation.evidenceBoards.creation.representative;
